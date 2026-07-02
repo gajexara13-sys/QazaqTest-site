@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Ширина оболочки в rem: при масштабе html (см. ниже) даёт те же пропорции макета, что и раньше max-w-7xl */
+  --page-shell-max: 80rem;
+  /* Палитра: #132C47 #294C63 #78AEAD #D4ECE9 #D86350 #FBAE54 */
+  --ink: #132c47;
+  --panel: #294c63;
+  --teal: #78aead;
+  --mint: #d4ece9;
+  --coral: #d86350;
+  --gold: #fbae54;
+  --hero-mid: #4d7078;
+  --accent: var(--coral);
+  --accent-bright: var(--gold);
+  --navy: var(--panel);
+  --surface: #d9ebe7;
+  --surface-card: #cfe8e4;
+  --surface-muted: #c5dfd9;
+  /* Фон основных «светлых» блоков — как у подвала */
+  --page-bg: var(--surface-muted);
+  /* Карусель: равный зазор между краями логотипов (flex gap); базовая и усиленная высота */
+  --brands-marquee-gap: 2.75rem;
+  --brands-logo-h: 5.25rem;
+  /* Техком / Lithostek / Грин-Тех: было ×2, −20% → ×1.6 (без transform — участвует в ширине ряда) */
+  --brands-logo-boost: 1.6;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ink);
+  background-color: var(--page-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Пропорциональное «уменьшение» интерфейса на десктопе: rem-типографика и отступы Tailwind
+   сжимаются вместе с колонкой, без лишних переносов текста от узкого max-width. */
+@media (min-width: 1024px) {
+  html {
+    font-size: 88.75%;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --brands-marquee-gap: 3.25rem;
+    --brands-logo-h: 5.75rem;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 0;
+  background: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  min-width: 1280px;
+}
+
+.angled-thumb {
+  position: relative;
+  min-height: 100%;
+}
+
+.angled-thumb::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -1px;
+  height: 100%;
+  width: 44px;
+  background: var(--page-bg);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.clip-corner {
+  clip-path: polygon(0 0, 72% 0, 100% 18%, 100% 100%, 0 100%);
+}
+
+::selection {
+  background: rgba(216, 99, 80, 0.22);
+  color: var(--ink);
+}
+
+/* Карусель логотипов: боковые засветления — слой над лентой, без маски на transform-дорожке */
+.brands-marquee {
+  position: relative;
+  z-index: 0;
+}
+
+.brands-marquee::before,
+.brands-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: clamp(2rem, 8vw, 5rem);
+  pointer-events: none;
+}
+
+.brands-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--page-bg), transparent);
+}
+
+.brands-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--page-bg), transparent);
+}
+
+.brands-marquee-track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: brands-marquee-scroll-fallback 32s linear infinite;
+}
+
+/* Сдвиг через requestAnimationFrame — без CSS keyframes у края экрана */
+.brands-marquee-track--raf {
+  animation: none !important;
+}
+
+/* Две половины равной ширины; внутри — flex: одинаковый зазор между краями соседних логотипов (не фикс. ширина слота). */
+.brands-marquee-seg {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--brands-marquee-gap);
+  width: max-content;
+  box-sizing: border-box;
+  padding-inline: calc(var(--brands-marquee-gap) / 2);
+}
+
+.brands-marquee-slot {
+  display: flex;
+  flex: 0 0 auto;
+  width: fit-content;
+  min-width: 0;
+  min-height: calc(var(--brands-logo-h) * var(--brands-logo-mul, 1) + 0.85rem);
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+/* Рамка по размеру картинки + явная высота img (preflight height:auto перебиваем) */
+.brands-marquee-img-wrap {
+  display: flex;
+  width: fit-content;
+  max-width: min(42rem, 92vw);
+  height: calc(var(--brands-logo-h) * var(--brands-logo-mul, 1));
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.brands-marquee-img-wrap--boost {
+  height: calc(
+    var(--brands-logo-h) * var(--brands-logo-boost) * var(--brands-brand-extra, 1) * var(--brands-logo-mul, 1)
+  );
+  max-width: min(48rem, 96vw);
+}
+
+.brands-marquee-slot--boost {
+  min-height: calc(
+    var(--brands-logo-h) * var(--brands-logo-boost) * var(--brands-brand-extra, 1) * var(--brands-logo-mul, 1) +
+      0.85rem
+  );
+}
+
+.brands-marquee .brands-marquee-slot .brands-marquee-img-wrap img.brands-marquee-img {
+  display: block !important;
+  height: calc(var(--brands-logo-h) * var(--brands-logo-mul, 1)) !important;
+  max-height: calc(var(--brands-logo-h) * var(--brands-logo-mul, 1)) !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition:
+    filter 0.22s ease-out,
+    opacity 0.22s ease-out;
+}
+
+/* У png Нефтехимавтоматики есть белые углы — убираем их смешиванием с фоном. */
+.brands-marquee .brands-marquee-slot .brands-marquee-img-wrap--boost img.brands-marquee-img {
+  height: calc(
+    var(--brands-logo-h) * var(--brands-logo-boost) * var(--brands-brand-extra, 1) * var(--brands-logo-mul, 1)
+  ) !important;
+  max-height: calc(
+    var(--brands-logo-h) * var(--brands-logo-boost) * var(--brands-brand-extra, 1) * var(--brands-logo-mul, 1)
+  ) !important;
+  max-width: 100% !important;
+}
+
+.brands-marquee-slot:hover .brands-marquee-img-wrap img.brands-marquee-img,
+.brands-marquee-slot:focus-within .brands-marquee-img-wrap img.brands-marquee-img {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* До измерения ширины сегмента — простой бесшовный цикл */
+@keyframes brands-marquee-scroll-fallback {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands-marquee-track {
+    animation: none;
+    transform: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 1.5rem;
+    column-gap: var(--brands-marquee-gap);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .brands-marquee-seg {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .brands-marquee-seg--dup {
+    display: none;
+  }
+
+}
