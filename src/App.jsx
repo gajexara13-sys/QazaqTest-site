@@ -90,13 +90,12 @@ function UtilityBar() {
       <div className="mx-auto flex max-w-[var(--page-shell-max)] items-center justify-between gap-4 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] md:px-12">
         <div className="flex items-center gap-3 text-white/90">
           <span>RU</span>
-          <span className="text-white/50">▼</span>
         </div>
         <a
-          href="tel:+77000000000"
+          href="tel:+77055640535"
           className="inline-flex text-white/75 transition-colors hover:text-white"
         >
-          +7 (700) 000 00 00
+          +7 (705) 564 05 35
         </a>
       </div>
     </div>
@@ -257,35 +256,35 @@ function Header() {
             <Link
               to="/services"
               onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
             >
               УСЛУГИ
             </Link>
             <Link
               to="/service"
               onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
             >
               СЕРВИС
             </Link>
             <Link
               to="/guides"
               onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
             >
               ГАЙДЫ
             </Link>
             <Link
               to="/about"
               onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
             >
               О КОМПАНИИ
             </Link>
             <Link
               to="/contact"
               onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
             >
               КОНТАКТЫ
             </Link>
@@ -629,10 +628,6 @@ function SiteFooter({ onOpenModal }) {
               Поставка лабораторного оборудования для дорожных, строительных и материаловедческих
               лабораторий по Казахстану: подбор, логистика, монтаж и сервисное сопровождение.
             </p>
-            <p className="mt-4 text-xs leading-relaxed text-slate-500">
-              Ниже — пример заполнения блоков подвала. Замените телефоны, e-mail и реквизиты на ваши
-              актуальные данные.
-            </p>
           </div>
 
           <nav className="lg:col-span-3" aria-label="Разделы сайта в подвале">
@@ -702,7 +697,7 @@ function SiteFooter({ onOpenModal }) {
 
           <div className="lg:col-span-2">
             <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
-              Реквизиты (пример)
+              Реквизиты
             </p>
             <address className="mt-5 not-italic text-sm leading-relaxed text-slate-600">
               ТОО «QAZAQTEST»
@@ -725,10 +720,10 @@ function SiteFooter({ onOpenModal }) {
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-500">
             <span>© {new Date().getFullYear()} QAZAQTEST. Все права защищены.</span>
             <a href="#" className="transition-colors hover:text-[var(--accent)]">
-              Политика конфиденциальности (пример)
+              Политика конфиденциальности
             </a>
             <a href="#" className="transition-colors hover:text-[var(--accent)]">
-              Договор оферты (пример)
+              Договор оферты
             </a>
           </div>
         </div>
@@ -1128,8 +1123,8 @@ function HomePage({ onOpenModal }) {
             </p>
             <h2 className="mt-5 text-5xl font-black tracking-tight">Создано для технических специалистов и лабораторий.</h2>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/72">
-              Следующий шаг для сайта: стандарты, методики, downloadable материалы, сервисные блоки
-              и более детальная структура категорий.
+              Подскажем по стандартам и методикам испытаний, поможем укомплектовать лабораторию под
+              требования аккредитации и сопроводим запуск оборудования на площадке.
             </p>
           </div>
 
@@ -1354,7 +1349,7 @@ function ContactPage({ onOpenModal }) {
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a
-              href="tel:+77000000000"
+              href="tel:+77055640535"
               className="inline-flex h-14 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
             >
               +7 (705) 564 05 35
