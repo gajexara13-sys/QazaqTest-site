@@ -609,16 +609,6 @@ function ProductModal({ item, onOpenModal, onClose }) {
               >
                 Запросить предложение
               </button>
-              {item.productUrl ? (
-                <a
-                  href={item.productUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
-                >
-                  Карточка товара (источник)
-                </a>
-              ) : null}
               <button
                 type="button"
                 onClick={onClose}

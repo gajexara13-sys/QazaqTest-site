@@ -7,9 +7,9 @@
     "dev": "node -e \"require('fs').mkdirSync('node_modules/.vite-temp',{recursive:true})\" && vite",
     "build": "vite build",
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
+    "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "knockout:lithostek": "node scripts/knockout-lithostek.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.2.4",
