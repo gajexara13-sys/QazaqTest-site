@@ -10,7 +10,7 @@ import {
   useParams,
 } from 'react-router-dom'
 import CategoriesBentoGrid from './components/CategoriesBentoGrid'
-import { benefits, brands, catalogItems, categories, getCategoryById } from './data/siteData'
+import { benefits, brands, catalogItems, categories, getCategoryById, RUB_TO_KZT } from './data/siteData'
 
 const defaultCategory = 'Общий запрос'
 
@@ -59,6 +59,31 @@ function useEscToClose(onClose) {
   }, [onClose])
 }
 
+/**
+ * Цены источника в рублях пересчитываем в тенге по курсу RUB_TO_KZT
+ * с округлением до 1000 ₸: «1329446.25 ₽» → «8 150 000 ₸».
+ * Нечисловые ярлыки («по запросу») не трогаем.
+ */
+function formatPriceLabel(label) {
+  if (!label) {
+    return label
+  }
+  const match = /^(\d+(?:\.\d+)?)\s*(.*)$/.exec(label.trim())
+  if (!match) {
+    return label
+  }
+  const amount = Number(match[1])
+  if (!Number.isFinite(amount)) {
+    return label
+  }
+  const suffix = match[2]
+  if (suffix.includes('₽')) {
+    const kzt = Math.round((amount * RUB_TO_KZT) / 1000) * 1000
+    return `${kzt.toLocaleString('ru-RU')} ₸`
+  }
+  return `${Math.round(amount).toLocaleString('ru-RU')}${suffix ? ` ${suffix}` : ''}`
+}
+
 function getFilteredItems(items, activeCategoryId, searchQuery) {
   const normalizedQuery = searchQuery.trim().toLowerCase()
 
@@ -87,16 +112,15 @@ function getFilteredItems(items, activeCategoryId, searchQuery) {
 function UtilityBar() {
   return (
     <div className="bg-[var(--ink)] text-white">
-      <div className="mx-auto flex max-w-[var(--page-shell-max)] items-center justify-between gap-4 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] md:px-12">
+      <div className="mx-auto flex max-w-[var(--page-shell-max)] items-center justify-between gap-4 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] md:px-12">
         <div className="flex items-center gap-3 text-white/90">
           <span>RU</span>
-          <span className="text-white/50">▼</span>
         </div>
         <a
-          href="tel:+77000000000"
+          href="tel:+77055640535"
           className="inline-flex text-white/75 transition-colors hover:text-white"
         >
-          +7 (700) 000 00 00
+          +7 (705) 564 05 35
         </a>
       </div>
     </div>
@@ -168,7 +192,7 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
           </div>
 
           <div className="pl-6">
-            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Превью категории
             </p>
             <div
@@ -179,7 +203,7 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
             <Link
               to={`/catalog/${activeCategory.id}`}
               onClick={onClose}
-              className="mt-5 inline-flex h-10 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+              className="mt-5 inline-flex h-10 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Открыть категорию
             </Link>
@@ -190,9 +214,60 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
   )
 }
 
+const NAV_LINKS = [
+  { to: '/services', label: 'УСЛУГИ' },
+  { to: '/service', label: 'СЕРВИС' },
+  { to: '/guides', label: 'ГАЙДЫ' },
+  { to: '/about', label: 'О КОМПАНИИ' },
+  { to: '/contact', label: 'КОНТАКТЫ' },
+]
+
+function MobileMenu({ onClose }) {
+  return (
+    <div className="absolute left-0 right-0 top-full z-40 max-h-[calc(100vh-120px)] overflow-y-auto border-t border-white/10 bg-[var(--panel)] shadow-[0_30px_60px_rgba(15,23,42,0.45)] lg:hidden">
+      <nav className="flex flex-col" aria-label="Мобильное меню">
+        <Link
+          to="/catalog"
+          onClick={onClose}
+          className="border-b border-white/10 px-6 py-4 text-[15px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-white/8"
+        >
+          Каталог
+        </Link>
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/catalog/${category.id}`}
+            onClick={onClose}
+            className="border-b border-white/5 px-6 py-3 text-sm text-white/75 transition-colors hover:bg-white/8 hover:text-white"
+          >
+            {category.title}
+          </Link>
+        ))}
+        {NAV_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            onClick={onClose}
+            className="border-b border-white/10 px-6 py-4 text-[15px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-white/8"
+          >
+            {link.label}
+          </Link>
+        ))}
+        <a
+          href="tel:+77055640535"
+          className="px-6 py-4 text-[15px] font-bold text-[var(--accent-bright)]"
+        >
+          +7 (705) 564 05 35
+        </a>
+      </nav>
+    </div>
+  )
+}
+
 function Header() {
   const navigate = useNavigate()
   const [isProductsOpen, setProductsOpen] = useState(false)
+  const [isMobileOpen, setMobileOpen] = useState(false)
   const productsMenuCloseTimerRef = useRef(null)
 
   const clearProductsMenuCloseTimer = () => {
@@ -229,13 +304,29 @@ function Header() {
         <div className="mx-auto flex max-w-[var(--page-shell-max)] items-stretch px-6 md:px-12">
           <Link
             to="/"
-            className="flex min-h-[88px] min-w-[190px] items-center text-3xl font-black tracking-tight text-white transition-opacity hover:opacity-90 md:min-w-[260px] md:text-4xl"
+            className="flex min-h-[72px] items-center text-3xl font-black tracking-tight text-white transition-opacity hover:opacity-90 md:min-h-[88px] md:min-w-[260px] md:text-4xl"
             aria-label="QAZAQTEST, перейти на главную"
           >
             QAZAQ<span className="text-[var(--accent)]">TEST</span>
           </Link>
 
-          <nav className="flex flex-1 items-stretch justify-end" aria-label="Основное меню">
+          <button
+            type="button"
+            onClick={() => setMobileOpen((open) => !open)}
+            aria-expanded={isMobileOpen}
+            aria-label={isMobileOpen ? 'Закрыть меню' : 'Открыть меню'}
+            className="ml-auto flex items-center justify-center self-center p-3 lg:hidden"
+          >
+            <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              {isMobileOpen ? (
+                <path d="M6 6l12 12M18 6L6 18" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
+
+          <nav className="hidden flex-1 items-stretch justify-end lg:flex" aria-label="Основное меню">
             <div
               className="relative flex min-w-[180px]"
               onMouseEnter={openProductsMenu}
@@ -254,41 +345,16 @@ function Header() {
                 <span className="text-xs">▼</span>
               </button>
             </div>
-            <Link
-              to="/services"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              УСЛУГИ
-            </Link>
-            <Link
-              to="/service"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              СЕРВИС
-            </Link>
-            <Link
-              to="/guides"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              ГАЙДЫ
-            </Link>
-            <Link
-              to="/about"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              О КОМПАНИИ
-            </Link>
-            <Link
-              to="/contact"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              КОНТАКТЫ
-            </Link>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onMouseEnter={closeProductsMenuNow}
+                className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
         {isProductsOpen ? (
@@ -298,14 +364,43 @@ function Header() {
             onMouseLeave={scheduleCloseProductsMenu}
           />
         ) : null}
+        {isMobileOpen ? <MobileMenu onClose={() => setMobileOpen(false)} /> : null}
       </div>
     </header>
   )
 }
 
+const WHATSAPP_PHONE = '77055640535'
+
+function buildWhatsAppUrl({ name, phone, topic }) {
+  const text = `Здравствуйте! Меня зовут ${name || '—'}. Интересует: ${topic}. Мой телефон: ${phone || '—'}.`
+  return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`
+}
+
+/**
+ * Отправка заявки на бэкенд/вебхук, если он настроен через VITE_LEAD_ENDPOINT
+ * (например, Formspree или собственный обработчик). Без него заявка уходит
+ * только через WhatsApp-кнопку на экране подтверждения.
+ */
+async function sendLead(payload) {
+  const endpoint = import.meta.env.VITE_LEAD_ENDPOINT
+  if (!endpoint) {
+    return { delivered: false }
+  }
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!response.ok) {
+    throw new Error(`Lead endpoint responded with ${response.status}`)
+  }
+  return { delivered: true }
+}
+
 function ContactModal({ selectedCategory, onClose }) {
   const [formData, setFormData] = useState({ name: '', phone: '' })
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const nameInputRef = useRef(null)
   const titleId = useId()
 
@@ -321,10 +416,24 @@ function ContactModal({ selectedCategory, onClose }) {
     setFormData((current) => ({ ...current, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setIsSubmitted(true)
+    setStatus('sending')
+    try {
+      await sendLead({
+        name: formData.name,
+        phone: formData.phone,
+        topic: selectedCategory,
+        page: window.location.href,
+        submittedAt: new Date().toISOString(),
+      })
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
   }
+
+  const isSubmitted = status === 'sent' || status === 'error'
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6">
@@ -350,27 +459,50 @@ function ContactModal({ selectedCategory, onClose }) {
           ×
         </button>
 
-        <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
           Запрос
         </p>
         <h2 id={titleId} className="mt-4 pr-12 text-3xl font-bold tracking-tight text-[var(--ink)]">
           Запрос на консультацию
         </h2>
-        <p className="mt-4 text-sm uppercase tracking-[0.22em] text-slate-500">
+        <p className="mt-4 text-sm uppercase tracking-[0.16em] text-slate-500">
           Тема: {selectedCategory}
         </p>
 
         {isSubmitted ? (
           <div className="mt-8 rounded-[1.5rem] bg-[var(--surface)] p-6">
-            <p className="text-lg font-semibold text-[var(--ink)]">Заявка принята.</p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
-              Мы свяжемся с вами по номеру {formData.phone} и уточним детали по теме "{selectedCategory}".
-            </p>
+            {status === 'sent' ? (
+              <>
+                <p className="text-lg font-semibold text-[var(--ink)]">Заявка принята.</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Мы свяжемся с вами по номеру {formData.phone} и уточним детали по теме "{selectedCategory}".
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-lg font-semibold text-[var(--ink)]">Не получилось отправить автоматически.</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Напишите нам в WhatsApp или позвоните по номеру{' '}
+                  <a href="tel:+77055640535" className="font-semibold text-[var(--accent)]">
+                    +7 (705) 564 05 35
+                  </a>{' '}
+                  — ответим быстро.
+                </p>
+              </>
+            )}
+            <a
+              href={buildWhatsAppUrl({ ...formData, topic: selectedCategory })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#25D366] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
+            >
+              Продублировать в WhatsApp
+            </a>
           </div>
         ) : (
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
                 Ваше имя
               </span>
               <input
@@ -387,7 +519,7 @@ function ContactModal({ selectedCategory, onClose }) {
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
                 Телефон
               </span>
               <input
@@ -405,14 +537,15 @@ function ContactModal({ selectedCategory, onClose }) {
             <div className="flex flex-col gap-3 pt-3 sm:flex-row">
               <button
                 type="submit"
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+                disabled={status === 'sending'}
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95 disabled:cursor-wait disabled:opacity-70"
               >
-                Отправить запрос
+                {status === 'sending' ? 'Отправляем…' : 'Отправить запрос'}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
                 Закрыть
               </button>
@@ -471,14 +604,16 @@ function ProductModal({ item, onOpenModal, onClose }) {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.2),rgba(15,23,42,0.55))]" />
             <div className="relative flex min-h-[360px] flex-col justify-between p-8 text-white md:p-10">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/80">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
                   {category?.title}
                 </p>
-                <h2 id={titleId} className="mt-4 max-w-lg text-4xl font-bold tracking-tight">
+                <h2 id={titleId} className="mt-4 max-w-lg text-2xl font-bold tracking-tight md:text-4xl">
                   {item.title}
                 </h2>
                 {item.priceLabel ? (
-                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">{item.priceLabel}</p>
+                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">
+                    {formatPriceLabel(item.priceLabel)}
+                  </p>
                 ) : null}
                 {item.brand ? (
                   <p className="mt-2 text-sm font-medium text-white/85">{item.brand}</p>
@@ -486,7 +621,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
               </div>
 
               <div className="rounded-[1.5rem] border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/70">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
                   {item.imageUrl ? 'Фото' : 'Превью'}
                 </p>
                 <div className="mt-4 flex min-h-[120px] items-center justify-center overflow-hidden rounded-[1.35rem] border border-dashed border-white/30 bg-white/5 p-2 text-center">
@@ -499,7 +634,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
                       decoding="async"
                     />
                   ) : (
-                    <div className="p-6 text-sm uppercase tracking-[0.28em] text-white/75">{item.imageLabel}</div>
+                    <div className="p-6 text-sm uppercase tracking-[0.18em] text-white/75">{item.imageLabel}</div>
                   )}
                 </div>
               </div>
@@ -507,14 +642,14 @@ function ProductModal({ item, onOpenModal, onClose }) {
           </div>
 
           <div className="p-8 md:p-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Обзор оборудования
             </p>
             <p className="mt-5 text-base leading-relaxed text-slate-600">{item.description}</p>
 
             {item.features?.length > 0 ? (
               <div className="mt-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Ключевые особенности
                 </p>
                 <div className="mt-4 space-y-3">
@@ -530,7 +665,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
 
             {item.specs?.length > 0 ? (
               <div className="mt-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Основные характеристики
                 </p>
                 <div className="mt-4 grid gap-3">
@@ -563,24 +698,14 @@ function ProductModal({ item, onOpenModal, onClose }) {
               <button
                 type="button"
                 onClick={() => onOpenModal(item.title)}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
               >
                 Запросить предложение
               </button>
-              {item.productUrl ? (
-                <a
-                  href={item.productUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
-                >
-                  Карточка товара (источник)
-                </a>
-              ) : null}
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
                 Закрыть превью
               </button>
@@ -629,14 +754,10 @@ function SiteFooter({ onOpenModal }) {
               Поставка лабораторного оборудования для дорожных, строительных и материаловедческих
               лабораторий по Казахстану: подбор, логистика, монтаж и сервисное сопровождение.
             </p>
-            <p className="mt-4 text-xs leading-relaxed text-slate-500">
-              Ниже — пример заполнения блоков подвала. Замените телефоны, e-mail и реквизиты на ваши
-              актуальные данные.
-            </p>
           </div>
 
           <nav className="lg:col-span-3" aria-label="Разделы сайта в подвале">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Разделы
             </p>
             <ul className="mt-5 space-y-3 text-sm font-medium text-[var(--ink)]">
@@ -674,7 +795,7 @@ function SiteFooter({ onOpenModal }) {
           </nav>
 
           <div className="lg:col-span-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Связь
             </p>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-slate-600">
@@ -701,8 +822,8 @@ function SiteFooter({ onOpenModal }) {
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
-              Реквизиты (пример)
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+              Реквизиты
             </p>
             <address className="mt-5 not-italic text-sm leading-relaxed text-slate-600">
               ТОО «QAZAQTEST»
@@ -718,17 +839,17 @@ function SiteFooter({ onOpenModal }) {
           <button
             type="button"
             onClick={() => onOpenModal(defaultCategory)}
-            className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95 md:w-auto"
+            className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95 md:w-auto"
           >
             Связаться с нами
           </button>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-500">
             <span>© {new Date().getFullYear()} QAZAQTEST. Все права защищены.</span>
             <a href="#" className="transition-colors hover:text-[var(--accent)]">
-              Политика конфиденциальности (пример)
+              Политика конфиденциальности
             </a>
             <a href="#" className="transition-colors hover:text-[var(--accent)]">
-              Договор оферты (пример)
+              Договор оферты
             </a>
           </div>
         </div>
@@ -1009,26 +1130,26 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:gap-12 md:px-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-14 lg:py-28">
           <div className="max-w-4xl">
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.88] tracking-[0.008em] text-balance md:text-7xl md:leading-[0.91] md:tracking-[0.012em]">
+            <h1 className="max-w-4xl text-balance text-4xl font-black leading-[1.06] tracking-[-0.01em] sm:text-5xl sm:leading-[1.04] md:text-7xl md:leading-[1.0]">
               Оборудование для{' '}
               <span className="text-[var(--accent-bright)]">дорожных и строительных</span> лабораторий в Казахстане.
             </h1>
             <div className="mt-8 h-1 w-28 rounded-full bg-[var(--accent)]" />
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/74">
+            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/75">
               Поставляем оборудование, которое знаем технически — не по каталогу, а по опыту работы в
               лаборатории. Имеем собственную сервисную службу.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 to="/catalog"
-                className="inline-flex h-16 items-center justify-center rounded-none bg-[var(--accent)] px-10 text-sm font-bold uppercase tracking-[0.24em] text-white transition-transform hover:-translate-y-0.5"
+                className="inline-flex h-16 items-center justify-center rounded-none bg-[var(--accent)] px-10 text-sm font-bold uppercase tracking-[0.16em] text-white transition-transform hover:-translate-y-0.5"
               >
                 Перейти в каталог
               </Link>
               <button
                 type="button"
                 onClick={() => onOpenModal(defaultCategory)}
-                className="inline-flex h-16 items-center justify-center border border-white/20 px-10 text-sm font-bold uppercase tracking-[0.24em] text-white transition-colors hover:bg-white/8"
+                className="inline-flex h-16 items-center justify-center border border-white/20 px-10 text-sm font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white/8"
               >
                 Связаться с нами
               </button>
@@ -1039,16 +1160,16 @@ function HomePage({ onOpenModal }) {
             {benefits.map((benefit) => (
               <article key={benefit.title} className="border border-white/12 bg-white/6 p-6 backdrop-blur-sm">
                 {benefit.value ? (
-                  <div className="text-5xl font-black italic text-[var(--accent-bright)]">{benefit.value}</div>
+                  <div className="text-5xl font-black tabular-nums text-[var(--accent-bright)]">{benefit.value}</div>
                 ) : null}
                 <div
-                  className={`text-xs font-extrabold uppercase tracking-[0.28em] text-white/75 ${
+                  className={`text-xs font-extrabold uppercase tracking-[0.18em] text-white/75 ${
                     benefit.value ? 'mt-3' : ''
                   }`}
                 >
                   {benefit.title}
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-white/70">{benefit.description}</p>
+                <p className="mt-4 text-sm leading-relaxed text-white/75">{benefit.description}</p>
               </article>
             ))}
           </div>
@@ -1057,7 +1178,7 @@ function HomePage({ onOpenModal }) {
 
       <section id="brands" className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-14 md:px-12 md:py-16 lg:py-20">
-          <h2 className="max-w-4xl text-5xl font-black tracking-tight text-[var(--accent)]">
+          <h2 className="max-w-4xl text-3xl font-black tracking-tight text-[var(--ink)] md:text-5xl">
             Оборудование от проверенных производителей
           </h2>
           <div className="mt-8 md:mt-10">
@@ -1070,7 +1191,7 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <div className="max-w-3xl">
-            <h2 className="text-5xl font-black tracking-tight text-white">Категории оборудования</h2>
+            <h2 className="text-3xl font-black tracking-tight text-white md:text-5xl">Категории оборудования</h2>
             <div className="mt-6 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-8 text-lg leading-relaxed text-white/75">
               Каталог построен по материалам и направлениям испытаний, чтобы клиент мог быстро
@@ -1087,7 +1208,7 @@ function HomePage({ onOpenModal }) {
       <section id="service" className="bg-[var(--page-bg)]">
         <div className="mx-auto grid max-w-[var(--page-shell-max)] gap-8 px-6 py-20 md:px-12 lg:grid-cols-3">
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Сервис
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Монтаж и запуск</h3>
@@ -1096,7 +1217,7 @@ function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Поддержка
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Обучение и методики</h3>
@@ -1105,7 +1226,7 @@ function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Логистика
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Доставка по Казахстану</h3>
@@ -1123,25 +1244,25 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:px-12 lg:grid-cols-[minmax(0,1fr)_420px]">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Материалы и поддержка
             </p>
-            <h2 className="mt-5 text-5xl font-black tracking-tight">Создано для технических специалистов и лабораторий.</h2>
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/72">
-              Следующий шаг для сайта: стандарты, методики, downloadable материалы, сервисные блоки
-              и более детальная структура категорий.
+            <h2 className="mt-5 text-3xl font-black tracking-tight md:text-5xl">Создано для технических специалистов и лабораторий.</h2>
+            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/75">
+              Подскажем по стандартам и методикам испытаний, поможем укомплектовать лабораторию под
+              требования аккредитации и сопроводим запуск оборудования на площадке.
             </p>
           </div>
 
           <div className="border border-white/12 bg-white/6 p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/62">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/70">
               Канал связи
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight">Нужна конфигурация под вашу задачу?</h3>
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="mt-8 inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="mt-8 inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Запросить консультацию
             </button>
@@ -1160,8 +1281,8 @@ function Breadcrumbs({ categoryTitle }) {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <Link to="/catalog" className="text-[var(--accent)] hover:underline">Каталог</Link>{' '}
-        {'>'} <span>{categoryTitle}</span>
+        <span className="text-slate-400">/</span>{' '}<Link to="/catalog" className="text-[var(--accent)] hover:underline">Каталог</Link>{' '}
+        <span className="text-slate-400">/</span>{' '}<span>{categoryTitle}</span>
       </div>
     </div>
   )
@@ -1174,7 +1295,7 @@ function CatalogBreadcrumbs() {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <span>Каталог</span>
+        <span className="text-slate-400">/</span>{' '}<span>Каталог</span>
       </div>
     </div>
   )
@@ -1187,7 +1308,7 @@ function StaticPageBreadcrumbs({ currentTitle }) {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <span>{currentTitle}</span>
+        <span className="text-slate-400">/</span>{' '}<span>{currentTitle}</span>
       </div>
     </div>
   )
@@ -1199,7 +1320,7 @@ function ServicesPage() {
       <StaticPageBreadcrumbs currentTitle="Услуги" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Услуги</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Услуги</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Закрываем полный цикл: от ввода оборудования в эксплуатацию до сопровождения лаборатории в
             рабочих процессах.
@@ -1236,8 +1357,8 @@ function GuidesPage({ onOpenModal }) {
       <StaticPageBreadcrumbs currentTitle="Гайды" />
       <section className="bg-[var(--navy)] text-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight">Гайды</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/72">
+          <h1 className="text-4xl font-black tracking-tight md:text-5xl">Гайды</h1>
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/75">
             Практические инструкции по выбору оборудования, запуску лабораторий и подготовке к
             испытаниям по основным направлениям.
           </p>
@@ -1259,7 +1380,7 @@ function GuidesPage({ onOpenModal }) {
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Получить консультацию
             </button>
@@ -1276,7 +1397,7 @@ function ServicePage() {
       <StaticPageBreadcrumbs currentTitle="Сервис" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Сервис</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Сервис</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Техническое сопровождение оборудования, контроль состояния приборов и регулярные регламентные
             работы для бесперебойной работы лаборатории.
@@ -1313,7 +1434,7 @@ function AboutPage() {
       <StaticPageBreadcrumbs currentTitle="О компании" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">О компании QAZAQTEST</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">О компании QAZAQTEST</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Мы поставляем лабораторное оборудование для дорожных, строительных и материаловедческих
             лабораторий по всему Казахстану и сопровождаем клиентов на каждом этапе внедрения.
@@ -1322,7 +1443,7 @@ function AboutPage() {
             {benefits.map((benefit) => (
               <article key={benefit.title} className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
                 {benefit.value ? (
-                  <div className="text-4xl font-black italic text-[var(--accent-bright)]">{benefit.value}</div>
+                  <div className="text-4xl font-black tabular-nums text-[var(--accent-bright)]">{benefit.value}</div>
                 ) : null}
                 <h2
                   className={`text-2xl font-bold tracking-tight text-[var(--ink)] ${
@@ -1347,22 +1468,22 @@ function ContactPage({ onOpenModal }) {
       <StaticPageBreadcrumbs currentTitle="Контакты" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Контакты</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Контакты</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Оставьте заявку, и мы поможем подобрать оборудование под вашу лабораторию, бюджет и
             технические требования.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a
-              href="tel:+77000000000"
-              className="inline-flex h-14 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+              href="tel:+77055640535"
+              className="inline-flex h-14 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
             >
               +7 (705) 564 05 35
             </a>
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Оставить заявку
             </button>
@@ -1399,7 +1520,7 @@ function CatalogPage() {
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <div className="max-w-3xl">
-            <h1 className="text-6xl font-black tracking-tight text-[var(--ink)]">Каталог</h1>
+            <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-6xl">Каталог</h1>
             <div className="mt-7 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-8 text-lg leading-relaxed text-slate-600">
               Изучите линейку испытательного оборудования, отсортированную по материалам и задачам
@@ -1421,7 +1542,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
     <div className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <label className="block w-full max-w-xl">
-          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.28em] text-slate-500">
+          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
             Поиск по категории
           </span>
           <input
@@ -1432,7 +1553,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
             className="h-14 w-full border border-[#78AEAD]/35 bg-white px-5 outline-none transition-all focus:border-[var(--accent)]"
           />
         </label>
-        <div className="text-[11px] font-bold uppercase tracking-[0.28em] text-slate-500">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
           Найдено: <span className="text-[var(--ink)]">{resultCount}</span>
         </div>
       </div>
@@ -1466,65 +1587,92 @@ function CatalogItemCard({ item, onOpenModal, onPreview }) {
   const category = getCategoryById(item.categoryId)
 
   return (
-    <article className="border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1">
-      <div className="grid gap-0 md:grid-cols-[220px_minmax(0,1fr)]">
-        <div className="relative min-h-[220px] overflow-hidden bg-white">
-          {item.imageUrl ? (
-            <img
-              src={item.imageUrl}
-              alt=""
-              className="absolute inset-0 h-full w-full object-contain p-4"
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <div className="absolute inset-0" style={{ background: category?.image }} />
-          )}
-        </div>
-        <div className="p-6">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
-              {category?.title}
-            </p>
-            <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--ink)]">{item.title}</h3>
-            {item.model ? (
-              <p className="mt-2 text-sm font-medium text-slate-500">Модель: {item.model}</p>
-            ) : null}
-            {item.brand ? <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{item.brand}</p> : null}
-            {item.priceLabel ? (
-              <p className="mt-3 text-xl font-bold tracking-tight text-[var(--ink)]">{item.priceLabel}</p>
-            ) : null}
-          </div>
+    <article className="flex min-w-0 flex-col border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1">
+      <button
+        type="button"
+        onClick={() => onPreview(item)}
+        aria-label={`Быстрый просмотр: ${item.title}`}
+        className="relative block aspect-[4/3] w-full overflow-hidden border-b border-[#78AEAD]/15 bg-white"
+      >
+        {item.imageUrl ? (
+          <img
+            src={item.imageUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain p-4"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="absolute inset-0" style={{ background: category?.image }} />
+        )}
+      </button>
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+          {category?.title}
+        </p>
+        <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
+          {item.title}
+        </h3>
+        {item.model ? (
+          <p className="mt-1 text-xs font-medium text-slate-500">Модель: {item.model}</p>
+        ) : null}
+        {item.priceLabel ? (
+          <p className="mt-2 text-lg font-bold tracking-tight text-[var(--ink)]">
+            {formatPriceLabel(item.priceLabel)}
+          </p>
+        ) : null}
+        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600">{item.summary}</p>
 
-          <p className="mt-5 text-sm leading-relaxed text-slate-600">{item.summary}</p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => onPreview(item)}
-              className="inline-flex h-12 flex-1 items-center justify-center border border-[#78AEAD]/35 px-5 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
-            >
-              Быстрый просмотр
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenModal(item.title)}
-              className="inline-flex h-12 flex-1 items-center justify-center bg-[var(--accent)] px-5 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
-            >
-              Запросить предложение
-            </button>
-          </div>
+        <div className="mt-5 grid gap-2">
+          <button
+            type="button"
+            onClick={() => onOpenModal(item.title)}
+            className="inline-flex h-11 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:brightness-95"
+          >
+            Запросить предложение
+          </button>
+          <button
+            type="button"
+            onClick={() => onPreview(item)}
+            className="inline-flex h-11 items-center justify-center border border-[#78AEAD]/35 px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+          >
+            Быстрый просмотр
+          </button>
         </div>
       </div>
     </article>
   )
 }
 
-function EmptyCatalogState() {
+function EmptyCatalogState({ categoryTitle, onOpenModal }) {
+  if (onOpenModal) {
+    return (
+      <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+          Раздел наполняется
+        </p>
+        <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
+          Позиции этого раздела скоро появятся на сайте
+        </h3>
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
+          Оборудование по направлению «{categoryTitle}» мы уже поставляем — оставьте заявку, и
+          инженер подберёт комплектацию под вашу задачу.
+        </p>
+        <button
+          type="button"
+          onClick={() => onOpenModal(categoryTitle)}
+          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-8 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
+        >
+          Запросить подбор
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">Ничего не найдено</p>
-      <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Ничего не найдено</p>
+      <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
         Фильтр ничего не нашёл
       </h3>
       <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
@@ -1534,19 +1682,35 @@ function EmptyCatalogState() {
   )
 }
 
+const CATEGORY_PAGE_SIZE = 12
+
 function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const { id } = useParams()
   const category = getCategoryById(id)
   const [searchQuery, setSearchQuery] = useState('')
+  const [visibleCount, setVisibleCount] = useState(CATEGORY_PAGE_SIZE)
+
+  // Сброс поиска и пагинации при переходе в другую категорию
+  const [prevId, setPrevId] = useState(id)
+  if (prevId !== id) {
+    setPrevId(id)
+    setSearchQuery('')
+    setVisibleCount(CATEGORY_PAGE_SIZE)
+  }
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value)
+    setVisibleCount(CATEGORY_PAGE_SIZE)
+  }
 
   if (!category) {
     return (
       <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-[var(--accent)]">404</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Раздел не найден</h1>
         <Link
           to="/catalog"
-          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white"
+          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white"
         >
           В каталог
         </Link>
@@ -1554,7 +1718,10 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
     )
   }
 
+  const categoryItems = catalogItems.filter((item) => item.categoryId === category.id)
   const filteredItems = getFilteredItems(catalogItems, category.id, searchQuery)
+  const visibleItems = filteredItems.slice(0, visibleCount)
+  const hiddenCount = filteredItems.length - visibleItems.length
 
   return (
     <>
@@ -1563,7 +1730,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-14">
           <div className="max-w-4xl">
-            <h1 className="text-6xl font-black tracking-tight text-[var(--ink)]">{category.title}</h1>
+            <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-6xl">{category.title}</h1>
             <div className="mt-7 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-6 text-lg leading-relaxed text-slate-600">{category.description}</p>
           </div>
@@ -1572,9 +1739,9 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
             <CategoryNavigation currentCategoryId={category.id} />
           </div>
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <aside className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
-              <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
+            <aside className="order-last min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6 lg:order-none">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
                 Состав раздела
               </p>
               <div className="mt-6 space-y-3">
@@ -1586,27 +1753,45 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
               </div>
             </aside>
 
-            <div>
+            <div className="min-w-0">
               <CatalogFilterBar
                 searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+                onSearchChange={handleSearchChange}
                 resultCount={filteredItems.length}
               />
 
-              <div className="mt-8 grid gap-6">
-                {filteredItems.length > 0 ? (
-                  filteredItems.map((item) => (
-                    <CatalogItemCard
-                      key={item.id}
-                      item={item}
-                      onOpenModal={onOpenModal}
-                      onPreview={onPreviewProduct}
-                    />
-                  ))
-                ) : (
-                  <EmptyCatalogState />
-                )}
-              </div>
+              {filteredItems.length > 0 ? (
+                <>
+                  <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {visibleItems.map((item) => (
+                      <CatalogItemCard
+                        key={item.id}
+                        item={item}
+                        onOpenModal={onOpenModal}
+                        onPreview={onPreviewProduct}
+                      />
+                    ))}
+                  </div>
+                  {hiddenCount > 0 ? (
+                    <div className="mt-10 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setVisibleCount((count) => count + CATEGORY_PAGE_SIZE)}
+                        className="inline-flex h-13 items-center justify-center border border-[#78AEAD]/35 bg-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                      >
+                        Показать ещё ({hiddenCount})
+                      </button>
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <div className="mt-8">
+                  <EmptyCatalogState
+                    categoryTitle={category.title}
+                    onOpenModal={categoryItems.length === 0 ? onOpenModal : undefined}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

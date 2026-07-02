@@ -1,5 +1,12 @@
 import catalogGenerated from './catalog.generated.json'
 
+/**
+ * Курс пересчёта рублёвых цен источника в тенге (₽ → ₸).
+ * Официальный курс НБ РК на 02.07.2026 ≈ 6,13. Сюда же можно заложить
+ * наценку (например, 6.13 * 1.15). Цены на сайте округляются до 1000 ₸.
+ */
+export const RUB_TO_KZT = 6.13
+
 export const categories = [
   {
     id: 'asphalt',
