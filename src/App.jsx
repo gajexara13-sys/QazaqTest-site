@@ -361,9 +361,37 @@ function Header() {
   )
 }
 
+const WHATSAPP_PHONE = '77055640535'
+
+function buildWhatsAppUrl({ name, phone, topic }) {
+  const text = `Здравствуйте! Меня зовут ${name || '—'}. Интересует: ${topic}. Мой телефон: ${phone || '—'}.`
+  return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`
+}
+
+/**
+ * Отправка заявки на бэкенд/вебхук, если он настроен через VITE_LEAD_ENDPOINT
+ * (например, Formspree или собственный обработчик). Без него заявка уходит
+ * только через WhatsApp-кнопку на экране подтверждения.
+ */
+async function sendLead(payload) {
+  const endpoint = import.meta.env.VITE_LEAD_ENDPOINT
+  if (!endpoint) {
+    return { delivered: false }
+  }
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!response.ok) {
+    throw new Error(`Lead endpoint responded with ${response.status}`)
+  }
+  return { delivered: true }
+}
+
 function ContactModal({ selectedCategory, onClose }) {
   const [formData, setFormData] = useState({ name: '', phone: '' })
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const nameInputRef = useRef(null)
   const titleId = useId()
 
@@ -379,10 +407,24 @@ function ContactModal({ selectedCategory, onClose }) {
     setFormData((current) => ({ ...current, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setIsSubmitted(true)
+    setStatus('sending')
+    try {
+      await sendLead({
+        name: formData.name,
+        phone: formData.phone,
+        topic: selectedCategory,
+        page: window.location.href,
+        submittedAt: new Date().toISOString(),
+      })
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
   }
+
+  const isSubmitted = status === 'sent' || status === 'error'
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6">
@@ -420,10 +462,33 @@ function ContactModal({ selectedCategory, onClose }) {
 
         {isSubmitted ? (
           <div className="mt-8 rounded-[1.5rem] bg-[var(--surface)] p-6">
-            <p className="text-lg font-semibold text-[var(--ink)]">Заявка принята.</p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
-              Мы свяжемся с вами по номеру {formData.phone} и уточним детали по теме "{selectedCategory}".
-            </p>
+            {status === 'sent' ? (
+              <>
+                <p className="text-lg font-semibold text-[var(--ink)]">Заявка принята.</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Мы свяжемся с вами по номеру {formData.phone} и уточним детали по теме "{selectedCategory}".
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-lg font-semibold text-[var(--ink)]">Не получилось отправить автоматически.</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Напишите нам в WhatsApp или позвоните по номеру{' '}
+                  <a href="tel:+77055640535" className="font-semibold text-[var(--accent)]">
+                    +7 (705) 564 05 35
+                  </a>{' '}
+                  — ответим быстро.
+                </p>
+              </>
+            )}
+            <a
+              href={buildWhatsAppUrl({ ...formData, topic: selectedCategory })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#25D366] px-6 text-xs font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+            >
+              Продублировать в WhatsApp
+            </a>
           </div>
         ) : (
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -463,9 +528,10 @@ function ContactModal({ selectedCategory, onClose }) {
             <div className="flex flex-col gap-3 pt-3 sm:flex-row">
               <button
                 type="submit"
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+                disabled={status === 'sending'}
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95 disabled:cursor-wait disabled:opacity-70"
               >
-                Отправить запрос
+                {status === 'sending' ? 'Отправляем…' : 'Отправить запрос'}
               </button>
               <button
                 type="button"
@@ -1615,10 +1681,13 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [visibleCount, setVisibleCount] = useState(CATEGORY_PAGE_SIZE)
 
-  useEffect(() => {
+  // Сброс поиска и пагинации при переходе в другую категорию
+  const [prevId, setPrevId] = useState(id)
+  if (prevId !== id) {
+    setPrevId(id)
     setSearchQuery('')
     setVisibleCount(CATEGORY_PAGE_SIZE)
-  }, [id])
+  }
 
   const handleSearchChange = (value) => {
     setSearchQuery(value)
