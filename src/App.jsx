@@ -112,7 +112,7 @@ function getFilteredItems(items, activeCategoryId, searchQuery) {
 function UtilityBar() {
   return (
     <div className="bg-[var(--ink)] text-white">
-      <div className="mx-auto flex max-w-[var(--page-shell-max)] items-center justify-between gap-4 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] md:px-12">
+      <div className="mx-auto flex max-w-[var(--page-shell-max)] items-center justify-between gap-4 px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] md:px-12">
         <div className="flex items-center gap-3 text-white/90">
           <span>RU</span>
         </div>
@@ -192,7 +192,7 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
           </div>
 
           <div className="pl-6">
-            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Превью категории
             </p>
             <div
@@ -203,7 +203,7 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
             <Link
               to={`/catalog/${activeCategory.id}`}
               onClick={onClose}
-              className="mt-5 inline-flex h-10 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+              className="mt-5 inline-flex h-10 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Открыть категорию
             </Link>
@@ -459,13 +459,13 @@ function ContactModal({ selectedCategory, onClose }) {
           ×
         </button>
 
-        <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
           Запрос
         </p>
         <h2 id={titleId} className="mt-4 pr-12 text-3xl font-bold tracking-tight text-[var(--ink)]">
           Запрос на консультацию
         </h2>
-        <p className="mt-4 text-sm uppercase tracking-[0.22em] text-slate-500">
+        <p className="mt-4 text-sm uppercase tracking-[0.16em] text-slate-500">
           Тема: {selectedCategory}
         </p>
 
@@ -494,7 +494,7 @@ function ContactModal({ selectedCategory, onClose }) {
               href={buildWhatsAppUrl({ ...formData, topic: selectedCategory })}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#25D366] px-6 text-xs font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+              className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#25D366] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Продублировать в WhatsApp
             </a>
@@ -502,7 +502,7 @@ function ContactModal({ selectedCategory, onClose }) {
         ) : (
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
                 Ваше имя
               </span>
               <input
@@ -519,7 +519,7 @@ function ContactModal({ selectedCategory, onClose }) {
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
                 Телефон
               </span>
               <input
@@ -538,14 +538,14 @@ function ContactModal({ selectedCategory, onClose }) {
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95 disabled:cursor-wait disabled:opacity-70"
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95 disabled:cursor-wait disabled:opacity-70"
               >
                 {status === 'sending' ? 'Отправляем…' : 'Отправить запрос'}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
                 Закрыть
               </button>
@@ -604,7 +604,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.2),rgba(15,23,42,0.55))]" />
             <div className="relative flex min-h-[360px] flex-col justify-between p-8 text-white md:p-10">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/80">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
                   {category?.title}
                 </p>
                 <h2 id={titleId} className="mt-4 max-w-lg text-2xl font-bold tracking-tight md:text-4xl">
@@ -621,7 +621,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
               </div>
 
               <div className="rounded-[1.5rem] border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/70">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
                   {item.imageUrl ? 'Фото' : 'Превью'}
                 </p>
                 <div className="mt-4 flex min-h-[120px] items-center justify-center overflow-hidden rounded-[1.35rem] border border-dashed border-white/30 bg-white/5 p-2 text-center">
@@ -634,7 +634,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
                       decoding="async"
                     />
                   ) : (
-                    <div className="p-6 text-sm uppercase tracking-[0.28em] text-white/75">{item.imageLabel}</div>
+                    <div className="p-6 text-sm uppercase tracking-[0.18em] text-white/75">{item.imageLabel}</div>
                   )}
                 </div>
               </div>
@@ -642,14 +642,14 @@ function ProductModal({ item, onOpenModal, onClose }) {
           </div>
 
           <div className="p-8 md:p-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Обзор оборудования
             </p>
             <p className="mt-5 text-base leading-relaxed text-slate-600">{item.description}</p>
 
             {item.features?.length > 0 ? (
               <div className="mt-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Ключевые особенности
                 </p>
                 <div className="mt-4 space-y-3">
@@ -665,7 +665,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
 
             {item.specs?.length > 0 ? (
               <div className="mt-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Основные характеристики
                 </p>
                 <div className="mt-4 grid gap-3">
@@ -698,14 +698,14 @@ function ProductModal({ item, onOpenModal, onClose }) {
               <button
                 type="button"
                 onClick={() => onOpenModal(item.title)}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
               >
                 Запросить предложение
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
                 Закрыть превью
               </button>
@@ -757,7 +757,7 @@ function SiteFooter({ onOpenModal }) {
           </div>
 
           <nav className="lg:col-span-3" aria-label="Разделы сайта в подвале">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Разделы
             </p>
             <ul className="mt-5 space-y-3 text-sm font-medium text-[var(--ink)]">
@@ -795,7 +795,7 @@ function SiteFooter({ onOpenModal }) {
           </nav>
 
           <div className="lg:col-span-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Связь
             </p>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-slate-600">
@@ -822,7 +822,7 @@ function SiteFooter({ onOpenModal }) {
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Реквизиты
             </p>
             <address className="mt-5 not-italic text-sm leading-relaxed text-slate-600">
@@ -839,7 +839,7 @@ function SiteFooter({ onOpenModal }) {
           <button
             type="button"
             onClick={() => onOpenModal(defaultCategory)}
-            className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95 md:w-auto"
+            className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95 md:w-auto"
           >
             Связаться с нами
           </button>
@@ -1130,26 +1130,26 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:gap-12 md:px-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-14 lg:py-28">
           <div className="max-w-4xl">
-            <h1 className="max-w-4xl text-4xl font-black leading-[0.92] tracking-[0.008em] text-balance sm:text-5xl sm:leading-[0.88] md:text-7xl md:leading-[0.91] md:tracking-[0.012em]">
+            <h1 className="max-w-4xl text-balance text-4xl font-black leading-[1.06] tracking-[-0.01em] sm:text-5xl sm:leading-[1.04] md:text-7xl md:leading-[1.0]">
               Оборудование для{' '}
               <span className="text-[var(--accent-bright)]">дорожных и строительных</span> лабораторий в Казахстане.
             </h1>
             <div className="mt-8 h-1 w-28 rounded-full bg-[var(--accent)]" />
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/74">
+            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/75">
               Поставляем оборудование, которое знаем технически — не по каталогу, а по опыту работы в
               лаборатории. Имеем собственную сервисную службу.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 to="/catalog"
-                className="inline-flex h-16 items-center justify-center rounded-none bg-[var(--accent)] px-10 text-sm font-bold uppercase tracking-[0.24em] text-white transition-transform hover:-translate-y-0.5"
+                className="inline-flex h-16 items-center justify-center rounded-none bg-[var(--accent)] px-10 text-sm font-bold uppercase tracking-[0.16em] text-white transition-transform hover:-translate-y-0.5"
               >
                 Перейти в каталог
               </Link>
               <button
                 type="button"
                 onClick={() => onOpenModal(defaultCategory)}
-                className="inline-flex h-16 items-center justify-center border border-white/20 px-10 text-sm font-bold uppercase tracking-[0.24em] text-white transition-colors hover:bg-white/8"
+                className="inline-flex h-16 items-center justify-center border border-white/20 px-10 text-sm font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white/8"
               >
                 Связаться с нами
               </button>
@@ -1160,16 +1160,16 @@ function HomePage({ onOpenModal }) {
             {benefits.map((benefit) => (
               <article key={benefit.title} className="border border-white/12 bg-white/6 p-6 backdrop-blur-sm">
                 {benefit.value ? (
-                  <div className="text-5xl font-black italic text-[var(--accent-bright)]">{benefit.value}</div>
+                  <div className="text-5xl font-black tabular-nums text-[var(--accent-bright)]">{benefit.value}</div>
                 ) : null}
                 <div
-                  className={`text-xs font-extrabold uppercase tracking-[0.28em] text-white/75 ${
+                  className={`text-xs font-extrabold uppercase tracking-[0.18em] text-white/75 ${
                     benefit.value ? 'mt-3' : ''
                   }`}
                 >
                   {benefit.title}
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-white/70">{benefit.description}</p>
+                <p className="mt-4 text-sm leading-relaxed text-white/75">{benefit.description}</p>
               </article>
             ))}
           </div>
@@ -1178,7 +1178,7 @@ function HomePage({ onOpenModal }) {
 
       <section id="brands" className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-14 md:px-12 md:py-16 lg:py-20">
-          <h2 className="max-w-4xl text-3xl font-black tracking-tight text-[var(--accent)] md:text-5xl">
+          <h2 className="max-w-4xl text-3xl font-black tracking-tight text-[var(--ink)] md:text-5xl">
             Оборудование от проверенных производителей
           </h2>
           <div className="mt-8 md:mt-10">
@@ -1208,7 +1208,7 @@ function HomePage({ onOpenModal }) {
       <section id="service" className="bg-[var(--page-bg)]">
         <div className="mx-auto grid max-w-[var(--page-shell-max)] gap-8 px-6 py-20 md:px-12 lg:grid-cols-3">
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Сервис
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Монтаж и запуск</h3>
@@ -1217,7 +1217,7 @@ function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Поддержка
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Обучение и методики</h3>
@@ -1226,7 +1226,7 @@ function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Логистика
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Доставка по Казахстану</h3>
@@ -1244,25 +1244,25 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:px-12 lg:grid-cols-[minmax(0,1fr)_420px]">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
               Материалы и поддержка
             </p>
             <h2 className="mt-5 text-3xl font-black tracking-tight md:text-5xl">Создано для технических специалистов и лабораторий.</h2>
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/72">
+            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/75">
               Подскажем по стандартам и методикам испытаний, поможем укомплектовать лабораторию под
               требования аккредитации и сопроводим запуск оборудования на площадке.
             </p>
           </div>
 
           <div className="border border-white/12 bg-white/6 p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/62">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/70">
               Канал связи
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight">Нужна конфигурация под вашу задачу?</h3>
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="mt-8 inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="mt-8 inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Запросить консультацию
             </button>
@@ -1281,8 +1281,8 @@ function Breadcrumbs({ categoryTitle }) {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <Link to="/catalog" className="text-[var(--accent)] hover:underline">Каталог</Link>{' '}
-        {'>'} <span>{categoryTitle}</span>
+        <span className="text-slate-400">/</span>{' '}<Link to="/catalog" className="text-[var(--accent)] hover:underline">Каталог</Link>{' '}
+        <span className="text-slate-400">/</span>{' '}<span>{categoryTitle}</span>
       </div>
     </div>
   )
@@ -1295,7 +1295,7 @@ function CatalogBreadcrumbs() {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <span>Каталог</span>
+        <span className="text-slate-400">/</span>{' '}<span>Каталог</span>
       </div>
     </div>
   )
@@ -1308,7 +1308,7 @@ function StaticPageBreadcrumbs({ currentTitle }) {
         <Link to="/" className="text-[var(--accent)] hover:underline">
           QAZAQTEST
         </Link>{' '}
-        {'>'} <span>{currentTitle}</span>
+        <span className="text-slate-400">/</span>{' '}<span>{currentTitle}</span>
       </div>
     </div>
   )
@@ -1358,7 +1358,7 @@ function GuidesPage({ onOpenModal }) {
       <section className="bg-[var(--navy)] text-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight md:text-5xl">Гайды</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/72">
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/75">
             Практические инструкции по выбору оборудования, запуску лабораторий и подготовке к
             испытаниям по основным направлениям.
           </p>
@@ -1380,7 +1380,7 @@ function GuidesPage({ onOpenModal }) {
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Получить консультацию
             </button>
@@ -1443,7 +1443,7 @@ function AboutPage() {
             {benefits.map((benefit) => (
               <article key={benefit.title} className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
                 {benefit.value ? (
-                  <div className="text-4xl font-black italic text-[var(--accent-bright)]">{benefit.value}</div>
+                  <div className="text-4xl font-black tabular-nums text-[var(--accent-bright)]">{benefit.value}</div>
                 ) : null}
                 <h2
                   className={`text-2xl font-bold tracking-tight text-[var(--ink)] ${
@@ -1476,14 +1476,14 @@ function ContactPage({ onOpenModal }) {
           <div className="mt-10 flex flex-wrap gap-4">
             <a
               href="tel:+77055640535"
-              className="inline-flex h-14 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.24em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+              className="inline-flex h-14 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
             >
               +7 (705) 564 05 35
             </a>
             <button
               type="button"
               onClick={() => onOpenModal(defaultCategory)}
-              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.24em] text-white transition-colors hover:brightness-95"
+              className="inline-flex h-14 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
             >
               Оставить заявку
             </button>
@@ -1542,7 +1542,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
     <div className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <label className="block w-full max-w-xl">
-          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.28em] text-slate-500">
+          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
             Поиск по категории
           </span>
           <input
@@ -1553,7 +1553,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
             className="h-14 w-full border border-[#78AEAD]/35 bg-white px-5 outline-none transition-all focus:border-[var(--accent)]"
           />
         </label>
-        <div className="text-[11px] font-bold uppercase tracking-[0.28em] text-slate-500">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
           Найдено: <span className="text-[var(--ink)]">{resultCount}</span>
         </div>
       </div>
@@ -1607,7 +1607,7 @@ function CatalogItemCard({ item, onOpenModal, onPreview }) {
         )}
       </button>
       <div className="flex flex-1 flex-col p-5">
-        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--accent)]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
           {category?.title}
         </p>
         <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
@@ -1648,7 +1648,7 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
   if (onOpenModal) {
     return (
       <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
           Раздел наполняется
         </p>
         <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
@@ -1661,7 +1661,7 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
         <button
           type="button"
           onClick={() => onOpenModal(categoryTitle)}
-          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-8 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-8 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
         >
           Запросить подбор
         </button>
@@ -1671,7 +1671,7 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
 
   return (
     <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">Ничего не найдено</p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Ничего не найдено</p>
       <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
         Фильтр ничего не нашёл
       </h3>
@@ -1706,11 +1706,11 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
   if (!category) {
     return (
       <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-[var(--accent)]">404</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Раздел не найден</h1>
         <Link
           to="/catalog"
-          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.24em] text-white"
+          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white"
         >
           В каталог
         </Link>
@@ -1741,7 +1741,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
 
           <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
             <aside className="order-last min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6 lg:order-none">
-              <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
                 Состав раздела
               </p>
               <div className="mt-6 space-y-3">
@@ -1777,7 +1777,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
                       <button
                         type="button"
                         onClick={() => setVisibleCount((count) => count + CATEGORY_PAGE_SIZE)}
-                        className="inline-flex h-13 items-center justify-center border border-[#78AEAD]/35 bg-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                        className="inline-flex h-13 items-center justify-center border border-[#78AEAD]/35 bg-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
                       >
                         Показать ещё ({hiddenCount})
                       </button>
