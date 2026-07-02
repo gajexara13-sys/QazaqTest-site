@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог оборудования — QazaqTest</title>
+  <meta name="description" content="Каталог лабораторного оборудования QazaqTest: аналитические приборы, общелабораторная техника, измерительные приборы, мебель, посуда и реактивы.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo" aria-label="QazaqTest — на главную">
+        <svg class="logo__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#lg)"/>
+          <path d="M15 10v8.5L9.5 28a3 3 0 0 0 2.6 4.5h15.8a3 3 0 0 0 2.6-4.5L25 18.5V10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12.5 10h15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="17.5" cy="25.5" r="1.6" fill="#FEC50C"/>
+          <circle cx="22.5" cy="28" r="1.2" fill="#FEC50C"/>
+          <defs><linearGradient id="lg" x1="2" y1="2" x2="38" y2="38"><stop stop-color="#00AFCA"/><stop offset="1" stop-color="#0C7FB8"/></linearGradient></defs>
+        </svg>
+        <span class="logo__text">Qazaq<span>Test</span></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Основная навигация">
+        <a href="index.html" class="nav__link">Главная</a>
+        <a href="catalog.html" class="nav__link nav__link--active">Каталог</a>
+        <a href="about.html" class="nav__link">О компании</a>
+        <a href="contacts.html" class="nav__link">Контакты</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="tel:+77270000000" class="header__phone">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          +7 (727) 000-00-00
+        </a>
+        <button class="btn btn--primary btn--sm" data-modal-open>Оставить заявку</button>
+        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Хлебные крошки">
+          <a href="index.html">Главная</a><span>/</span><span>Каталог</span>
+        </nav>
+        <h1>Каталог оборудования</h1>
+        <p>Не нашли нужную позицию? Мы поставляем оборудование под заказ — <button class="link-arrow" data-modal-open style="font-size:inherit">отправьте запрос</button> и мы подберём решение.</p>
+      </div>
+    </section>
+
+    <section class="catalog-layout">
+      <div class="container">
+        <div class="catalog-toolbar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="search" id="catalog-search" placeholder="Поиск по каталогу…" aria-label="Поиск по каталогу">
+          </div>
+          <div class="chips" id="catalog-chips" role="group" aria-label="Фильтр по категориям">
+            <button class="chip is-active" data-cat="all">Все</button>
+            <button class="chip" data-cat="analytics">Аналитическое</button>
+            <button class="chip" data-cat="general">Общелабораторное</button>
+            <button class="chip" data-cat="measuring">Измерительные</button>
+            <button class="chip" data-cat="furniture">Мебель</button>
+            <button class="chip" data-cat="consumables">Расходники</button>
+            <button class="chip" data-cat="reagents">Реактивы</button>
+          </div>
+        </div>
+
+        <p class="catalog-count" id="catalog-count" aria-live="polite"></p>
+        <div class="product-grid" id="catalog-grid"></div>
+        <div class="catalog-empty" id="catalog-empty" hidden>
+          <strong>Ничего не найдено</strong>
+          <p>Попробуйте изменить запрос или <button class="link-arrow" data-modal-open style="font-size:inherit">отправьте заявку</button> — подберём под заказ.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__col footer__col--brand">
+        <a href="index.html" class="logo logo--light">
+          <svg class="logo__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#lgf)"/>
+            <path d="M15 10v8.5L9.5 28a3 3 0 0 0 2.6 4.5h15.8a3 3 0 0 0 2.6-4.5L25 18.5V10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.5 10h15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <defs><linearGradient id="lgf" x1="2" y1="2" x2="38" y2="38"><stop stop-color="#00AFCA"/><stop offset="1" stop-color="#0C7FB8"/></linearGradient></defs>
+          </svg>
+          <span class="logo__text">Qazaq<span>Test</span></span>
+        </a>
+        <p>Поставка лабораторного оборудования и комплексное оснащение лабораторий по всему Казахстану.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Разделы</h4>
+        <a href="index.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="about.html">О компании</a>
+        <a href="contacts.html">Контакты</a>
+      </div>
+      <div class="footer__col">
+        <h4>Каталог</h4>
+        <a href="catalog.html?cat=analytics">Аналитическое оборудование</a>
+        <a href="catalog.html?cat=general">Общелабораторное</a>
+        <a href="catalog.html?cat=measuring">Измерительные приборы</a>
+        <a href="catalog.html?cat=furniture">Лабораторная мебель</a>
+      </div>
+      <div class="footer__col">
+        <h4>Контакты</h4>
+        <a href="tel:+77270000000">+7 (727) 000-00-00</a>
+        <a href="mailto:info@qazaqtest.kz">info@qazaqtest.kz</a>
+        <p>г. Алматы, ул. Примерная, 1, офис 101</p>
+        <p>Пн–Пт, 9:00–18:00</p>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>© 2026 QazaqTest. Все права защищены.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal__close" data-modal-close aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <h3 id="modal-title">Оставить заявку</h3>
+      <p class="modal__sub">Заполните форму — мы свяжемся с вами в течение рабочего дня.</p>
+      <form class="form" id="lead-form" novalidate>
+        <label class="form__field">
+          <span>Ваше имя *</span>
+          <input type="text" name="name" required placeholder="Как к вам обращаться">
+        </label>
+        <label class="form__field">
+          <span>Телефон *</span>
+          <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__">
+        </label>
+        <label class="form__field">
+          <span>Что вас интересует</span>
+          <textarea name="message" rows="3" placeholder="Например: нужен спектрофотометр для лаборатории воды"></textarea>
+        </label>
+        <button type="submit" class="btn btn--primary btn--lg form__submit">Отправить заявку</button>
+        <p class="form__note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
+        <p class="form__success" hidden>Спасибо! Заявка отправлена — мы скоро свяжемся с вами.</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/catalog.js"></script>
+</body>
+</html>

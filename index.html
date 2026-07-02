@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QazaqTest — лабораторное оборудование в Казахстане</title>
+  <meta name="description" content="QazaqTest — поставка лабораторного оборудования, приборов и расходных материалов по всему Казахстану. Аналитическое оборудование, общелабораторная техника, мебель, реактивы.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo" aria-label="QazaqTest — на главную">
+        <svg class="logo__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#lg)"/>
+          <path d="M15 10v8.5L9.5 28a3 3 0 0 0 2.6 4.5h15.8a3 3 0 0 0 2.6-4.5L25 18.5V10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12.5 10h15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="17.5" cy="25.5" r="1.6" fill="#FEC50C"/>
+          <circle cx="22.5" cy="28" r="1.2" fill="#FEC50C"/>
+          <defs>
+            <linearGradient id="lg" x1="2" y1="2" x2="38" y2="38">
+              <stop stop-color="#00AFCA"/><stop offset="1" stop-color="#0C7FB8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo__text">Qazaq<span>Test</span></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Основная навигация">
+        <a href="index.html" class="nav__link nav__link--active">Главная</a>
+        <a href="catalog.html" class="nav__link">Каталог</a>
+        <a href="about.html" class="nav__link">О компании</a>
+        <a href="contacts.html" class="nav__link">Контакты</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="tel:+77270000000" class="header__phone">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          +7 (727) 000-00-00
+        </a>
+        <button class="btn btn--primary btn--sm" data-modal-open>Оставить заявку</button>
+        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__content reveal">
+          <span class="badge">Работаем по всему Казахстану</span>
+          <h1 class="hero__title">Лабораторное оборудование <em>для точных результатов</em></h1>
+          <p class="hero__subtitle">Комплексное оснащение лабораторий: аналитические приборы, общелабораторная техника, мебель и расходные материалы. Подбор, поставка, пусконаладка и сервис.</p>
+          <div class="hero__actions">
+            <a href="catalog.html" class="btn btn--primary btn--lg">Перейти в каталог</a>
+            <button class="btn btn--ghost btn--lg" data-modal-open>Получить консультацию</button>
+          </div>
+          <ul class="hero__stats">
+            <li><strong>10+</strong><span>лет на рынке</span></li>
+            <li><strong>500+</strong><span>оснащённых лабораторий</span></li>
+            <li><strong>50+</strong><span>мировых брендов</span></li>
+            <li><strong>24 ч</strong><span>ответ на запрос</span></li>
+          </ul>
+        </div>
+        <div class="hero__art reveal" aria-hidden="true">
+          <svg viewBox="0 0 420 420" fill="none">
+            <circle cx="210" cy="210" r="200" fill="url(#hg1)" opacity=".12"/>
+            <circle cx="210" cy="210" r="150" stroke="#00AFCA" stroke-opacity=".25" stroke-dasharray="4 8"/>
+            <rect x="120" y="90" width="180" height="240" rx="20" fill="#fff" stroke="#dbe7f0"/>
+            <path d="M180 120v70l-38 78a16 16 0 0 0 14.4 23h107.2a16 16 0 0 0 14.4-23l-38-78v-70" stroke="#0C7FB8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M168 120h84" stroke="#0C7FB8" stroke-width="7" stroke-linecap="round"/>
+            <path d="M158 232h104l24 49a10 10 0 0 1-9 14.5H143a10 10 0 0 1-9-14.5l24-49Z" fill="#00AFCA" fill-opacity=".25"/>
+            <circle cx="195" cy="262" r="8" fill="#00AFCA"/>
+            <circle cx="228" cy="276" r="6" fill="#FEC50C"/>
+            <circle cx="210" cy="250" r="5" fill="#0C7FB8"/>
+            <g class="float-a"><rect x="296" y="120" width="86" height="64" rx="14" fill="#fff" stroke="#dbe7f0"/><path d="M312 158l10-14 10 10 14-22 12 26" stroke="#00AFCA" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <g class="float-b"><rect x="42" y="230" width="86" height="64" rx="14" fill="#fff" stroke="#dbe7f0"/><circle cx="70" cy="262" r="14" stroke="#FEC50C" stroke-width="5"/><path d="M80 272l14 14" stroke="#FEC50C" stroke-width="5" stroke-linecap="round"/></g>
+            <defs><linearGradient id="hg1" x1="10" y1="10" x2="410" y2="410"><stop stop-color="#00AFCA"/><stop offset="1" stop-color="#0C7FB8"/></linearGradient></defs>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2>Категории оборудования</h2>
+          <a href="catalog.html" class="link-arrow">Весь каталог
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="cat-grid">
+          <a href="catalog.html?cat=analytics" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#E0F5F9">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M6 26h20M9 26V14m7 12V8m7 18V18" stroke="#0C7FB8" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Аналитическое оборудование</h3>
+            <p>Спектрофотометры, хроматографы, анализаторы</p>
+          </a>
+          <a href="catalog.html?cat=general" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#FFF4D6">
+              <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="#C79400" stroke-width="2.4"/><path d="M16 16l5-5M16 6v3m10 7h-3M16 26v-3M6 16h3" stroke="#C79400" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Общелабораторное</h3>
+            <p>Центрифуги, автоклавы, термостаты, шейкеры</p>
+          </a>
+          <a href="catalog.html?cat=measuring" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#E4F0FA">
+              <svg viewBox="0 0 32 32" fill="none"><rect x="5" y="8" width="22" height="16" rx="3" stroke="#0C7FB8" stroke-width="2.4"/><path d="M10 20l3-5 3 3 4-6 2 4" stroke="#00AFCA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Измерительные приборы</h3>
+            <p>Весы, pH-метры, рефрактометры, титраторы</p>
+          </a>
+          <a href="catalog.html?cat=furniture" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#E9F9EF">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M4 12h24M6 12v14m20-14v14M12 12V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5m-8 8h8" stroke="#1E9E5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Лабораторная мебель</h3>
+            <p>Вытяжные шкафы, столы, стеллажи, мойки</p>
+          </a>
+          <a href="catalog.html?cat=consumables" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#F3ECFB">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M12 4v8l-6 12a3 3 0 0 0 2.7 4.4h14.6A3 3 0 0 0 26 24L20 12V4" stroke="#7A4DB8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4h12" stroke="#7A4DB8" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Посуда и расходники</h3>
+            <p>Стекло, пластик, фильтры, наконечники</p>
+          </a>
+          <a href="catalog.html?cat=reagents" class="cat-card reveal">
+            <span class="cat-card__icon" style="--tint:#FDEBEC">
+              <svg viewBox="0 0 32 32" fill="none"><rect x="9" y="9" width="14" height="19" rx="3" stroke="#C2454E" stroke-width="2.4"/><path d="M12 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3m-11 9h14" stroke="#C2454E" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Реактивы и стандарты</h3>
+            <p>Химреактивы, ГСО, питательные среды</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section section--tint">
+      <div class="container">
+        <div class="section__head section__head--center reveal">
+          <h2>Почему выбирают QazaqTest</h2>
+          <p class="section__lead">Мы не просто продаём приборы — мы берём на себя весь цикл оснащения лаборатории</p>
+        </div>
+        <div class="benefit-grid">
+          <div class="benefit reveal">
+            <span class="benefit__num">01</span>
+            <h3>Официальные поставки</h3>
+            <p>Прямые контракты с производителями. Полный пакет документов, сертификаты и регистрация в реестре СИ РК.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="benefit__num">02</span>
+            <h3>Подбор под задачу</h3>
+            <p>Инженеры помогут подобрать оборудование под вашу методику, бюджет и требования аккредитации.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="benefit__num">03</span>
+            <h3>Пусконаладка и обучение</h3>
+            <p>Монтаж, ввод в эксплуатацию и обучение персонала на месте — в любом регионе Казахстана.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="benefit__num">04</span>
+            <h3>Сервис и поверка</h3>
+            <p>Гарантийное и постгарантийное обслуживание, помощь в организации поверки и калибровки.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular products -->
+    <section class="section">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2>Популярные позиции</h2>
+          <a href="catalog.html" class="link-arrow">Смотреть все
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="product-grid" id="featured-grid"><!-- rendered by JS --></div>
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="section section--tint">
+      <div class="container">
+        <div class="section__head section__head--center reveal">
+          <h2>Как мы работаем</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal"><span class="step__dot">1</span><h3>Заявка</h3><p>Оставьте заявку на сайте или позвоните — уточним задачу и требования.</p></li>
+          <li class="step reveal"><span class="step__dot">2</span><h3>Подбор и КП</h3><p>Подберём оборудование и подготовим коммерческое предложение в течение 1–2 дней.</p></li>
+          <li class="step reveal"><span class="step__dot">3</span><h3>Договор и поставка</h3><p>Заключаем договор, поставляем оборудование в срок с полным пакетом документов.</p></li>
+          <li class="step reveal"><span class="step__dot">4</span><h3>Запуск и сервис</h3><p>Выполняем пусконаладку, обучаем персонал и сопровождаем в эксплуатации.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta reveal">
+          <div class="cta__content">
+            <h2>Нужно оснастить лабораторию?</h2>
+            <p>Отправьте заявку — инженер свяжется с вами в течение рабочего дня, поможет с подбором и подготовит коммерческое предложение.</p>
+          </div>
+          <button class="btn btn--light btn--lg" data-modal-open>Оставить заявку</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__col footer__col--brand">
+        <a href="index.html" class="logo logo--light">
+          <svg class="logo__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#lgf)"/>
+            <path d="M15 10v8.5L9.5 28a3 3 0 0 0 2.6 4.5h15.8a3 3 0 0 0 2.6-4.5L25 18.5V10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.5 10h15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <defs><linearGradient id="lgf" x1="2" y1="2" x2="38" y2="38"><stop stop-color="#00AFCA"/><stop offset="1" stop-color="#0C7FB8"/></linearGradient></defs>
+          </svg>
+          <span class="logo__text">Qazaq<span>Test</span></span>
+        </a>
+        <p>Поставка лабораторного оборудования и комплексное оснащение лабораторий по всему Казахстану.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Разделы</h4>
+        <a href="index.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="about.html">О компании</a>
+        <a href="contacts.html">Контакты</a>
+      </div>
+      <div class="footer__col">
+        <h4>Каталог</h4>
+        <a href="catalog.html?cat=analytics">Аналитическое оборудование</a>
+        <a href="catalog.html?cat=general">Общелабораторное</a>
+        <a href="catalog.html?cat=measuring">Измерительные приборы</a>
+        <a href="catalog.html?cat=furniture">Лабораторная мебель</a>
+      </div>
+      <div class="footer__col">
+        <h4>Контакты</h4>
+        <a href="tel:+77270000000">+7 (727) 000-00-00</a>
+        <a href="mailto:info@qazaqtest.kz">info@qazaqtest.kz</a>
+        <p>г. Алматы, ул. Примерная, 1, офис 101</p>
+        <p>Пн–Пт, 9:00–18:00</p>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>© 2026 QazaqTest. Все права защищены.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal__close" data-modal-close aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <h3 id="modal-title">Оставить заявку</h3>
+      <p class="modal__sub">Заполните форму — мы свяжемся с вами в течение рабочего дня.</p>
+      <form class="form" id="lead-form" novalidate>
+        <label class="form__field">
+          <span>Ваше имя *</span>
+          <input type="text" name="name" required placeholder="Как к вам обращаться">
+        </label>
+        <label class="form__field">
+          <span>Телефон *</span>
+          <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__">
+        </label>
+        <label class="form__field">
+          <span>Что вас интересует</span>
+          <textarea name="message" rows="3" placeholder="Например: нужен спектрофотометр для лаборатории воды"></textarea>
+        </label>
+        <button type="submit" class="btn btn--primary btn--lg form__submit">Отправить заявку</button>
+        <p class="form__note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
+        <p class="form__success" hidden>Спасибо! Заявка отправлена — мы скоро свяжемся с вами.</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
