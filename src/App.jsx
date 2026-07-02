@@ -59,6 +59,22 @@ function useEscToClose(onClose) {
   }, [onClose])
 }
 
+/** «1329446.25 ₽» → «1 329 446 ₽»; нечисловые ярлыки («по запросу») не трогаем */
+function formatPriceLabel(label) {
+  if (!label) {
+    return label
+  }
+  const match = /^(\d+(?:\.\d+)?)\s*(.*)$/.exec(label.trim())
+  if (!match) {
+    return label
+  }
+  const amount = Math.round(Number(match[1]))
+  if (!Number.isFinite(amount)) {
+    return label
+  }
+  return `${amount.toLocaleString('ru-RU')}${match[2] ? ` ${match[2]}` : ''}`
+}
+
 function getFilteredItems(items, activeCategoryId, searchQuery) {
   const normalizedQuery = searchQuery.trim().toLowerCase()
 
@@ -520,7 +536,9 @@ function ProductModal({ item, onOpenModal, onClose }) {
                   {item.title}
                 </h2>
                 {item.priceLabel ? (
-                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">{item.priceLabel}</p>
+                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">
+                    {formatPriceLabel(item.priceLabel)}
+                  </p>
                 ) : null}
                 {item.brand ? (
                   <p className="mt-2 text-sm font-medium text-white/85">{item.brand}</p>
@@ -1494,65 +1512,92 @@ function CatalogItemCard({ item, onOpenModal, onPreview }) {
   const category = getCategoryById(item.categoryId)
 
   return (
-    <article className="border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1">
-      <div className="grid gap-0 md:grid-cols-[220px_minmax(0,1fr)]">
-        <div className="relative min-h-[220px] overflow-hidden bg-white">
-          {item.imageUrl ? (
-            <img
-              src={item.imageUrl}
-              alt=""
-              className="absolute inset-0 h-full w-full object-contain p-4"
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <div className="absolute inset-0" style={{ background: category?.image }} />
-          )}
-        </div>
-        <div className="p-6">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
-              {category?.title}
-            </p>
-            <h3 className="mt-3 break-words text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">{item.title}</h3>
-            {item.model ? (
-              <p className="mt-2 text-sm font-medium text-slate-500">Модель: {item.model}</p>
-            ) : null}
-            {item.brand ? <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{item.brand}</p> : null}
-            {item.priceLabel ? (
-              <p className="mt-3 text-xl font-bold tracking-tight text-[var(--ink)]">{item.priceLabel}</p>
-            ) : null}
-          </div>
+    <article className="flex min-w-0 flex-col border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1">
+      <button
+        type="button"
+        onClick={() => onPreview(item)}
+        aria-label={`Быстрый просмотр: ${item.title}`}
+        className="relative block aspect-[4/3] w-full overflow-hidden border-b border-[#78AEAD]/15 bg-white"
+      >
+        {item.imageUrl ? (
+          <img
+            src={item.imageUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain p-4"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className="absolute inset-0" style={{ background: category?.image }} />
+        )}
+      </button>
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--accent)]">
+          {category?.title}
+        </p>
+        <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
+          {item.title}
+        </h3>
+        {item.model ? (
+          <p className="mt-1 text-xs font-medium text-slate-500">Модель: {item.model}</p>
+        ) : null}
+        {item.priceLabel ? (
+          <p className="mt-2 text-lg font-bold tracking-tight text-[var(--ink)]">
+            {formatPriceLabel(item.priceLabel)}
+          </p>
+        ) : null}
+        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600">{item.summary}</p>
 
-          <p className="mt-5 text-sm leading-relaxed text-slate-600">{item.summary}</p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => onPreview(item)}
-              className="inline-flex h-12 flex-1 items-center justify-center border border-[#78AEAD]/35 px-5 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
-            >
-              Быстрый просмотр
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenModal(item.title)}
-              className="inline-flex h-12 flex-1 items-center justify-center bg-[var(--accent)] px-5 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
-            >
-              Запросить предложение
-            </button>
-          </div>
+        <div className="mt-5 grid gap-2">
+          <button
+            type="button"
+            onClick={() => onOpenModal(item.title)}
+            className="inline-flex h-11 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:brightness-95"
+          >
+            Запросить предложение
+          </button>
+          <button
+            type="button"
+            onClick={() => onPreview(item)}
+            className="inline-flex h-11 items-center justify-center border border-[#78AEAD]/35 px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+          >
+            Быстрый просмотр
+          </button>
         </div>
       </div>
     </article>
   )
 }
 
-function EmptyCatalogState() {
+function EmptyCatalogState({ categoryTitle, onOpenModal }) {
+  if (onOpenModal) {
+    return (
+      <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
+          Раздел наполняется
+        </p>
+        <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
+          Позиции этого раздела скоро появятся на сайте
+        </h3>
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
+          Оборудование по направлению «{categoryTitle}» мы уже поставляем — оставьте заявку, и
+          инженер подберёт комплектацию под вашу задачу.
+        </p>
+        <button
+          type="button"
+          onClick={() => onOpenModal(categoryTitle)}
+          className="mt-8 inline-flex h-12 items-center justify-center bg-[var(--accent)] px-8 text-[11px] font-bold uppercase tracking-[0.22em] text-white transition-colors hover:brightness-95"
+        >
+          Запросить подбор
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
       <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">Ничего не найдено</p>
-      <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">
+      <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
         Фильтр ничего не нашёл
       </h3>
       <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
@@ -1562,10 +1607,23 @@ function EmptyCatalogState() {
   )
 }
 
+const CATEGORY_PAGE_SIZE = 12
+
 function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const { id } = useParams()
   const category = getCategoryById(id)
   const [searchQuery, setSearchQuery] = useState('')
+  const [visibleCount, setVisibleCount] = useState(CATEGORY_PAGE_SIZE)
+
+  useEffect(() => {
+    setSearchQuery('')
+    setVisibleCount(CATEGORY_PAGE_SIZE)
+  }, [id])
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value)
+    setVisibleCount(CATEGORY_PAGE_SIZE)
+  }
 
   if (!category) {
     return (
@@ -1582,7 +1640,10 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
     )
   }
 
+  const categoryItems = catalogItems.filter((item) => item.categoryId === category.id)
   const filteredItems = getFilteredItems(catalogItems, category.id, searchQuery)
+  const visibleItems = filteredItems.slice(0, visibleCount)
+  const hiddenCount = filteredItems.length - visibleItems.length
 
   return (
     <>
@@ -1617,24 +1678,42 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
             <div className="min-w-0">
               <CatalogFilterBar
                 searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+                onSearchChange={handleSearchChange}
                 resultCount={filteredItems.length}
               />
 
-              <div className="mt-8 grid gap-6">
-                {filteredItems.length > 0 ? (
-                  filteredItems.map((item) => (
-                    <CatalogItemCard
-                      key={item.id}
-                      item={item}
-                      onOpenModal={onOpenModal}
-                      onPreview={onPreviewProduct}
-                    />
-                  ))
-                ) : (
-                  <EmptyCatalogState />
-                )}
-              </div>
+              {filteredItems.length > 0 ? (
+                <>
+                  <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {visibleItems.map((item) => (
+                      <CatalogItemCard
+                        key={item.id}
+                        item={item}
+                        onOpenModal={onOpenModal}
+                        onPreview={onPreviewProduct}
+                      />
+                    ))}
+                  </div>
+                  {hiddenCount > 0 ? (
+                    <div className="mt-10 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setVisibleCount((count) => count + CATEGORY_PAGE_SIZE)}
+                        className="inline-flex h-13 items-center justify-center border border-[#78AEAD]/35 bg-white px-10 py-4 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                      >
+                        Показать ещё ({hiddenCount})
+                      </button>
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <div className="mt-8">
+                  <EmptyCatalogState
+                    categoryTitle={category.title}
+                    onOpenModal={categoryItems.length === 0 ? onOpenModal : undefined}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
