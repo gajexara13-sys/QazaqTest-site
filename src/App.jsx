@@ -10,7 +10,7 @@ import {
   useParams,
 } from 'react-router-dom'
 import CategoriesBentoGrid from './components/CategoriesBentoGrid'
-import { benefits, brands, catalogItems, categories, getCategoryById } from './data/siteData'
+import { benefits, brands, catalogItems, categories, getCategoryById, RUB_TO_KZT } from './data/siteData'
 
 const defaultCategory = 'Общий запрос'
 
@@ -59,7 +59,11 @@ function useEscToClose(onClose) {
   }, [onClose])
 }
 
-/** «1329446.25 ₽» → «1 329 446 ₽»; нечисловые ярлыки («по запросу») не трогаем */
+/**
+ * Цены источника в рублях пересчитываем в тенге по курсу RUB_TO_KZT
+ * с округлением до 1000 ₸: «1329446.25 ₽» → «8 150 000 ₸».
+ * Нечисловые ярлыки («по запросу») не трогаем.
+ */
 function formatPriceLabel(label) {
   if (!label) {
     return label
@@ -68,11 +72,16 @@ function formatPriceLabel(label) {
   if (!match) {
     return label
   }
-  const amount = Math.round(Number(match[1]))
+  const amount = Number(match[1])
   if (!Number.isFinite(amount)) {
     return label
   }
-  return `${amount.toLocaleString('ru-RU')}${match[2] ? ` ${match[2]}` : ''}`
+  const suffix = match[2]
+  if (suffix.includes('₽')) {
+    const kzt = Math.round((amount * RUB_TO_KZT) / 1000) * 1000
+    return `${kzt.toLocaleString('ru-RU')} ₸`
+  }
+  return `${Math.round(amount).toLocaleString('ru-RU')}${suffix ? ` ${suffix}` : ''}`
 }
 
 function getFilteredItems(items, activeCategoryId, searchQuery) {
