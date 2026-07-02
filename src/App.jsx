@@ -189,9 +189,60 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
   )
 }
 
+const NAV_LINKS = [
+  { to: '/services', label: 'УСЛУГИ' },
+  { to: '/service', label: 'СЕРВИС' },
+  { to: '/guides', label: 'ГАЙДЫ' },
+  { to: '/about', label: 'О КОМПАНИИ' },
+  { to: '/contact', label: 'КОНТАКТЫ' },
+]
+
+function MobileMenu({ onClose }) {
+  return (
+    <div className="absolute left-0 right-0 top-full z-40 max-h-[calc(100vh-120px)] overflow-y-auto border-t border-white/10 bg-[var(--panel)] shadow-[0_30px_60px_rgba(15,23,42,0.45)] lg:hidden">
+      <nav className="flex flex-col" aria-label="Мобильное меню">
+        <Link
+          to="/catalog"
+          onClick={onClose}
+          className="border-b border-white/10 px-6 py-4 text-[15px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-white/8"
+        >
+          Каталог
+        </Link>
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/catalog/${category.id}`}
+            onClick={onClose}
+            className="border-b border-white/5 px-6 py-3 text-sm text-white/75 transition-colors hover:bg-white/8 hover:text-white"
+          >
+            {category.title}
+          </Link>
+        ))}
+        {NAV_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            onClick={onClose}
+            className="border-b border-white/10 px-6 py-4 text-[15px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-white/8"
+          >
+            {link.label}
+          </Link>
+        ))}
+        <a
+          href="tel:+77055640535"
+          className="px-6 py-4 text-[15px] font-bold text-[var(--accent-bright)]"
+        >
+          +7 (705) 564 05 35
+        </a>
+      </nav>
+    </div>
+  )
+}
+
 function Header() {
   const navigate = useNavigate()
   const [isProductsOpen, setProductsOpen] = useState(false)
+  const [isMobileOpen, setMobileOpen] = useState(false)
   const productsMenuCloseTimerRef = useRef(null)
 
   const clearProductsMenuCloseTimer = () => {
@@ -228,13 +279,29 @@ function Header() {
         <div className="mx-auto flex max-w-[var(--page-shell-max)] items-stretch px-6 md:px-12">
           <Link
             to="/"
-            className="flex min-h-[88px] min-w-[190px] items-center text-3xl font-black tracking-tight text-white transition-opacity hover:opacity-90 md:min-w-[260px] md:text-4xl"
+            className="flex min-h-[72px] items-center text-3xl font-black tracking-tight text-white transition-opacity hover:opacity-90 md:min-h-[88px] md:min-w-[260px] md:text-4xl"
             aria-label="QAZAQTEST, перейти на главную"
           >
             QAZAQ<span className="text-[var(--accent)]">TEST</span>
           </Link>
 
-          <nav className="flex flex-1 items-stretch justify-end" aria-label="Основное меню">
+          <button
+            type="button"
+            onClick={() => setMobileOpen((open) => !open)}
+            aria-expanded={isMobileOpen}
+            aria-label={isMobileOpen ? 'Закрыть меню' : 'Открыть меню'}
+            className="ml-auto flex items-center justify-center self-center p-3 lg:hidden"
+          >
+            <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              {isMobileOpen ? (
+                <path d="M6 6l12 12M18 6L6 18" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
+
+          <nav className="hidden flex-1 items-stretch justify-end lg:flex" aria-label="Основное меню">
             <div
               className="relative flex min-w-[180px]"
               onMouseEnter={openProductsMenu}
@@ -253,41 +320,16 @@ function Header() {
                 <span className="text-xs">▼</span>
               </button>
             </div>
-            <Link
-              to="/services"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              УСЛУГИ
-            </Link>
-            <Link
-              to="/service"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              СЕРВИС
-            </Link>
-            <Link
-              to="/guides"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              ГАЙДЫ
-            </Link>
-            <Link
-              to="/about"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              О КОМПАНИИ
-            </Link>
-            <Link
-              to="/contact"
-              onMouseEnter={closeProductsMenuNow}
-              className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
-            >
-              КОНТАКТЫ
-            </Link>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onMouseEnter={closeProductsMenuNow}
+                className="inline-flex items-center whitespace-nowrap px-5 text-[16px] font-semibold transition-colors hover:bg-white/8"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
         {isProductsOpen ? (
@@ -297,6 +339,7 @@ function Header() {
             onMouseLeave={scheduleCloseProductsMenu}
           />
         ) : null}
+        {isMobileOpen ? <MobileMenu onClose={() => setMobileOpen(false)} /> : null}
       </div>
     </header>
   )
@@ -473,7 +516,7 @@ function ProductModal({ item, onOpenModal, onClose }) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-white/80">
                   {category?.title}
                 </p>
-                <h2 id={titleId} className="mt-4 max-w-lg text-4xl font-bold tracking-tight">
+                <h2 id={titleId} className="mt-4 max-w-lg text-2xl font-bold tracking-tight md:text-4xl">
                   {item.title}
                 </h2>
                 {item.priceLabel ? (
@@ -1004,7 +1047,7 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:gap-12 md:px-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-14 lg:py-28">
           <div className="max-w-4xl">
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.88] tracking-[0.008em] text-balance md:text-7xl md:leading-[0.91] md:tracking-[0.012em]">
+            <h1 className="max-w-4xl text-4xl font-black leading-[0.92] tracking-[0.008em] text-balance sm:text-5xl sm:leading-[0.88] md:text-7xl md:leading-[0.91] md:tracking-[0.012em]">
               Оборудование для{' '}
               <span className="text-[var(--accent-bright)]">дорожных и строительных</span> лабораторий в Казахстане.
             </h1>
@@ -1052,7 +1095,7 @@ function HomePage({ onOpenModal }) {
 
       <section id="brands" className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-14 md:px-12 md:py-16 lg:py-20">
-          <h2 className="max-w-4xl text-5xl font-black tracking-tight text-[var(--accent)]">
+          <h2 className="max-w-4xl text-3xl font-black tracking-tight text-[var(--accent)] md:text-5xl">
             Оборудование от проверенных производителей
           </h2>
           <div className="mt-8 md:mt-10">
@@ -1065,7 +1108,7 @@ function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <div className="max-w-3xl">
-            <h2 className="text-5xl font-black tracking-tight text-white">Категории оборудования</h2>
+            <h2 className="text-3xl font-black tracking-tight text-white md:text-5xl">Категории оборудования</h2>
             <div className="mt-6 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-8 text-lg leading-relaxed text-white/75">
               Каталог построен по материалам и направлениям испытаний, чтобы клиент мог быстро
@@ -1121,7 +1164,7 @@ function HomePage({ onOpenModal }) {
             <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
               Материалы и поддержка
             </p>
-            <h2 className="mt-5 text-5xl font-black tracking-tight">Создано для технических специалистов и лабораторий.</h2>
+            <h2 className="mt-5 text-3xl font-black tracking-tight md:text-5xl">Создано для технических специалистов и лабораторий.</h2>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/72">
               Подскажем по стандартам и методикам испытаний, поможем укомплектовать лабораторию под
               требования аккредитации и сопроводим запуск оборудования на площадке.
@@ -1194,7 +1237,7 @@ function ServicesPage() {
       <StaticPageBreadcrumbs currentTitle="Услуги" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Услуги</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Услуги</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Закрываем полный цикл: от ввода оборудования в эксплуатацию до сопровождения лаборатории в
             рабочих процессах.
@@ -1231,7 +1274,7 @@ function GuidesPage({ onOpenModal }) {
       <StaticPageBreadcrumbs currentTitle="Гайды" />
       <section className="bg-[var(--navy)] text-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight">Гайды</h1>
+          <h1 className="text-4xl font-black tracking-tight md:text-5xl">Гайды</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/72">
             Практические инструкции по выбору оборудования, запуску лабораторий и подготовке к
             испытаниям по основным направлениям.
@@ -1271,7 +1314,7 @@ function ServicePage() {
       <StaticPageBreadcrumbs currentTitle="Сервис" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Сервис</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Сервис</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Техническое сопровождение оборудования, контроль состояния приборов и регулярные регламентные
             работы для бесперебойной работы лаборатории.
@@ -1308,7 +1351,7 @@ function AboutPage() {
       <StaticPageBreadcrumbs currentTitle="О компании" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">О компании QAZAQTEST</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">О компании QAZAQTEST</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Мы поставляем лабораторное оборудование для дорожных, строительных и материаловедческих
             лабораторий по всему Казахстану и сопровождаем клиентов на каждом этапе внедрения.
@@ -1342,7 +1385,7 @@ function ContactPage({ onOpenModal }) {
       <StaticPageBreadcrumbs currentTitle="Контакты" />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
-          <h1 className="text-5xl font-black tracking-tight text-[var(--ink)]">Контакты</h1>
+          <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Контакты</h1>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600">
             Оставьте заявку, и мы поможем подобрать оборудование под вашу лабораторию, бюджет и
             технические требования.
@@ -1394,7 +1437,7 @@ function CatalogPage() {
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <div className="max-w-3xl">
-            <h1 className="text-6xl font-black tracking-tight text-[var(--ink)]">Каталог</h1>
+            <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-6xl">Каталог</h1>
             <div className="mt-7 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-8 text-lg leading-relaxed text-slate-600">
               Изучите линейку испытательного оборудования, отсортированную по материалам и задачам
@@ -1481,7 +1524,7 @@ function CatalogItemCard({ item, onOpenModal, onPreview }) {
             <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--accent)]">
               {category?.title}
             </p>
-            <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--ink)]">{item.title}</h3>
+            <h3 className="mt-3 break-words text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">{item.title}</h3>
             {item.model ? (
               <p className="mt-2 text-sm font-medium text-slate-500">Модель: {item.model}</p>
             ) : null}
@@ -1558,7 +1601,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-14">
           <div className="max-w-4xl">
-            <h1 className="text-6xl font-black tracking-tight text-[var(--ink)]">{category.title}</h1>
+            <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-6xl">{category.title}</h1>
             <div className="mt-7 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-6 text-lg leading-relaxed text-slate-600">{category.description}</p>
           </div>
@@ -1567,8 +1610,8 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
             <CategoryNavigation currentCategoryId={category.id} />
           </div>
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <aside className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
+            <aside className="order-last min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6 lg:order-none">
               <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[var(--accent)]">
                 Состав раздела
               </p>
@@ -1581,7 +1624,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
               </div>
             </aside>
 
-            <div>
+            <div className="min-w-0">
               <CatalogFilterBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
