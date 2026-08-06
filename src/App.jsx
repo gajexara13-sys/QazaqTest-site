@@ -9,8 +9,24 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom'
+import Breadcrumbs from './components/Breadcrumbs'
 import CategoriesBentoGrid from './components/CategoriesBentoGrid'
-import { benefits, brands, catalogItems, categories, getCategoryById, RUB_TO_KZT } from './data/siteData'
+import ProductCard from './components/ProductCard'
+import ProductImage from './components/ProductImage'
+import ProductSpecs from './components/ProductSpecs'
+import ProductPage from './pages/ProductPage'
+import useDocumentTitle from './hooks/useDocumentTitle'
+import {
+  benefits,
+  brands,
+  COMPANY_DETAILS,
+  catalogItems,
+  categories,
+  categoryCounts,
+  formatPrice,
+  getCategoryById,
+  getCategoryGroups,
+} from './data/siteData'
 
 const defaultCategory = 'Общий запрос'
 
@@ -59,54 +75,59 @@ function useEscToClose(onClose) {
   }, [onClose])
 }
 
-/**
- * Цены источника в рублях пересчитываем в тенге по курсу RUB_TO_KZT
- * с округлением до 1000 ₸: «1329446.25 ₽» → «8 150 000 ₸».
- * Нечисловые ярлыки («по запросу») не трогаем.
- */
-function formatPriceLabel(label) {
-  if (!label) {
-    return label
-  }
-  const match = /^(\d+(?:\.\d+)?)\s*(.*)$/.exec(label.trim())
-  if (!match) {
-    return label
-  }
-  const amount = Number(match[1])
-  if (!Number.isFinite(amount)) {
-    return label
-  }
-  const suffix = match[2]
-  if (suffix.includes('₽')) {
-    const kzt = Math.round((amount * RUB_TO_KZT) / 1000) * 1000
-    return `${kzt.toLocaleString('ru-RU')} ₸`
-  }
-  return `${Math.round(amount).toLocaleString('ru-RU')}${suffix ? ` ${suffix}` : ''}`
-}
-
-function getFilteredItems(items, activeCategoryId, searchQuery) {
+function getFilteredItems(items, activeCategoryId, searchQuery, activeGroup = 'all') {
   const normalizedQuery = searchQuery.trim().toLowerCase()
 
   return items.filter((item) => {
     const matchesCategory = activeCategoryId === 'all' || item.categoryId === activeCategoryId
+    const matchesGroup = activeGroup === 'all' || item.group === activeGroup
     const blob = [
       item.title,
       item.summary,
-      item.description,
       item.model,
       item.brand,
-      item.priceLabel,
-      item.originalCategory,
-      item.sku,
-      ...(item.tags ?? []),
+      item.group,
+      ...item.paragraphs,
+      ...item.specs.map((spec) => `${spec.label} ${spec.value}`),
+      ...item.tags,
     ]
       .filter(Boolean)
       .join('\n')
       .toLowerCase()
     const matchesSearch = normalizedQuery.length === 0 || blob.includes(normalizedQuery)
 
-    return matchesCategory && matchesSearch
+    return matchesCategory && matchesGroup && matchesSearch
   })
+}
+
+/** Сортировки каталога: по умолчанию — как в выгрузке. */
+const SORT_OPTIONS = [
+  { id: 'default', label: 'По умолчанию' },
+  { id: 'price-asc', label: 'Сначала дешевле' },
+  { id: 'price-desc', label: 'Сначала дороже' },
+  { id: 'title', label: 'По названию' },
+]
+
+function sortItems(items, sortId) {
+  const sorted = [...items]
+
+  switch (sortId) {
+    case 'price-asc':
+    case 'price-desc': {
+      const direction = sortId === 'price-asc' ? 1 : -1
+      // Позиции «по запросу» всегда в конце списка, независимо от направления.
+      return sorted.sort((a, b) => {
+        if (!a.priceRub || !b.priceRub) {
+          return (a.priceRub ? 0 : 1) - (b.priceRub ? 0 : 1)
+        }
+        return (a.priceRub - b.priceRub) * direction
+      })
+    }
+    case 'title':
+      return sorted.sort((a, b) => a.title.localeCompare(b.title, 'ru'))
+    default:
+      return sorted
+  }
 }
 
 function UtilityBar() {
@@ -557,8 +578,14 @@ function ContactModal({ selectedCategory, onClose }) {
   )
 }
 
+/**
+ * Быстрый просмотр из сетки каталога: то же содержание, что и на странице
+ * товара, но без ухода со списка. Полное описание — по ссылке «Открыть
+ * карточку», чтобы модалка не превращалась в бесконечную простыню.
+ */
 function ProductModal({ item, onOpenModal, onClose }) {
   const category = getCategoryById(item.categoryId)
+  const price = formatPrice(item.priceRub)
   const titleId = useId()
 
   useLockBodyScroll(true)
@@ -577,138 +604,91 @@ function ProductModal({ item, onOpenModal, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] border border-[#78AEAD]/25 bg-[var(--mint)] shadow-2xl shadow-slate-950/20"
+        className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto border border-[#78AEAD]/25 bg-white shadow-2xl shadow-slate-950/20"
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/85 text-xl text-slate-500 transition-colors hover:text-[var(--ink)]"
+          className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center border border-[#78AEAD]/35 bg-white text-xl text-slate-500 transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
           aria-label="Закрыть"
         >
           ×
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-          <div className="relative min-h-[360px] overflow-hidden rounded-t-[2rem] lg:rounded-l-[2rem] lg:rounded-tr-none">
-            {item.imageUrl ? (
-              <img
-                src={item.imageUrl}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-            ) : (
-              <div className="absolute inset-0" style={{ background: category?.image }} />
-            )}
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.2),rgba(15,23,42,0.55))]" />
-            <div className="relative flex min-h-[360px] flex-col justify-between p-8 text-white md:p-10">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
-                  {category?.title}
-                </p>
-                <h2 id={titleId} className="mt-4 max-w-lg text-2xl font-bold tracking-tight md:text-4xl">
-                  {item.title}
-                </h2>
-                {item.priceLabel ? (
-                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">
-                    {formatPriceLabel(item.priceLabel)}
-                  </p>
-                ) : null}
-                {item.brand ? (
-                  <p className="mt-2 text-sm font-medium text-white/85">{item.brand}</p>
-                ) : null}
-              </div>
-
-              <div className="rounded-[1.5rem] border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
-                  {item.imageUrl ? 'Фото' : 'Превью'}
-                </p>
-                <div className="mt-4 flex min-h-[120px] items-center justify-center overflow-hidden rounded-[1.35rem] border border-dashed border-white/30 bg-white/5 p-2 text-center">
-                  {item.imageUrl ? (
-                    <img
-                      src={item.imageUrl}
-                      alt=""
-                      className="max-h-[200px] w-full object-contain"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div className="p-6 text-sm uppercase tracking-[0.18em] text-white/75">{item.imageLabel}</div>
-                  )}
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="relative min-h-[280px] border-b border-[#78AEAD]/20 bg-[var(--surface)] lg:min-h-full lg:border-b-0 lg:border-r">
+            <ProductImage item={item} eager />
           </div>
 
-          <div className="p-8 md:p-10">
+          <div className="p-7 md:p-9">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Обзор оборудования
+              {item.group ?? category?.title}
             </p>
-            <p className="mt-5 text-base leading-relaxed text-slate-600">{item.description}</p>
+            <h2
+              id={titleId}
+              className="mt-3 pr-10 text-2xl font-bold leading-tight tracking-tight text-[var(--ink)] md:text-3xl"
+            >
+              {item.title}
+            </h2>
 
-            {item.features?.length > 0 ? (
-              <div className="mt-8">
+            {item.brand || item.model ? (
+              <p className="mt-2 text-sm font-medium text-slate-500">
+                {[item.brand, item.model].filter(Boolean).join(' · ')}
+              </p>
+            ) : null}
+
+            <p
+              className={`mt-4 text-2xl font-black tracking-tight ${
+                price ? 'text-[var(--ink)]' : 'text-slate-500'
+              }`}
+            >
+              {price ?? 'Цена по запросу'}
+            </p>
+
+            <p className="mt-5 text-base leading-relaxed text-slate-600">{item.summary}</p>
+
+            {item.features.length > 0 ? (
+              <div className="mt-7">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Ключевые особенности
                 </p>
-                <div className="mt-4 space-y-3">
-                  {item.features.map((feature) => (
-                    <div key={feature} className="flex items-start text-sm leading-relaxed text-slate-700">
+                <ul className="mt-4 space-y-2.5">
+                  {item.features.slice(0, 4).map((feature) => (
+                    <li key={feature} className="flex items-start text-sm leading-relaxed text-slate-700">
                       <span className="mt-2 mr-3 h-2 w-2 flex-shrink-0 rounded-full bg-[var(--accent)]" />
                       <span>{feature}</span>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ) : null}
 
-            {item.specs?.length > 0 ? (
-              <div className="mt-8">
+            {item.specs.length > 0 ? (
+              <div className="mt-7">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Основные характеристики
                 </p>
-                <div className="mt-4 grid gap-3">
-                  {item.specs.map((spec) => (
-                    <div
-                      key={spec}
-                      className="rounded-2xl border border-[#78AEAD]/25 bg-[var(--surface)] px-4 py-3 text-sm font-medium text-slate-700"
-                    >
-                      {spec}
-                    </div>
-                  ))}
+                <div className="mt-4">
+                  <ProductSpecs specs={item.specs.slice(0, 6)} />
                 </div>
               </div>
             ) : null}
 
-            {item.tags?.length > 0 ? (
-              <div className="mt-8 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-[#78AEAD]/25 bg-[var(--mint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={() => onOpenModal(item.title)}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
+                className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight bg-[var(--accent)] px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
               >
                 Запросить предложение
               </button>
-              <button
-                type="button"
+              <Link
+                to={`/catalog/${item.categoryId}/${item.slug}`}
                 onClick={onClose}
-                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight border border-[#78AEAD]/35 px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
-                Закрыть превью
-              </button>
+                Открыть карточку
+              </Link>
             </div>
           </div>
         </div>
@@ -825,12 +805,19 @@ function SiteFooter({ onOpenModal }) {
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Реквизиты
             </p>
+            {/* БИН и адрес офиса подставляются в COMPANY_DETAILS в src/data/siteData.js.
+                Пока они не заполнены, показываем только то, что подтверждено, —
+                выдуманные реквизиты в подвале хуже, чем их отсутствие. */}
             <address className="mt-5 not-italic text-sm leading-relaxed text-slate-600">
-              ТОО «QAZAQTEST»
+              {COMPANY_DETAILS.legalName}
+              {COMPANY_DETAILS.bin ? (
+                <>
+                  <br />
+                  БИН {COMPANY_DETAILS.bin}
+                </>
+              ) : null}
               <br />
-              БИН 941240012345
-              <br />
-              г. Алматы, ул. Примерная, 42, офис 305
+              {COMPANY_DETAILS.address}
             </address>
           </div>
         </div>
@@ -1274,50 +1261,10 @@ function HomePage({ onOpenModal }) {
   )
 }
 
-function Breadcrumbs({ categoryTitle }) {
-  return (
-    <div className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
-      <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-4 text-sm text-slate-600 md:px-12">
-        <Link to="/" className="text-[var(--accent)] hover:underline">
-          QAZAQTEST
-        </Link>{' '}
-        <span className="text-slate-400">/</span>{' '}<Link to="/catalog" className="text-[var(--accent)] hover:underline">Каталог</Link>{' '}
-        <span className="text-slate-400">/</span>{' '}<span>{categoryTitle}</span>
-      </div>
-    </div>
-  )
-}
-
-function CatalogBreadcrumbs() {
-  return (
-    <div className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
-      <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-4 text-sm text-slate-600 md:px-12">
-        <Link to="/" className="text-[var(--accent)] hover:underline">
-          QAZAQTEST
-        </Link>{' '}
-        <span className="text-slate-400">/</span>{' '}<span>Каталог</span>
-      </div>
-    </div>
-  )
-}
-
-function StaticPageBreadcrumbs({ currentTitle }) {
-  return (
-    <div className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">
-      <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-4 text-sm text-slate-600 md:px-12">
-        <Link to="/" className="text-[var(--accent)] hover:underline">
-          QAZAQTEST
-        </Link>{' '}
-        <span className="text-slate-400">/</span>{' '}<span>{currentTitle}</span>
-      </div>
-    </div>
-  )
-}
-
 function ServicesPage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Услуги" />
+      <Breadcrumbs trail={[{ title: 'Услуги' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Услуги</h1>
@@ -1354,7 +1301,7 @@ function ServicesPage() {
 function GuidesPage({ onOpenModal }) {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Гайды" />
+      <Breadcrumbs trail={[{ title: 'Гайды' }]} />
       <section className="bg-[var(--navy)] text-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight md:text-5xl">Гайды</h1>
@@ -1394,7 +1341,7 @@ function GuidesPage({ onOpenModal }) {
 function ServicePage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Сервис" />
+      <Breadcrumbs trail={[{ title: 'Сервис' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Сервис</h1>
@@ -1431,7 +1378,7 @@ function ServicePage() {
 function AboutPage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="О компании" />
+      <Breadcrumbs trail={[{ title: 'О компании' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">О компании QAZAQTEST</h1>
@@ -1465,7 +1412,7 @@ function AboutPage() {
 function ContactPage({ onOpenModal }) {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Контакты" />
+      <Breadcrumbs trail={[{ title: 'Контакты' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Контакты</h1>
@@ -1515,7 +1462,7 @@ function CategoryHubCard({ category }) {
 function CatalogPage() {
   return (
     <>
-      <CatalogBreadcrumbs />
+      <Breadcrumbs trail={[{ title: 'Каталог' }]} />
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
@@ -1537,23 +1484,41 @@ function CatalogPage() {
   )
 }
 
-function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
+function CatalogFilterBar({ searchQuery, onSearchChange, sortId, onSortChange, resultCount }) {
   return (
     <div className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <label className="block w-full max-w-xl">
+        <label className="block w-full max-w-md">
           <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-            Поиск по категории
+            Поиск по разделу
           </span>
           <input
             type="search"
             value={searchQuery}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Например: пресс, плотность, вискозиметр"
+            placeholder="Название, модель или характеристика"
             className="h-14 w-full border border-[#78AEAD]/35 bg-white px-5 outline-none transition-all focus:border-[var(--accent)]"
           />
         </label>
-        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+
+        <label className="block">
+          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            Сортировка
+          </span>
+          <select
+            value={sortId}
+            onChange={(event) => onSortChange(event.target.value)}
+            className="h-14 w-full border border-[#78AEAD]/35 bg-white px-4 pr-8 text-sm font-medium text-[var(--ink)] outline-none transition-colors focus:border-[var(--accent)] lg:w-56"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 lg:pb-5">
           Найдено: <span className="text-[var(--ink)]">{resultCount}</span>
         </div>
       </div>
@@ -1561,86 +1526,89 @@ function CatalogFilterBar({ searchQuery, onSearchChange, resultCount }) {
   )
 }
 
-function CategoryNavigation({ currentCategoryId }) {
+/**
+ * Подразделы внутри категории. Без них 48 позиций «общелабораторного» —
+ * сплошная лента, в которой не найти сушильный шкаф.
+ */
+function GroupFilter({ groups, activeGroup, onChange, totalCount, fallbackItems }) {
+  const hasGroups = groups.length >= 2
+
   return (
-    <div className="flex flex-wrap gap-3 border-b border-[#78AEAD]/25 pb-6">
-      {categories.map((category) => (
-        <NavLink
-          key={category.id}
-          to={`/catalog/${category.id}`}
-          className={({ isActive }) =>
-            `inline-flex min-h-11 items-center border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors ${
-              isActive || currentCategoryId === category.id
-                ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
-                : 'border-[#78AEAD]/35 bg-white text-slate-700 hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white'
-            }`
-          }
-        >
-          {category.title}
-        </NavLink>
-      ))}
-    </div>
+    <aside className="min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+        {hasGroups ? 'Подразделы' : 'Состав раздела'}
+      </p>
+
+      {hasGroups ? (
+        <div className="mt-6 space-y-2">
+          {[{ title: 'all', label: 'Все позиции', count: totalCount }, ...groups.map((group) => ({
+            title: group.title,
+            label: group.title,
+            count: group.count,
+          }))].map((option) => {
+            const isActive = activeGroup === option.title
+
+            return (
+              <button
+                key={option.title}
+                type="button"
+                onClick={() => onChange(option.title)}
+                aria-pressed={isActive}
+                className={`flex w-full min-h-11 items-center justify-between gap-3 border px-4 py-2.5 text-left text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'border-[var(--ink)] bg-[var(--ink)] text-white'
+                    : 'border-[#78AEAD]/25 bg-white text-slate-700 hover:border-[var(--ink)]'
+                }`}
+              >
+                <span className="min-w-0">{option.label}</span>
+                <span className={`shrink-0 text-xs ${isActive ? 'text-white/60' : 'text-slate-400'}`}>
+                  {option.count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      ) : (
+        <div className="mt-6 space-y-3">
+          {fallbackItems.map((item) => (
+            <div
+              key={item}
+              className="border border-[#78AEAD]/25 bg-white px-4 py-3 text-sm font-medium text-slate-700"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
+    </aside>
   )
 }
 
-function CatalogItemCard({ item, onOpenModal, onPreview }) {
-  const category = getCategoryById(item.categoryId)
-
+function CategoryNavigation({ currentCategoryId }) {
   return (
-    <article className="flex min-w-0 flex-col border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1">
-      <button
-        type="button"
-        onClick={() => onPreview(item)}
-        aria-label={`Быстрый просмотр: ${item.title}`}
-        className="relative block aspect-[4/3] w-full overflow-hidden border-b border-[#78AEAD]/15 bg-white"
-      >
-        {item.imageUrl ? (
-          <img
-            src={item.imageUrl}
-            alt=""
-            className="absolute inset-0 h-full w-full object-contain p-4"
-            loading="lazy"
-            decoding="async"
-          />
-        ) : (
-          <div className="absolute inset-0" style={{ background: category?.image }} />
-        )}
-      </button>
-      <div className="flex flex-1 flex-col p-5">
-        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
-          {category?.title}
-        </p>
-        <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
-          {item.title}
-        </h3>
-        {item.model ? (
-          <p className="mt-1 text-xs font-medium text-slate-500">Модель: {item.model}</p>
-        ) : null}
-        {item.priceLabel ? (
-          <p className="mt-2 text-lg font-bold tracking-tight text-[var(--ink)]">
-            {formatPriceLabel(item.priceLabel)}
-          </p>
-        ) : null}
-        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600">{item.summary}</p>
+    <nav aria-label="Разделы каталога" className="flex flex-wrap gap-3 border-b border-[#78AEAD]/25 pb-6">
+      {categories.map((category) => {
+        const count = categoryCounts[category.id] ?? 0
 
-        <div className="mt-5 grid gap-2">
-          <button
-            type="button"
-            onClick={() => onOpenModal(item.title)}
-            className="inline-flex h-11 items-center justify-center bg-[var(--accent)] px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:brightness-95"
+        return (
+          <NavLink
+            key={category.id}
+            to={`/catalog/${category.id}`}
+            className={({ isActive }) =>
+              `inline-flex min-h-11 items-center gap-2 border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors ${
+                isActive || currentCategoryId === category.id
+                  ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
+                  : 'border-[#78AEAD]/35 bg-white text-slate-700 hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white'
+              }`
+            }
           >
-            Запросить предложение
-          </button>
-          <button
-            type="button"
-            onClick={() => onPreview(item)}
-            className="inline-flex h-11 items-center justify-center border border-[#78AEAD]/35 px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
-          >
-            Быстрый просмотр
-          </button>
-        </div>
-      </div>
-    </article>
+            {category.title}
+            {/* Раздел без позиций честно показываем как «под заказ», а не пустым */}
+            <span className="text-[10px] font-semibold opacity-60">{count > 0 ? count : '—'}</span>
+          </NavLink>
+        )
+      })}
+    </nav>
   )
 }
 
@@ -1688,13 +1656,17 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const { id } = useParams()
   const category = getCategoryById(id)
   const [searchQuery, setSearchQuery] = useState('')
+  const [activeGroup, setActiveGroup] = useState('all')
+  const [sortId, setSortId] = useState('default')
   const [visibleCount, setVisibleCount] = useState(CATEGORY_PAGE_SIZE)
 
-  // Сброс поиска и пагинации при переходе в другую категорию
+  // Сброс поиска, фильтров и пагинации при переходе в другую категорию
   const [prevId, setPrevId] = useState(id)
   if (prevId !== id) {
     setPrevId(id)
     setSearchQuery('')
+    setActiveGroup('all')
+    setSortId('default')
     setVisibleCount(CATEGORY_PAGE_SIZE)
   }
 
@@ -1702,6 +1674,13 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
     setSearchQuery(value)
     setVisibleCount(CATEGORY_PAGE_SIZE)
   }
+
+  const handleGroupChange = (group) => {
+    setActiveGroup(group)
+    setVisibleCount(CATEGORY_PAGE_SIZE)
+  }
+
+  useDocumentTitle(category?.title, category?.description)
 
   if (!category) {
     return (
@@ -1719,18 +1698,24 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
   }
 
   const categoryItems = catalogItems.filter((item) => item.categoryId === category.id)
-  const filteredItems = getFilteredItems(catalogItems, category.id, searchQuery)
+  const groups = getCategoryGroups(category.id)
+  const filteredItems = sortItems(
+    getFilteredItems(catalogItems, category.id, searchQuery, activeGroup),
+    sortId,
+  )
   const visibleItems = filteredItems.slice(0, visibleCount)
   const hiddenCount = filteredItems.length - visibleItems.length
 
   return (
     <>
-      <Breadcrumbs categoryTitle={category.title} />
+      <Breadcrumbs trail={[{ title: 'Каталог', to: '/catalog' }, { title: category.title }]} />
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-14">
           <div className="max-w-4xl">
-            <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-6xl">{category.title}</h1>
+            <h1 className="hyphens-auto break-words text-3xl font-black tracking-tight text-[var(--ink)] sm:text-4xl md:text-6xl">
+              {category.title}
+            </h1>
             <div className="mt-7 h-1 w-28 rounded-full bg-[var(--accent)]" />
             <p className="mt-6 text-lg leading-relaxed text-slate-600">{category.description}</p>
           </div>
@@ -1740,23 +1725,20 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <aside className="order-last min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6 lg:order-none">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
-                Состав раздела
-              </p>
-              <div className="mt-6 space-y-3">
-                {category.items.map((item) => (
-                  <div key={item} className="border border-[#78AEAD]/25 bg-white px-4 py-3 text-sm font-medium text-slate-700">
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </aside>
+            <GroupFilter
+              groups={groups}
+              activeGroup={activeGroup}
+              onChange={handleGroupChange}
+              totalCount={categoryItems.length}
+              fallbackItems={category.items}
+            />
 
             <div className="min-w-0">
               <CatalogFilterBar
                 searchQuery={searchQuery}
                 onSearchChange={handleSearchChange}
+                sortId={sortId}
+                onSortChange={setSortId}
                 resultCount={filteredItems.length}
               />
 
@@ -1764,7 +1746,7 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
                 <>
                   <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                     {visibleItems.map((item) => (
-                      <CatalogItemCard
+                      <ProductCard
                         key={item.id}
                         item={item}
                         onOpenModal={onOpenModal}
@@ -1797,6 +1779,32 @@ function CategoryPage({ onOpenModal, onPreviewProduct }) {
         </div>
       </section>
     </>
+  )
+}
+
+function NotFoundPage() {
+  return (
+    <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
+      <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Страница не найдена</h1>
+      <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-600">
+        Проверьте адрес или начните с каталога — там собраны все направления оборудования.
+      </p>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Link
+          to="/catalog"
+          className="inline-flex h-12 items-center justify-center bg-[var(--accent)] px-8 text-xs font-bold uppercase tracking-[0.16em] text-white"
+        >
+          В каталог
+        </Link>
+        <Link
+          to="/contact"
+          className="inline-flex h-12 items-center justify-center border border-[#78AEAD]/35 px-8 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)]"
+        >
+          Связаться с нами
+        </Link>
+      </div>
+    </section>
   )
 }
 
@@ -1868,6 +1876,16 @@ function AppShell() {
               />
             }
           />
+          <Route
+            path="/catalog/:categoryId/:slug"
+            element={
+              <ProductPage
+                onOpenModal={handleOpenModal}
+                onPreviewProduct={(item) => setPreviewItem(item)}
+              />
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <SiteFooter onOpenModal={handleOpenModal} />

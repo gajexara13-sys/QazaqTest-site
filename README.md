@@ -1,65 +1,101 @@
 # QAZAQTEST — сайт поставщика лабораторного оборудования
 
-React + Vite + Tailwind CSS 4. Оборудование для дорожных, строительных и
-материаловедческих лабораторий Казахстана: каталог на 127 позиций, мега-меню,
-карусель брендов, форма заявки.
+React 19 + Vite + Tailwind CSS 4. Оборудование для дорожных, строительных и
+материаловедческих лабораторий Казахстана: каталог на 127 позиций в 12 разделах
+и 28 подразделах, страницы товаров, мега-меню, карусель брендов, форма заявки.
 
 ## Команды
 
 ```bash
-npm install          # зависимости
-npm run dev          # дев-сервер (http://localhost:5173)
-npm run build        # прод-сборка в dist/
-npm run preview      # предпросмотр прод-сборки
-npm run lint         # ESLint
+npm install               # зависимости
+npm run dev               # дев-сервер (http://localhost:5173)
+npm run catalog:build     # пересобрать каталог из выгрузки
 npm run images:download   # скачать фото товаров к себе (см. ниже)
+npm run build             # прод-сборка в dist/
+npm run preview           # предпросмотр прод-сборки
+npm run lint              # ESLint
 ```
+
+## Каталог
+
+Карточки собираются конвейером, а не правятся руками:
+
+```
+src/data/catalog.generated.json   выгрузка из Excel (источник, не редактируется)
+        ↓  scripts/normalize_catalog.mjs  +  src/data/catalog.overrides.json
+src/data/catalog.json             витрина, её импортирует сайт
+```
+
+`npm run catalog:build` перезаписывает `catalog.json` целиком, поэтому правки
+вносятся одним из двух способов:
+
+- **системная проблема** (разбор характеристик, чистка текста, бренды) — правило
+  в `scripts/normalize_catalog.mjs`;
+- **одна позиция** (уточнили название или цену) — запись в
+  `src/data/catalog.overrides.json`: `{ "qzt-42": { "title": "…" } }`.
+
+Что делает нормализация: собирает аннотацию из целых предложений вместо
+обрезанных на «…» строк выгрузки, разбирает характеристики в пары
+«параметр — значение», отделяет списки от прозы, вытаскивает код модели и бренд,
+дописывает код модели к повторяющимся названиям (в выгрузке было девять
+одинаковых «Тестеров стабильности Маршалла»), убирает артефакты Excel и
+переводит цену в число.
 
 ## Фото товаров
 
-`src/data/catalog.generated.json` сгенерирован из Excel
-(`scripts/generate_catalog_from_xlsx.py`); поле `imageUrl` изначально указывает
-на rutestin.com. Чтобы не зависеть от чужого хостинга:
+Фотографий в репозитории нет: исходная выгрузка ссылалась на сторонний сайт,
+который с нашего хостинга не открывается. Пока снимка нет, компонент
+`ProductImage` рисует заглушку с кодом модели — карточка выглядит осознанно, а
+не сломанной.
+
+Когда фото появятся: положить файлы в `public/products/` и указать путь в
+`image` через overrides. Если исходные адреса из `imageSource` доступны:
 
 ```bash
-npm run images:download
+npm run images:download   # скачает в public/products/ и пропишет пути в overrides
+npm run catalog:build     # подтянет их в витрину
 ```
 
-Скрипт скачает все изображения в `public/products/`, перепишет `imageUrl` на
-локальные пути (исходный адрес останется в `imageSourceUrl`) и ничего не
-сломает при повторном запуске. После запуска закоммитьте `public/products/` и
-обновлённый JSON.
+## Цены
+
+В выгрузке цены в рублях. На сайте — тенге: `formatPrice()` в
+`src/data/siteData.js` умножает `priceRub` на `RUB_TO_KZT` и округляет до
+1000 ₸. Там же задаётся курс и закладывается наценка. Позиция без цены
+выводится как «Цена по запросу».
 
 ## Отправка заявок
 
-Форма «Запрос на консультацию» отправляет JSON `{ name, phone, topic, page,
-submittedAt }` на адрес из переменной окружения `VITE_LEAD_ENDPOINT`:
+Форма отправляет JSON `{ name, phone, topic, page, submittedAt }` на адрес из
+переменной окружения `VITE_LEAD_ENDPOINT`:
 
 ```bash
 # .env.local
-VITE_LEAD_ENDPOINT=https://formspree.io/f/XXXXXXXX   # или свой обработчик
+VITE_LEAD_ENDPOINT=https://formspree.io/f/XXXXXXXX
 ```
 
 Если переменная не задана, заявка не теряется: на экране подтверждения есть
-кнопка «Продублировать в WhatsApp» (номер задаётся константой `WHATSAPP_PHONE`
-в `src/App.jsx`) с предзаполненным сообщением.
+кнопка «Продублировать в WhatsApp» (номер — константа `WHATSAPP_PHONE` в
+`src/App.jsx`).
 
-## Что заменить перед запуском
+## Что заполнить перед запуском
 
-- Реквизиты в подвале (`SiteFooter` в `src/App.jsx`): БИН и адрес офиса.
+- `COMPANY_DETAILS` в `src/data/siteData.js` — БИН и адрес офиса. Пустой `bin`
+  строку в подвале не выводит: показывать выдуманные реквизиты нельзя.
 - Ссылки «Политика конфиденциальности» и «Договор оферты» — сейчас `href="#"`.
-- Цены: в `catalog.generated.json` они хранятся в ₽ (как у источника), а на
-  сайте автоматически пересчитываются в ₸ по курсу `RUB_TO_KZT` из
-  `src/data/siteData.js` с округлением до 1000 ₸. Обновляйте курс там и
-  закладывайте наценку при необходимости.
+- Курс `RUB_TO_KZT` и наценка.
+- Домен в `index.html` (`canonical`, `og:url`), если он отличается от
+  qazaqtest.kz.
 
 ## Структура
 
 ```
-src/App.jsx                     — все страницы и компоненты (роутинг HashRouter)
-src/data/siteData.js            — категории, бренды, преимущества
-src/data/catalog.generated.json — товары (генерируется из xlsx)
-src/components/                 — CategoriesBentoGrid
-src/index.css                   — палитра (CSS-переменные), Tailwind, карусель брендов
-scripts/                        — генерация каталога, обработка логотипов, загрузка фото
+src/App.jsx                     шапка, подвал, модалки, статические страницы, роутинг
+src/pages/ProductPage.jsx       страница товара
+src/components/                 ProductCard, ProductSpecs, ProductImage, Breadcrumbs,
+                                CategoriesBentoGrid
+src/hooks/useDocumentTitle.js   заголовок вкладки на HashRouter
+src/data/siteData.js            разделы, бренды, преимущества, реквизиты, помощники
+src/index.css                   палитра (CSS-переменные), Tailwind, карусель брендов
+scripts/                        нормализация каталога, обработка логотипов, загрузка фото
+.claude/agents/                 специализированные агенты: catalog-editor, site-developer
 ```

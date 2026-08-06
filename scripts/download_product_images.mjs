@@ -1,9 +1,12 @@
 /**
- * Скачивает фото товаров из imageUrl (rutestin.com) в public/products/
- * и переписывает imageUrl в src/data/catalog.generated.json на локальные пути.
- * Исходный адрес сохраняется в imageSourceUrl.
+ * Скачивает фото товаров из поля imageSource в public/products/ и
+ * прописывает локальные пути в src/data/catalog.overrides.json.
  *
- * Запуск:  npm run images:download
+ * Пути пишутся именно в overrides, а не в catalog.json: витрина
+ * перегенерируется скриптом normalize_catalog.mjs и любые правки в ней
+ * затираются. После загрузки нужно пересобрать каталог.
+ *
+ * Запуск:  npm run images:download && npm run catalog:build
  * Повторный запуск безопасен: уже скачанные файлы пропускаются.
  */
 
@@ -15,7 +18,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const CATALOG_PATH = path.join(root, 'src/data/catalog.generated.json')
+const CATALOG_PATH = path.join(root, 'src/data/catalog.json')
+const OVERRIDES_PATH = path.join(root, 'src/data/catalog.overrides.json')
 const OUT_DIR = path.join(root, 'public/products')
 const CONCURRENCY = 5
 
@@ -27,7 +31,7 @@ function extFromUrl(url) {
 }
 
 async function downloadOne(item) {
-  const sourceUrl = item.imageSourceUrl ?? item.imageUrl
+  const sourceUrl = item.imageSource
   if (!sourceUrl || !/^https?:\/\//.test(sourceUrl)) {
     return { item, status: 'no-remote-url' }
   }
@@ -51,6 +55,12 @@ async function downloadOne(item) {
 }
 
 const catalog = JSON.parse(await readFile(CATALOG_PATH, 'utf8'))
+const overrides = await readFile(OVERRIDES_PATH, 'utf8').then(JSON.parse, (error) => {
+  if (error.code === 'ENOENT') {
+    return {}
+  }
+  throw error
+})
 await mkdir(OUT_DIR, { recursive: true })
 
 let ok = 0
@@ -63,8 +73,7 @@ async function worker() {
     try {
       const result = await downloadOne(item)
       if (result.localUrl) {
-        item.imageSourceUrl = result.sourceUrl
-        item.imageUrl = result.localUrl
+        overrides[item.id] = { ...overrides[item.id], image: result.localUrl }
         ok += 1
         console.log(`✓ ${item.id} (${result.status})`)
       } else {
@@ -81,9 +90,10 @@ async function worker() {
 await Promise.all(Array.from({ length: CONCURRENCY }, worker))
 
 if (ok > 0) {
-  await writeFile(CATALOG_PATH, `${JSON.stringify(catalog, null, 2)}\n`)
+  await writeFile(OVERRIDES_PATH, `${JSON.stringify(overrides, null, 2)}\n`)
   console.log(`\nГотово: ${ok} с локальными фото, ошибок: ${failed}.`)
-  console.log('Пути в catalog.generated.json обновлены. Проверьте сайт и закоммитьте public/products/.')
+  console.log('Пути записаны в catalog.overrides.json — выполните npm run catalog:build,')
+  console.log('затем закоммитьте public/products/, overrides и пересобранный catalog.json.')
 } else {
-  console.log(`\nНи одно фото не скачалось (ошибок: ${failed}). Файл каталога не менялся.`)
+  console.log(`\nНи одно фото не скачалось (ошибок: ${failed}). Файлы каталога не менялись.`)
 }
