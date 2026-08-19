@@ -31,9 +31,9 @@ const RU_ENDINGS = [
 ]
 
 /**
- * Грубый стемминг под русскую морфологию: «ситовой» → «ситов»,
- * «печи» → «печ». Точность не нужна — основа используется только как
- * запасной вариант поиска по началу слова с пониженным весом.
+ * Грубый стемминг под русскую морфологию: «ситовой» → «ситов».
+ * Точность не нужна — основа используется только как запасной вариант
+ * поиска по началу слова с пониженным весом.
  */
 export function stem(token) {
   if (token.length < 5) {
@@ -72,32 +72,37 @@ export function queryTokens(query) {
   return meaningful.length > 0 ? meaningful : tokens
 }
 
-/** Веса полей: попадание в название важнее попадания в описание. */
+/**
+ * Веса полей: попадание в название важнее попадания в описание.
+ * Витрина хранит характеристики парами, а прозу — массивом абзацев,
+ * поэтому текст поля собирается из структуры, а не берётся строкой.
+ */
 const FIELD_WEIGHTS = [
   { key: 'title', weight: 10 },
   { key: 'model', weight: 8 },
-  { key: 'sku', weight: 8 },
   { key: 'brand', weight: 5 },
+  { key: 'group', weight: 4 },
   { key: 'tags', weight: 4 },
-  { key: 'originalCategory', weight: 3 },
   { key: 'summary', weight: 2 },
-  { key: 'description', weight: 1 },
+  { key: 'paragraphs', weight: 1 },
   { key: 'specs', weight: 1 },
   { key: 'features', weight: 1 },
 ]
 
 function fieldText(item, key) {
   const value = item[key]
-  if (Array.isArray(value)) {
-    return value.join(' ')
+  if (!value) {
+    return ''
   }
-  return value ?? ''
+  if (Array.isArray(value)) {
+    return value
+      .map((entry) => (typeof entry === 'string' ? entry : `${entry.label} ${entry.value}`))
+      .join(' ')
+  }
+  return String(value)
 }
 
-/**
- * Поисковый индекс строится один раз на модуль: 127 позиций,
- * нормализованный текст по каждому взвешенному полю.
- */
+/** Индекс строится один раз на модуль по всем позициям витрины */
 const searchIndex = catalogItems.map((item) => {
   const fields = {}
   FIELD_WEIGHTS.forEach(({ key }) => {
@@ -109,8 +114,7 @@ const searchIndex = catalogItems.map((item) => {
 
 /**
  * Совпадение одного токена в одной записи. Точное слово ценится выше,
- * чем совпадение по началу слова (префикс), чтобы «пресс» не проигрывал
- * «прессформе».
+ * чем совпадение по началу слова, чтобы «пресс» не проигрывал «прессформе».
  */
 function scoreToken(fields, token) {
   let score = 0
@@ -145,7 +149,6 @@ function scoreToken(fields, token) {
 /**
  * Глобальный поиск по каталогу. Токены объединяются по И: позиция
  * попадает в выдачу, только если найден каждый токен запроса.
- * Результат отсортирован по релевантности, при равенстве — по названию.
  */
 export function searchCatalog(query, { limit } = {}) {
   const tokens = queryTokens(query)
@@ -172,29 +175,22 @@ export function searchCatalog(query, { limit } = {}) {
   return typeof limit === 'number' ? items.slice(0, limit) : items
 }
 
-/** Фильтрация внутри категории — поиск по подстроке без ранжирования. */
-export function getFilteredItems(items, activeCategoryId, searchQuery) {
+/** Фильтрация внутри категории: по подразделу и подстроке, без ранжирования */
+export function getFilteredItems(items, activeCategoryId, searchQuery, activeGroup = 'all') {
   const tokens = queryTokens(searchQuery)
 
   return items.filter((item) => {
     if (activeCategoryId !== 'all' && item.categoryId !== activeCategoryId) {
       return false
     }
+    if (activeGroup !== 'all' && item.group !== activeGroup) {
+      return false
+    }
     if (tokens.length === 0) {
       return true
     }
     const blob = normalize(
-      [
-        item.title,
-        item.summary,
-        item.description,
-        item.model,
-        item.brand,
-        item.priceLabel,
-        item.originalCategory,
-        item.sku,
-        ...(item.tags ?? []),
-      ]
+      FIELD_WEIGHTS.map(({ key }) => fieldText(item, key))
         .filter(Boolean)
         .join(' '),
     )
@@ -208,7 +204,36 @@ export function getFilteredItems(items, activeCategoryId, searchQuery) {
   })
 }
 
-/** Бренды каталога с числом позиций — для фасетов на странице поиска. */
+export const SORT_OPTIONS = [
+  { id: 'default', label: 'По умолчанию' },
+  { id: 'price-asc', label: 'Сначала дешевле' },
+  { id: 'price-desc', label: 'Сначала дороже' },
+  { id: 'title', label: 'По названию' },
+]
+
+export function sortItems(items, sortId) {
+  const sorted = [...items]
+
+  switch (sortId) {
+    case 'price-asc':
+    case 'price-desc': {
+      const direction = sortId === 'price-asc' ? 1 : -1
+      // Позиции «по запросу» всегда в конце списка, независимо от направления.
+      return sorted.sort((a, b) => {
+        if (!a.priceRub || !b.priceRub) {
+          return (a.priceRub ? 0 : 1) - (b.priceRub ? 0 : 1)
+        }
+        return (a.priceRub - b.priceRub) * direction
+      })
+    }
+    case 'title':
+      return sorted.sort((a, b) => a.title.localeCompare(b.title, 'ru'))
+    default:
+      return sorted
+  }
+}
+
+/** Бренды в наборе с числом позиций — фасеты страницы поиска */
 export function getBrandFacets(items) {
   const counts = new Map()
   items.forEach((item) => {
@@ -222,7 +247,7 @@ export function getBrandFacets(items) {
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'ru'))
 }
 
-/** Категории, встречающиеся в наборе, с числом позиций. */
+/** Категории, встречающиеся в наборе, с числом позиций */
 export function getCategoryFacets(items) {
   const counts = new Map()
   items.forEach((item) => {

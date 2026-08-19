@@ -1,10 +1,10 @@
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import Breadcrumbs from '../components/Breadcrumbs'
 import { CONTACT_PHONE_HREF, CONTACT_PHONE_LABEL, DEFAULT_TOPIC } from '../constants'
 
 export default function ContactPage({ onOpenModal }) {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Контакты" />
+      <Breadcrumbs trail={[{ title: 'Контакты' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Контакты</h1>

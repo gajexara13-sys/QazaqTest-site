@@ -144,7 +144,7 @@ function MobileMenu({ onClose }) {
   )
 }
 
-export default function Header({ onPreviewProduct }) {
+export default function Header() {
   const navigate = useNavigate()
   const [isProductsOpen, setProductsOpen] = useState(false)
   const [isMobileOpen, setMobileOpen] = useState(false)
@@ -279,7 +279,7 @@ export default function Header({ onPreviewProduct }) {
           />
         ) : null}
         {isSearchOpen ? (
-          <HeaderSearch onClose={closeSearch} onPreviewProduct={onPreviewProduct} />
+          <HeaderSearch onClose={closeSearch} />
         ) : null}
         {isMobileOpen ? <MobileMenu onClose={() => setMobileOpen(false)} /> : null}
       </div>

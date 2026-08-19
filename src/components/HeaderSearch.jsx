@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getCategoryById } from '../data/siteData'
-import { formatPriceLabel } from '../lib/format'
+import { Link, useNavigate } from 'react-router-dom'
+import { formatPrice, getCategoryById } from '../data/siteData'
 import { buildSearchUrl, searchCatalog } from '../lib/search'
+import ProductImage from './ProductImage'
 import SearchIcon from './SearchIcon'
 
 const SUGGESTION_LIMIT = 6
 
 /**
  * Панель поиска под шапкой: живые подсказки по всему каталогу.
- * Enter (или «Показать все») уводит на /search, клик по подсказке
- * открывает быстрый просмотр товара.
+ * Enter (или «Показать все») уводит на /search, клик по подсказке —
+ * сразу на страницу товара.
  */
-export default function HeaderSearch({ onClose, onPreviewProduct }) {
+export default function HeaderSearch({ onClose }) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -33,15 +33,13 @@ export default function HeaderSearch({ onClose, onPreviewProduct }) {
     onClose()
   }
 
-  const openProduct = (item) => {
-    onPreviewProduct(item)
-    onClose()
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (activeIndex >= 0 && suggestions[activeIndex]) {
-      openProduct(suggestions[activeIndex])
+    const active = suggestions[activeIndex]
+    if (active) {
+      navigate(`/catalog/${active.categoryId}/${active.slug}`)
+      onClose()
       return
     }
     goToResults()
@@ -106,46 +104,35 @@ export default function HeaderSearch({ onClose, onPreviewProduct }) {
             {suggestions.length > 0 ? (
               <>
                 <ul className="divide-y divide-[#78AEAD]/20 border border-white/10 bg-white">
-                  {suggestions.map((item, index) => {
-                    const category = getCategoryById(item.categoryId)
-                    return (
-                      <li key={item.id}>
-                        <button
-                          type="button"
-                          onClick={() => openProduct(item)}
-                          onMouseEnter={() => setActiveIndex(index)}
-                          className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors ${
-                            index === activeIndex ? 'bg-[var(--mint)]' : 'hover:bg-[var(--mint)]'
-                          }`}
-                        >
-                          <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden border border-[#78AEAD]/25 bg-white">
-                            {item.imageUrl ? (
-                              <img
-                                src={item.imageUrl}
-                                alt=""
-                                loading="lazy"
-                                decoding="async"
-                                className="h-full w-full object-contain p-1"
-                              />
-                            ) : null}
+                  {suggestions.map((item, index) => (
+                    <li key={item.id}>
+                      <Link
+                        to={`/catalog/${item.categoryId}/${item.slug}`}
+                        onClick={onClose}
+                        onMouseEnter={() => setActiveIndex(index)}
+                        className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors ${
+                          index === activeIndex ? 'bg-[var(--mint)]' : 'hover:bg-[var(--mint)]'
+                        }`}
+                      >
+                        <span className="relative block h-14 w-14 shrink-0 overflow-hidden border border-[#78AEAD]/25 bg-white">
+                          <ProductImage item={item} compact />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-bold leading-snug text-[var(--ink)]">
+                            {item.title}
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-sm font-bold leading-snug text-[var(--ink)]">
-                              {item.title}
-                            </span>
-                            <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
-                              {category?.title}
-                            </span>
+                          <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+                            {item.group ?? getCategoryById(item.categoryId)?.title}
                           </span>
-                          {item.priceLabel ? (
-                            <span className="hidden shrink-0 text-sm font-bold text-[var(--ink)] sm:block">
-                              {formatPriceLabel(item.priceLabel)}
-                            </span>
-                          ) : null}
-                        </button>
-                      </li>
-                    )
-                  })}
+                        </span>
+                        {item.priceRub ? (
+                          <span className="hidden shrink-0 text-sm font-bold text-[var(--ink)] sm:block">
+                            {formatPrice(item.priceRub)}
+                          </span>
+                        ) : null}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
                 <button
                   type="button"

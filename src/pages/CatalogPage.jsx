@@ -1,10 +1,10 @@
 import CategoriesBentoGrid from '../components/CategoriesBentoGrid'
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 export default function CatalogPage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Каталог" />
+      <Breadcrumbs trail={[{ title: 'Каталог' }]} />
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">

@@ -1,4 +1,4 @@
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import Breadcrumbs from '../components/Breadcrumbs'
 import { DEFAULT_TOPIC } from '../constants'
 
 const GUIDES = [
@@ -15,7 +15,7 @@ const GUIDES = [
 export default function GuidesPage({ onOpenModal }) {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Гайды" />
+      <Breadcrumbs trail={[{ title: 'Гайды' }]} />
       <section className="bg-[var(--navy)] text-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight md:text-5xl">Гайды</h1>

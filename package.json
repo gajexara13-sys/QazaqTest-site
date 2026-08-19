@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node -e \"require('fs').mkdirSync('node_modules/.vite-temp',{recursive:true})\" && vite",
     "build": "vite build",
+    "catalog:build": "node scripts/normalize_catalog.mjs",
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",

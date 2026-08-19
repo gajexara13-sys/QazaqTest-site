@@ -1,47 +1,18 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import CatalogItemCard from '../components/CatalogItemCard'
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import ProductCard from '../components/ProductCard'
+import Breadcrumbs from '../components/Breadcrumbs'
 import SearchIcon from '../components/SearchIcon'
-import { getPriceKzt } from '../lib/format'
-import { getBrandFacets, getCategoryFacets, searchCatalog } from '../lib/search'
+import useDocumentTitle from '../hooks/useDocumentTitle'
+import {
+  getBrandFacets,
+  getCategoryFacets,
+  searchCatalog,
+  SORT_OPTIONS,
+  sortItems,
+} from '../lib/search'
 
 const PAGE_SIZE = 12
-
-const SORT_OPTIONS = [
-  { id: 'relevance', label: 'По релевантности' },
-  { id: 'price-asc', label: 'Сначала дешевле' },
-  { id: 'price-desc', label: 'Сначала дороже' },
-  { id: 'title', label: 'По названию' },
-]
-
-/** Позиции без цены всегда в конце сортировки по цене. */
-function sortResults(items, sort) {
-  if (sort === 'relevance') {
-    return items
-  }
-  const sorted = [...items]
-  if (sort === 'title') {
-    sorted.sort((a, b) => a.title.localeCompare(b.title, 'ru'))
-    return sorted
-  }
-  const direction = sort === 'price-asc' ? 1 : -1
-  sorted.sort((a, b) => {
-    const priceA = getPriceKzt(a)
-    const priceB = getPriceKzt(b)
-    if (priceA == null && priceB == null) {
-      return a.title.localeCompare(b.title, 'ru')
-    }
-    if (priceA == null) {
-      return 1
-    }
-    if (priceB == null) {
-      return -1
-    }
-    return (priceA - priceB) * direction
-  })
-  return sorted
-}
 
 function FacetButton({ isActive, onClick, children }) {
   return (
@@ -66,17 +37,19 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
   const [inputValue, setInputValue] = useState(query)
   const [categoryId, setCategoryId] = useState('all')
   const [brand, setBrand] = useState('all')
-  const [sort, setSort] = useState('relevance')
+  const [sort, setSort] = useState('default')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
   // Новый запрос из адресной строки (шапка, ссылка) сбрасывает фильтры
+  useDocumentTitle(query.trim() ? `Поиск: ${query.trim()}` : 'Поиск по каталогу')
+
   const [prevQuery, setPrevQuery] = useState(query)
   if (prevQuery !== query) {
     setPrevQuery(query)
     setInputValue(query)
     setCategoryId('all')
     setBrand('all')
-    setSort('relevance')
+    setSort('default')
     setVisibleCount(PAGE_SIZE)
   }
 
@@ -89,7 +62,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
       (categoryId === 'all' || item.categoryId === categoryId) &&
       (brand === 'all' || item.brand === brand),
   )
-  const results = sortResults(filtered, sort)
+  const results = sortItems(filtered, sort)
   const visibleItems = results.slice(0, visibleCount)
   const hiddenCount = results.length - visibleItems.length
 
@@ -106,7 +79,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
 
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Поиск" />
+      <Breadcrumbs trail={[{ title: 'Поиск' }]} />
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-14">
@@ -257,7 +230,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
                 <>
                   <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {visibleItems.map((item) => (
-                      <CatalogItemCard
+                      <ProductCard
                         key={item.id}
                         item={item}
                         onOpenModal={onOpenModal}

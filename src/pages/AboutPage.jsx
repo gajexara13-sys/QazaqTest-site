@@ -1,10 +1,10 @@
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import Breadcrumbs from '../components/Breadcrumbs'
 import { benefits } from '../data/siteData'
 
 export default function AboutPage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="О компании" />
+      <Breadcrumbs trail={[{ title: 'О компании' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">О компании QAZAQTEST</h1>

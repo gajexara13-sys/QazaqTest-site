@@ -13,6 +13,8 @@ import CategoryPage from './pages/CategoryPage'
 import ContactPage from './pages/ContactPage'
 import GuidesPage from './pages/GuidesPage'
 import HomePage from './pages/HomePage'
+import NotFoundPage from './pages/NotFoundPage'
+import ProductPage from './pages/ProductPage'
 import SearchPage from './pages/SearchPage'
 import ServicePage from './pages/ServicePage'
 import ServicesPage from './pages/ServicesPage'
@@ -33,7 +35,7 @@ function AppShell() {
   return (
     <div className="min-h-screen bg-[var(--page-bg)] text-[var(--ink)] antialiased">
       <ScrollToTop />
-      <Header onPreviewProduct={handlePreviewProduct} />
+      <Header />
       <BackToTop />
       {previewItem ? (
         <ProductModal
@@ -62,6 +64,15 @@ function AppShell() {
             }
           />
           <Route
+            path="/catalog/:categoryId/:slug"
+            element={
+              <ProductPage
+                onOpenModal={handleOpenModal}
+                onPreviewProduct={handlePreviewProduct}
+              />
+            }
+          />
+          <Route
             path="/search"
             element={
               <SearchPage
@@ -75,6 +86,7 @@ function AppShell() {
           <Route path="/guides" element={<GuidesPage onOpenModal={handleOpenModal} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage onOpenModal={handleOpenModal} />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <SiteFooter onOpenModal={handleOpenModal} />

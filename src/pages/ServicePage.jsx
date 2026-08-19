@@ -1,4 +1,4 @@
-import { StaticPageBreadcrumbs } from '../components/Breadcrumbs'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 const SERVICE_BLOCKS = [
   {
@@ -18,7 +18,7 @@ const SERVICE_BLOCKS = [
 export default function ServicePage() {
   return (
     <>
-      <StaticPageBreadcrumbs currentTitle="Сервис" />
+      <Breadcrumbs trail={[{ title: 'Сервис' }]} />
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-20 md:px-12">
           <h1 className="text-4xl font-black tracking-tight text-[var(--ink)] md:text-5xl">Сервис</h1>

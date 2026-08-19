@@ -1,10 +1,13 @@
 import { useId } from 'react'
-import { getCategoryById } from '../data/siteData'
-import { formatPriceLabel } from '../lib/format'
+import { Link } from 'react-router-dom'
+import ProductImage from './ProductImage'
+import ProductSpecs from './ProductSpecs'
+import { formatPrice, getCategoryById } from '../data/siteData'
 import { useEscToClose, useLockBodyScroll } from '../lib/hooks'
 
 export default function ProductModal({ item, onOpenModal, onClose }) {
   const category = getCategoryById(item.categoryId)
+  const price = formatPrice(item.priceRub)
   const titleId = useId()
 
   useLockBodyScroll(true)
@@ -23,138 +26,91 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] border border-[#78AEAD]/25 bg-[var(--mint)] shadow-2xl shadow-slate-950/20"
+        className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto border border-[#78AEAD]/25 bg-white shadow-2xl shadow-slate-950/20"
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/85 text-xl text-slate-500 transition-colors hover:text-[var(--ink)]"
+          className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center border border-[#78AEAD]/35 bg-white text-xl text-slate-500 transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
           aria-label="Закрыть"
         >
           ×
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-          <div className="relative min-h-[360px] overflow-hidden rounded-t-[2rem] lg:rounded-l-[2rem] lg:rounded-tr-none">
-            {item.imageUrl ? (
-              <img
-                src={item.imageUrl}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-            ) : (
-              <div className="absolute inset-0" style={{ background: category?.image }} />
-            )}
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.2),rgba(15,23,42,0.55))]" />
-            <div className="relative flex min-h-[360px] flex-col justify-between p-8 text-white md:p-10">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
-                  {category?.title}
-                </p>
-                <h2 id={titleId} className="mt-4 max-w-lg text-2xl font-bold tracking-tight md:text-4xl">
-                  {item.title}
-                </h2>
-                {item.priceLabel ? (
-                  <p className="mt-4 text-lg font-semibold tracking-tight text-white">
-                    {formatPriceLabel(item.priceLabel)}
-                  </p>
-                ) : null}
-                {item.brand ? (
-                  <p className="mt-2 text-sm font-medium text-white/85">{item.brand}</p>
-                ) : null}
-              </div>
-
-              <div className="rounded-[1.5rem] border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
-                  {item.imageUrl ? 'Фото' : 'Превью'}
-                </p>
-                <div className="mt-4 flex min-h-[120px] items-center justify-center overflow-hidden rounded-[1.35rem] border border-dashed border-white/30 bg-white/5 p-2 text-center">
-                  {item.imageUrl ? (
-                    <img
-                      src={item.imageUrl}
-                      alt=""
-                      className="max-h-[200px] w-full object-contain"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div className="p-6 text-sm uppercase tracking-[0.18em] text-white/75">{item.imageLabel}</div>
-                  )}
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="relative min-h-[280px] border-b border-[#78AEAD]/20 bg-[var(--surface)] lg:min-h-full lg:border-b-0 lg:border-r">
+            <ProductImage item={item} eager />
           </div>
 
-          <div className="p-8 md:p-10">
+          <div className="p-7 md:p-9">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Обзор оборудования
+              {item.group ?? category?.title}
             </p>
-            <p className="mt-5 text-base leading-relaxed text-slate-600">{item.description}</p>
+            <h2
+              id={titleId}
+              className="mt-3 pr-10 text-2xl font-bold leading-tight tracking-tight text-[var(--ink)] md:text-3xl"
+            >
+              {item.title}
+            </h2>
 
-            {item.features?.length > 0 ? (
-              <div className="mt-8">
+            {item.brand || item.model ? (
+              <p className="mt-2 text-sm font-medium text-slate-500">
+                {[item.brand, item.model].filter(Boolean).join(' · ')}
+              </p>
+            ) : null}
+
+            <p
+              className={`mt-4 text-2xl font-black tracking-tight ${
+                price ? 'text-[var(--ink)]' : 'text-slate-500'
+              }`}
+            >
+              {price ?? 'Цена по запросу'}
+            </p>
+
+            <p className="mt-5 text-base leading-relaxed text-slate-600">{item.summary}</p>
+
+            {item.features.length > 0 ? (
+              <div className="mt-7">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Ключевые особенности
                 </p>
-                <div className="mt-4 space-y-3">
-                  {item.features.map((feature) => (
-                    <div key={feature} className="flex items-start text-sm leading-relaxed text-slate-700">
+                <ul className="mt-4 space-y-2.5">
+                  {item.features.slice(0, 4).map((feature) => (
+                    <li key={feature} className="flex items-start text-sm leading-relaxed text-slate-700">
                       <span className="mt-2 mr-3 h-2 w-2 flex-shrink-0 rounded-full bg-[var(--accent)]" />
                       <span>{feature}</span>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ) : null}
 
-            {item.specs?.length > 0 ? (
-              <div className="mt-8">
+            {item.specs.length > 0 ? (
+              <div className="mt-7">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                   Основные характеристики
                 </p>
-                <div className="mt-4 grid gap-3">
-                  {item.specs.map((spec) => (
-                    <div
-                      key={spec}
-                      className="rounded-2xl border border-[#78AEAD]/25 bg-[var(--surface)] px-4 py-3 text-sm font-medium text-slate-700"
-                    >
-                      {spec}
-                    </div>
-                  ))}
+                <div className="mt-4">
+                  <ProductSpecs specs={item.specs.slice(0, 6)} />
                 </div>
               </div>
             ) : null}
 
-            {item.tags?.length > 0 ? (
-              <div className="mt-8 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-[#78AEAD]/25 bg-[var(--mint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={() => onOpenModal(item.title)}
-                className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
+                className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight bg-[var(--accent)] px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95"
               >
                 Запросить предложение
               </button>
-              <button
-                type="button"
+              <Link
+                to={`/catalog/${item.categoryId}/${item.slug}`}
                 onClick={onClose}
-                className="inline-flex h-14 min-w-[12rem] flex-1 items-center justify-center rounded-2xl border border-[#78AEAD]/35 px-6 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight border border-[#78AEAD]/35 px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
               >
-                Закрыть превью
-              </button>
+                Открыть карточку
+              </Link>
             </div>
           </div>
         </div>
