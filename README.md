@@ -85,6 +85,7 @@ src/lib/format.js               — цены (₽ → ₸), парсинг дл�
 src/lib/lead.js                 — отправка заявки и ссылка на WhatsApp
 src/lib/hooks.js                — блокировка скролла страницы, закрытие по Esc
 src/data/siteData.js            — категории, бренды, преимущества
+src/data/normalizeCatalog.js    — механическая чистка текстов выгрузки (см. docs/)
 src/data/catalog.generated.json — товары (генерируется из xlsx)
 src/index.css                   — палитра (CSS-переменные), Tailwind, карусель брендов
 scripts/                        — генерация каталога, обработка логотипов, загрузка фото

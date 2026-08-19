@@ -1,4 +1,5 @@
 import catalogGenerated from './catalog.generated.json'
+import { normalizeCatalogItems } from './normalizeCatalog'
 
 /**
  * Курс пересчёта рублёвых цен источника в тенге (₽ → ₸).
@@ -208,7 +209,12 @@ export const benefits = [
   },
 ]
 
-export const catalogItems = catalogGenerated
+/**
+ * Выгрузка проходит механическую чистку один раз при загрузке модуля:
+ * единицы, имена параметров, разбор слитых пар, аннотации из целых предложений.
+ * Правила — в ./normalizeCatalog.js, разбор дефектов — в docs/catalog-copy-audit.md.
+ */
+export const catalogItems = normalizeCatalogItems(catalogGenerated)
 
 export function getCategoryById(categoryId) {
   return categories.find((category) => category.id === categoryId)
