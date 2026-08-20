@@ -10,7 +10,8 @@
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "catalog:lint": "node scripts/check_summaries.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

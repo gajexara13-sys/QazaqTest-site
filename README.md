@@ -90,7 +90,12 @@ npm run catalog:build     # подтянет их в витрину
 `docs/catalog-copy-audit.md`. Механические правила (единицы, словарь имён
 параметров, разведение одинаковых названий, разбор слитых характеристик)
 живут в `scripts/normalize_catalog.mjs` и применяются при
-`npm run catalog:build`. Редактура текстов — в `catalog.overrides.json`.
+`npm run catalog:build`. Написанные тексты — в `catalog.overrides.json`.
+
+`npm run catalog:lint` проверяет аннотации по редполитике: длина, обрывы,
+дублирование описания, оценочная лексика, единицы по ГОСТ 8.417. Режим
+`node scripts/check_summaries.mjs --facts` выдаёт фактолист по проблемным
+позициям — из него пишется текст.
 
 ## Отправка заявок
 
