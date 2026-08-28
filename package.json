@@ -11,7 +11,7 @@
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "catalog:lint": "node scripts/check_summaries.mjs"
+    "catalog:lint": "node scripts/check_copy.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

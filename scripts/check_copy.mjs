@@ -1,10 +1,12 @@
 /**
- * Линтер аннотаций каталога — проход 3 из docs/catalog-copy-audit.md.
+ * Линтер текстов каталога — проходы 3 и 4 из docs/catalog-copy-audit.md.
  *
  * Аннотацию нельзя сгенерировать формулой: стандарт указан у 17 позиций из 127,
  * а 94 названия — это просто тип прибора, из которого назначение не выводится.
  * Зато можно автоматически находить аннотации, которые нарушают редполитику,
  * и не пускать их на сайт незамеченными.
+ *
+ * Проверяются аннотация (summary) и «ключевые особенности» (features).
  *
  * Запуск:  npm run catalog:lint
  * Выход:   0 — нарушений нет; 1 — есть.
@@ -48,7 +50,7 @@ const UNITS = [
   ['℃', 'символ-лигатура вместо °C'],
   ['°\\s*С', 'кириллическая «С» в градусе'],
   ['\\bAC\\s?\\d{3}\\s?V', 'питание латиницей'],
-  ['\\d\\s?[хx]\\s?\\d', 'кириллическая «х» вместо ×'],
+  ['\\d\\s?[хХ]\\s?\\d', 'кириллическая «х» вместо ×'],
 ]
 
 /**
@@ -101,9 +103,90 @@ function checkItem(item) {
   return problems
 }
 
+/** Особенность длиннее этого — уже не пункт списка, а абзац */
+const FEATURE_MAX_LENGTH = 100
+const FEATURE_MAX_COUNT = 5
+
+/** Непроверяемые превосходные степени: для карточки поставщика это риск */
+// Граница слова задана явно: `\b` в JS не работает перед кириллицей
+const SUPERLATIVES = /(?:^|[^а-яёa-z])(сам(ый|ая|ое|ые|ым|ых|ого)|единственн(ый|ые|ая|ое)|лучш(ий|ие|ая|ее)|№\s?1|номер один)/i
+
+/**
+ * Особенности — это конструктивные решения и автоматизация, а не таблица
+ * характеристик: «Высота падения: 457 мм» уже стоит в specs и там ей место.
+ */
+function checkFeatures(item) {
+  const problems = []
+  const features = item.features ?? []
+  const add = (code, detail) => problems.push({ code, detail })
+
+  if (features.length === 0) {
+    return problems
+  }
+  if (features.length > FEATURE_MAX_COUNT) {
+    add('особенностей много', `${features.length} пунктов, нужно до ${FEATURE_MAX_COUNT}`)
+  }
+
+  const specLabels = new Set((item.specs ?? []).map((spec) => spec.label.toLowerCase()))
+  const prose = (item.paragraphs ?? []).join(' ')
+
+  features.forEach((feature) => {
+    const head = feature.slice(0, 40)
+    if (feature.length > FEATURE_MAX_LENGTH) {
+      add('пункт длинный', `${feature.length} знаков: «${head}…»`)
+    }
+    if (SUPERLATIVES.test(feature)) {
+      add('превосходная степень', `«${head}…»`)
+    }
+    const asSpec = /^([^:]{2,40}):\s*\S/.exec(feature)
+    if (asSpec && specLabels.has(asSpec[1].trim().toLowerCase())) {
+      add('это характеристика', `«${asSpec[1]}» уже есть в specs`)
+    }
+    if (prose.includes(feature.slice(0, 50))) {
+      add('пункт дублирует описание', `«${head}…»`)
+    }
+    for (const [pattern, reason] of [...MARKETING, ...TRANSLATIONESE, ...UNITS]) {
+      const match = new RegExp(pattern, 'i').exec(feature)
+      if (match) {
+        add('редполитика в особенностях', `«${match[0]}» — ${reason}`)
+      }
+    }
+  })
+
+  return problems
+}
+
+/**
+ * Описание (paragraphs) не режется по длине — там уместна проза, — но
+ * должно быть свободно от оценочной лексики и превосходных степеней:
+ * это карточка поставщика, а не рекламный текст.
+ */
+function checkParagraphs(item) {
+  const problems = []
+  const add = (code, detail) => problems.push({ code, detail })
+
+  ;(item.paragraphs ?? []).forEach((paragraph) => {
+    if (SUPERLATIVES.test(paragraph)) {
+      const match = SUPERLATIVES.exec(paragraph)
+      add('превосходная степень в описании', `«${match[0].trim()}»`)
+    }
+    for (const [pattern, reason] of MARKETING) {
+      const match = new RegExp(pattern, 'i').exec(paragraph)
+      if (match) {
+        add('редполитика в описании', `«${match[0]}» — ${reason}`)
+      }
+    }
+  })
+
+  return problems
+}
+
 const catalog = JSON.parse(await readFile(CATALOG_PATH, 'utf8'))
 const report = catalog
-  .map((item) => ({ item, problems: checkItem(item) }))
+  .map((item) => ({
+    item,
+    problems: [...checkItem(item), ...checkFeatures(item), ...checkParagraphs(item)],
+  }))
   .filter((entry) => entry.problems.length > 0)
 
 const byCode = new Map()

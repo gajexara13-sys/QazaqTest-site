@@ -91,7 +91,7 @@ const isSectionHeading = (line) =>
 
 /** «250*250*250» → «250×250×250»: типографика вместо ASCII-звёздочек. */
 const prettifyDimensions = (value) =>
-  value.replace(/(\d)\s*[*xX]\s*(?=\d)/g, '$1×').replace(/\s*×\s*/g, '×')
+  value.replace(/(\d)\s*[*xXхХ]\s*(?=\d)/g, '$1×').replace(/\s*×\s*/g, '×')
 
 /**
  * Обозначения стандартов прячем на время замен: точка в номере
@@ -126,6 +126,9 @@ const normalizeUnits = (value) =>
       .replace(/(\d{2})\s*Hz(?![A-Za-z0-9])/gi, '$1 Гц')
       .replace(/(\d)\.(\d)/g, '$1,$2')
       .replace(/(\d)\s*°C/g, '$1 °C')
+      // «1,2Х20» → «1,2×20»: кириллическая «х/Х» вместо знака умножения —
+      // применяем и вне разбора характеристик, в описаниях и особенностях.
+      .replace(/(\d)\s*[хХ]\s*(?=\d)/g, '$1×').replace(/\s*×\s*/g, '×')
       .replace(/(\d)(л|кг|г|мм|см|кВт|Вт|кН|Н|МПа|кПа|Гц|В)(?![а-яА-Яa-zA-Z])/g, '$1 $2')
       .replace(/\)\s*(В|Гц|кг|мм|кВт|А)(?![а-яёa-z])/g, ') $1'),
   )
@@ -426,6 +429,41 @@ function slugify(value) {
     .slice(0, 70)
 }
 
+/**
+ * «Особенности» — это конструктивные решения и автоматизация. Всё остальное
+ * из списка вычищается правилами (docs/catalog-copy-audit.md, проход 4):
+ * характеристики уже стоят в specs, оценки и превосходные степени непроверяемы,
+ * а длинный пункт — это абзац, случайно попавший в список.
+ */
+const FEATURE_MAX_LENGTH = 100
+const FEATURE_LIMIT = 5
+
+/** Непроверяемые утверждения: для карточки поставщика это риск, а не польза */
+const FEATURE_NOISE =
+  /(?:^|[^а-яёa-z])(сам(ый|ая|ое|ые|ым|ых|ого)|единственн(ый|ые|ая|ое)|лучш(ий|ие|ая|ее)|№\s?1|издели|хост(?![а-яё])|высококачествен|надежн|надёжн|широко (использ|примен)|идеальн|передов(ой|ая|ое)|превосходн|тестировщик|пользовател|наш(а|ей) компани)|в то же время/i
+
+/** Пункт вида «Высота падения: 457 мм», уже стоящий в таблице характеристик */
+function isSpecInDisguise(feature, specLabels) {
+  const pair = /^([^:]{2,40}):\s*\S/.exec(feature)
+  return Boolean(pair) && specLabels.has(pair[1].trim().toLowerCase())
+}
+
+/**
+ * Длинный пункт ужимаем до первого предложения: в списке уместно одно
+ * утверждение. Если и оно длинное, пункт выбрасываем — обрезать на полуслове
+ * хуже, чем не показывать вовсе.
+ */
+function shortenFeature(feature) {
+  if (feature.length <= FEATURE_MAX_LENGTH) {
+    return feature
+  }
+  const firstSentence = /^[^.!?]+[.!?]/.exec(feature)?.[0]?.trim()
+  if (firstSentence && firstSentence.length >= 30 && firstSentence.length <= FEATURE_MAX_LENGTH) {
+    return firstSentence
+  }
+  return null
+}
+
 function normalizeItem(item) {
   const baseTitle = cleanTitle(item.title)
   const model = refineModel(detectModel(item, baseTitle), baseTitle)
@@ -475,9 +513,15 @@ function normalizeItem(item) {
 
   // Если аннотацию пришлось собрать из пункта «особенностей», этот пункт
   // из списка убираем: иначе одна и та же фраза стоит в карточке дважды.
+  const specLabels = new Set(specs.map((spec) => spec.label.trim().toLowerCase()))
   const visibleFeatures = features
     .map(tidyText)
     .filter((feature) => paragraphs.length > 0 || !summary.startsWith(feature.slice(0, 40)))
+    .filter((feature) => !FEATURE_NOISE.test(feature))
+    .filter((feature) => !isSpecInDisguise(feature, specLabels))
+    .filter((feature) => !paragraphs.some((paragraph) => paragraph.includes(feature.slice(0, 50))))
+    .map(shortenFeature)
+    .filter(Boolean)
 
   // Код модели и бренд выводятся в карточке отдельными полями — в облаке
   // тегов они только шумят.
@@ -495,7 +539,7 @@ function normalizeItem(item) {
     brand,
     summary,
     paragraphs,
-    features: visibleFeatures.slice(0, 8),
+    features: visibleFeatures.slice(0, FEATURE_LIMIT),
     specs: specs.map((spec) => ({ label: tidyText(spec.label), value: tidyText(spec.value) })).slice(0, 24),
     tags: [...new Set(tags)].filter(Boolean),
     priceRub: parsePriceRub(item.priceLabel),
