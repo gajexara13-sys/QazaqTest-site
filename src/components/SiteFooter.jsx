@@ -5,6 +5,7 @@ import {
   CONTACT_PHONE_LABEL,
   DEFAULT_TOPIC,
 } from '../constants'
+import { COMPANY_DETAILS } from '../data/siteData'
 
 const FOOTER_LINKS = [
   { to: '/catalog', label: 'Каталог' },
@@ -76,12 +77,18 @@ export default function SiteFooter({ onOpenModal }) {
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
               Реквизиты
             </p>
+            {/* Реквизиты берём из COMPANY_DETAILS. Пустой БИН строку не выводит:
+                выдуманные реквизиты в подвале хуже, чем их отсутствие. */}
             <address className="mt-5 not-italic text-sm leading-relaxed text-slate-600">
-              ТОО «QAZAQTEST»
+              {COMPANY_DETAILS.legalName}
+              {COMPANY_DETAILS.bin ? (
+                <>
+                  <br />
+                  БИН {COMPANY_DETAILS.bin}
+                </>
+              ) : null}
               <br />
-              БИН 941240012345
-              <br />
-              г. Алматы, ул. Примерная, 42, офис 305
+              {COMPANY_DETAILS.address}
             </address>
           </div>
         </div>
