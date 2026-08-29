@@ -31,7 +31,7 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center border border-[#78AEAD]/35 bg-white text-xl text-slate-500 transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
+          className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center border border-[#78AEAD]/35 bg-white text-xl text-[var(--muted-text)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
           aria-label="Закрыть"
         >
           ×
@@ -43,7 +43,7 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
           </div>
 
           <div className="p-7 md:p-9">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               {item.group ?? category?.title}
             </p>
             <h2
@@ -54,14 +54,14 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
             </h2>
 
             {item.brand || item.model ? (
-              <p className="mt-2 text-sm font-medium text-slate-500">
+              <p className="mt-2 text-sm font-medium text-[var(--muted-text)]">
                 {[item.brand, item.model].filter(Boolean).join(' · ')}
               </p>
             ) : null}
 
             <p
               className={`mt-4 text-2xl font-black tracking-tight ${
-                price ? 'text-[var(--ink)]' : 'text-slate-500'
+                price ? 'text-[var(--ink)]' : 'text-[var(--muted-text)]'
               }`}
             >
               {price ?? 'Цена по запросу'}
@@ -71,7 +71,7 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
 
             {item.features.length > 0 ? (
               <div className="mt-7">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--muted-text)]">
                   Ключевые особенности
                 </p>
                 <ul className="mt-4 space-y-2.5">
@@ -87,7 +87,7 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
 
             {item.specs.length > 0 ? (
               <div className="mt-7">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--muted-text)]">
                   Основные характеристики
                 </p>
                 <div className="mt-4">

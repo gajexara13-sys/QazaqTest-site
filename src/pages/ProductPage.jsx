@@ -26,7 +26,7 @@ function getRelatedItems(item) {
 function NotFound() {
   return (
     <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">404</p>
       <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Позиция не найдена</h1>
       <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-600">
         Возможно, карточка переехала в другой раздел. Откройте каталог — или напишите нам, и мы
@@ -74,7 +74,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
             </div>
 
             <div className="flex flex-col">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                 {item.group ?? category.title}
               </p>
               <h1 className="mt-4 hyphens-auto break-words text-2xl font-black leading-tight tracking-tight text-[var(--ink)] sm:text-3xl md:text-4xl">
@@ -85,7 +85,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                 <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
                   {item.brand ? (
                     <div>
-                      <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                      <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                         Производитель
                       </dt>
                       <dd className="mt-1 font-semibold text-[var(--ink)]">{item.brand}</dd>
@@ -93,7 +93,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                   ) : null}
                   {item.model ? (
                     <div>
-                      <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                      <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                         Модель
                       </dt>
                       <dd className="mt-1 font-semibold text-[var(--ink)]">{item.model}</dd>
@@ -103,17 +103,17 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
               ) : null}
 
               <div className="mt-7 border border-[#78AEAD]/25 bg-white p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                   Стоимость
                 </p>
                 <p
                   className={`mt-2 text-3xl font-black tracking-tight ${
-                    price ? 'text-[var(--ink)]' : 'text-slate-500'
+                    price ? 'text-[var(--ink)]' : 'text-[var(--muted-text)]'
                   }`}
                 >
                   {price ?? 'По запросу'}
                 </p>
-                <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                <p className="mt-3 text-xs leading-relaxed text-[var(--muted-text)]">
                   Цена ориентировочная, пересчитывается на день выставления счёта. Доставка,
                   пусконаладка и обучение персонала считаются отдельно.
                 </p>
@@ -143,7 +143,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
             <div className="min-w-0">
               {item.paragraphs.length > 0 ? (
                 <div>
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Назначение и принцип работы
                   </h2>
                   <div className="mt-5 space-y-4 text-base leading-relaxed text-slate-600">
@@ -156,7 +156,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
               {item.features.length > 0 ? (
                 <div className={item.paragraphs.length > 0 ? 'mt-10' : ''}>
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Ключевые особенности
                   </h2>
                   <ul className="mt-5 space-y-3">
@@ -174,7 +174,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
             <div className="min-w-0">
               {item.specs.length > 0 ? (
                 <>
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Технические характеристики
                   </h2>
                   <div className="mt-5">
@@ -183,7 +183,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                 </>
               ) : (
                 <div className="border border-dashed border-[#78AEAD]/35 bg-white p-6">
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Технические характеристики
                   </h2>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600">
@@ -198,7 +198,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="border border-[#78AEAD]/25 bg-[var(--mint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                      className="border border-[#78AEAD]/25 bg-[var(--mint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]"
                     >
                       {tag}
                     </span>

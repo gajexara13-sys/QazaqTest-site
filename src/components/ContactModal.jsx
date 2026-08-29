@@ -58,19 +58,19 @@ export default function ContactModal({ selectedCategory, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#78AEAD]/25 text-xl text-slate-500 transition-colors hover:border-slate-900 hover:text-[var(--ink)]"
+          className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#78AEAD]/25 text-xl text-[var(--muted-text)] transition-colors hover:border-slate-900 hover:text-[var(--ink)]"
           aria-label="Закрыть"
         >
           ×
         </button>
 
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
           Запрос
         </p>
         <h2 id={titleId} className="mt-4 pr-12 text-3xl font-bold tracking-tight text-[var(--ink)]">
           Запрос на консультацию
         </h2>
-        <p className="mt-4 text-sm uppercase tracking-[0.16em] text-slate-500">
+        <p className="mt-4 text-sm uppercase tracking-[0.16em] text-[var(--muted-text)]">
           Тема: {selectedCategory}
         </p>
 
@@ -88,7 +88,7 @@ export default function ContactModal({ selectedCategory, onClose }) {
                 <p className="text-lg font-semibold text-[var(--ink)]">Не получилось отправить автоматически.</p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
                   Напишите нам в WhatsApp или позвоните по номеру{' '}
-                  <a href={CONTACT_PHONE_HREF} className="font-semibold text-[var(--accent)]">
+                  <a href={CONTACT_PHONE_HREF} className="font-semibold text-[var(--accent-text)]">
                     {CONTACT_PHONE_LABEL}
                   </a>{' '}
                   — ответим быстро.
@@ -107,7 +107,7 @@ export default function ContactModal({ selectedCategory, onClose }) {
         ) : (
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                 Ваше имя
               </span>
               <input
@@ -124,7 +124,7 @@ export default function ContactModal({ selectedCategory, onClose }) {
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+              <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                 Телефон
               </span>
               <input

@@ -34,7 +34,7 @@ function ProductPlaceholder({ item, compact }) {
       </svg>
       {caption ? (
         <span
-          className={`font-bold uppercase tracking-[0.18em] text-slate-500 ${
+          className={`font-bold uppercase tracking-[0.18em] text-[var(--muted-text)] ${
             compact ? 'text-[9px]' : 'text-[10px]'
           }`}
         >

@@ -15,9 +15,9 @@ export default function Breadcrumbs({ trail }) {
 
           return (
             <li key={`${item.title}-${index}`} className="flex items-center gap-2">
-              {index > 0 ? <span className="text-slate-400">/</span> : null}
+              {index > 0 ? <span className="text-[var(--muted-text)]">/</span> : null}
               {item.to && !isLast ? (
-                <Link to={item.to} className="text-[var(--accent)] hover:underline">
+                <Link to={item.to} className="text-[var(--accent-text)] hover:underline">
                   {item.title}
                 </Link>
               ) : (

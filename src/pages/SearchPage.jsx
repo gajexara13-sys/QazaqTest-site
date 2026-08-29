@@ -115,7 +115,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
 
           {query.trim().length === 0 ? (
             <div className="mt-12 border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                 Введите запрос
               </p>
               <h2 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
@@ -123,7 +123,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600">
                 Или откройте{' '}
-                <Link to="/catalog" className="font-semibold text-[var(--accent)] hover:underline">
+                <Link to="/catalog" className="font-semibold text-[var(--accent-text)] hover:underline">
                   каталог по категориям
                 </Link>
                 .
@@ -132,18 +132,18 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
           ) : (
             <>
               <div className="mt-10 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]">
                   По запросу «{query}» найдено:{' '}
                   <span className="text-[var(--ink)]">{results.length}</span>
                   {results.length !== matches.length ? (
-                    <span className="text-slate-400"> из {matches.length}</span>
+                    <span className="text-[var(--muted-text)]"> из {matches.length}</span>
                   ) : null}
                 </p>
 
                 {matches.length > 0 ? (
                   <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_220px]">
                     <div>
-                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]">
                         Категория
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
@@ -173,7 +173,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
 
                     {brandFacets.length > 0 ? (
                       <div>
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]">
                           Бренд
                         </p>
                         <div className="mt-3 flex flex-wrap gap-2">
@@ -205,7 +205,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
                     <div>
                       <label
                         htmlFor="search-sort"
-                        className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]"
+                        className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]"
                       >
                         Сортировка
                       </label>
@@ -228,6 +228,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
 
               {results.length > 0 ? (
                 <>
+                  <h2 className="sr-only">Результаты поиска</h2>
                   <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {visibleItems.map((item) => (
                       <ProductCard
@@ -252,7 +253,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
                 </>
               ) : (
                 <div className="mt-10 border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Ничего не найдено
                   </p>
                   <h2 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">

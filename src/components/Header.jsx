@@ -86,7 +86,7 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
           </div>
 
           <div className="pl-6">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               Превью категории
             </p>
             <div className="mt-4 min-h-[130px] rounded" style={{ background: activeCategory.image }} />
@@ -191,7 +191,7 @@ export default function Header() {
             className="flex min-h-[72px] items-center text-3xl font-black tracking-tight text-white transition-opacity hover:opacity-90 md:min-h-[88px] md:min-w-[260px] md:text-4xl"
             aria-label="QAZAQTEST, перейти на главную"
           >
-            QAZAQ<span className="text-[var(--accent)]">TEST</span>
+            QAZAQ<span className="text-[var(--coral)]">TEST</span>
           </Link>
 
           <button

@@ -6,7 +6,7 @@ export default function NotFoundPage() {
 
   return (
     <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">404</p>
       <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Страница не найдена</h1>
       <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-600">
         Проверьте адрес или начните с каталога — там собраны все направления оборудования.

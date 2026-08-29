@@ -92,7 +92,7 @@ export default function HomePage({ onOpenModal }) {
       <section id="service" className="bg-[var(--page-bg)]">
         <div className="mx-auto grid max-w-[var(--page-shell-max)] gap-8 px-6 py-20 md:px-12 lg:grid-cols-3">
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               Сервис
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Монтаж и запуск</h3>
@@ -101,7 +101,7 @@ export default function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               Поддержка
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Обучение и методики</h3>
@@ -110,7 +110,7 @@ export default function HomePage({ onOpenModal }) {
             </p>
           </article>
           <article className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-8">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               Логистика
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight text-[var(--ink)]">Доставка по Казахстану</h3>
@@ -128,7 +128,7 @@ export default function HomePage({ onOpenModal }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,174,84,0.14),_transparent_36%),linear-gradient(135deg,_rgba(212,236,233,0.06),_transparent_48%)]" />
         <div className="relative mx-auto grid max-w-[var(--page-shell-max)] gap-10 px-6 py-20 md:px-12 lg:grid-cols-[minmax(0,1fr)_420px]">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
               Материалы и поддержка
             </p>
             <h2 className="mt-5 text-3xl font-black tracking-tight md:text-5xl">Создано для технических специалистов и лабораторий.</h2>

@@ -20,7 +20,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, sortId, onSortChange, r
     <div className="border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <label className="block w-full max-w-md">
-          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]">
             Поиск по разделу
           </span>
           <input
@@ -33,7 +33,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, sortId, onSortChange, r
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]">
             Сортировка
           </span>
           <select
@@ -49,7 +49,7 @@ function CatalogFilterBar({ searchQuery, onSearchChange, sortId, onSortChange, r
           </select>
         </label>
 
-        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 lg:pb-5">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)] lg:pb-5">
           Найдено: <span className="text-[var(--ink)]">{resultCount}</span>
         </div>
       </div>
@@ -62,7 +62,7 @@ function GroupFilter({ groups, activeGroup, onChange, totalCount, fallbackItems 
 
   return (
     <aside className="min-w-0 border border-[#78AEAD]/25 bg-[var(--surface-card)] p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
         {hasGroups ? 'Подразделы' : 'Состав раздела'}
       </p>
 
@@ -88,7 +88,7 @@ function GroupFilter({ groups, activeGroup, onChange, totalCount, fallbackItems 
                 }`}
               >
                 <span className="min-w-0">{option.label}</span>
-                <span className={`shrink-0 text-xs ${isActive ? 'text-white/60' : 'text-slate-400'}`}>
+                <span className={`shrink-0 text-xs ${isActive ? 'text-white/60' : 'text-[var(--muted-text)]'}`}>
                   {option.count}
                 </span>
               </button>
@@ -130,8 +130,9 @@ function CategoryNavigation({ currentCategoryId }) {
             }
           >
             {category.title}
-            {/* Раздел без позиций честно показываем как «под заказ», а не пустым */}
-            <span className="text-[10px] font-semibold opacity-60">{count > 0 ? count : '—'}</span>
+            {/* Раздел без позиций честно показываем как «под заказ», а не пустым.
+                Счётчик без opacity: полупрозрачность поверх заливки давала 2,12:1. */}
+            <span className="text-[10px] font-semibold">{count > 0 ? count : '—'}</span>
           </NavLink>
         )
       })}
@@ -143,7 +144,7 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
   if (onOpenModal) {
     return (
       <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
           Раздел наполняется
         </p>
         <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
@@ -166,7 +167,7 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
 
   return (
     <div className="border border-dashed border-[#78AEAD]/35 bg-white px-6 py-14 text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Ничего не найдено</p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">Ничего не найдено</p>
       <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)] md:text-3xl">
         Фильтр ничего не нашёл
       </h3>
@@ -210,7 +211,7 @@ export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
   if (!category) {
     return (
       <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]">404</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">404</p>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--ink)]">Раздел не найден</h1>
         <Link
           to="/catalog"
@@ -269,6 +270,9 @@ export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
 
               {filteredItems.length > 0 ? (
                 <>
+                  {/* Карточка в сетке — это h3, поэтому секции результатов нужен
+                      свой h2: иначе уровни идут H1 → H3 с пропуском. */}
+                  <h2 className="sr-only">Позиции раздела «{category.title}»</h2>
                   <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                     {visibleItems.map((item) => (
                       <ProductCard

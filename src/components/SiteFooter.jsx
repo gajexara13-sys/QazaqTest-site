@@ -23,7 +23,7 @@ export default function SiteFooter({ onOpenModal }) {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
             <div className="text-3xl font-black tracking-tight text-[var(--ink)]">
-              QAZAQ<span className="text-[var(--accent)]">TEST</span>
+              QAZAQ<span className="text-[var(--accent-text)]">TEST</span>
             </div>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">
               Поставка лабораторного оборудования для дорожных, строительных и материаловедческих
@@ -32,13 +32,13 @@ export default function SiteFooter({ onOpenModal }) {
           </div>
 
           <nav className="lg:col-span-3" aria-label="Разделы сайта в подвале">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]">
               Разделы
             </p>
             <ul className="mt-5 space-y-3 text-sm font-medium text-[var(--ink)]">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="transition-colors hover:text-[var(--accent)]">
+                  <Link to={link.to} className="transition-colors hover:text-[var(--accent-text)]">
                     {link.label}
                   </Link>
                 </li>
@@ -47,21 +47,21 @@ export default function SiteFooter({ onOpenModal }) {
           </nav>
 
           <div className="lg:col-span-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]">
               Связь
             </p>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-slate-600">
               <li>
                 <span className="font-semibold text-[var(--ink)]">Телефон</span>
                 <br />
-                <a href={CONTACT_PHONE_HREF} className="text-[var(--accent)] hover:underline">
+                <a href={CONTACT_PHONE_HREF} className="text-[var(--accent-text)] hover:underline">
                   {CONTACT_PHONE_LABEL}
                 </a>
               </li>
               <li>
                 <span className="font-semibold text-[var(--ink)]">E-mail</span>
                 <br />
-                <a href={`mailto:${CONTACT_EMAIL}`} className="text-[var(--accent)] hover:underline">
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-[var(--accent-text)] hover:underline">
                   {CONTACT_EMAIL}
                 </a>
               </li>
@@ -74,7 +74,7 @@ export default function SiteFooter({ onOpenModal }) {
           </div>
 
           <div className="lg:col-span-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-text)]">
               Реквизиты
             </p>
             {/* Реквизиты берём из COMPANY_DETAILS. Пустой БИН строку не выводит:
@@ -101,12 +101,12 @@ export default function SiteFooter({ onOpenModal }) {
           >
             Связаться с нами
           </button>
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-500">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-[var(--muted-text)]">
             <span>© {new Date().getFullYear()} QAZAQTEST. Все права защищены.</span>
-            <a href="#" className="transition-colors hover:text-[var(--accent)]">
+            <a href="#" className="transition-colors hover:text-[var(--accent-text)]">
               Политика конфиденциальности
             </a>
-            <a href="#" className="transition-colors hover:text-[var(--accent)]">
+            <a href="#" className="transition-colors hover:text-[var(--accent-text)]">
               Договор оферты
             </a>
           </div>

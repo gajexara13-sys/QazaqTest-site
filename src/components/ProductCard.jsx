@@ -38,25 +38,25 @@ export default function ProductCard({ item, onOpenModal, onPreview }) {
       </button>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent-text)]">
           {item.group ?? 'Оборудование'}
         </p>
 
         <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
-          <Link to={productPath} className="transition-colors hover:text-[var(--accent)]">
+          <Link to={productPath} className="transition-colors hover:text-[var(--accent-text)]">
             {item.title}
           </Link>
         </h3>
 
         {item.brand || item.model ? (
-          <p className="mt-1 text-xs font-medium text-slate-500">
+          <p className="mt-1 text-xs font-medium text-[var(--muted-text)]">
             {[item.brand, item.model].filter(Boolean).join(' · ')}
           </p>
         ) : null}
 
         <p
           className={`mt-3 text-lg font-bold tracking-tight ${
-            price ? 'text-[var(--ink)]' : 'text-slate-500'
+            price ? 'text-[var(--ink)]' : 'text-[var(--muted-text)]'
           }`}
         >
           {price ?? 'Цена по запросу'}
@@ -68,7 +68,7 @@ export default function ProductCard({ item, onOpenModal, onPreview }) {
           <dl className="mt-4 space-y-1.5 border-t border-[#78AEAD]/20 pt-4 text-xs leading-relaxed">
             {keySpecs.map((spec) => (
               <div key={spec.label} className="flex justify-between gap-3">
-                <dt className="min-w-0 text-slate-500">{spec.label}</dt>
+                <dt className="min-w-0 text-[var(--muted-text)]">{spec.label}</dt>
                 <dd className="shrink-0 text-right font-semibold text-[var(--ink)]">{spec.value}</dd>
               </div>
             ))}

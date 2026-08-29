@@ -121,7 +121,7 @@ export default function HeaderSearch({ onClose }) {
                           <span className="block truncate text-sm font-bold leading-snug text-[var(--ink)]">
                             {item.title}
                           </span>
-                          <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+                          <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--accent-text)]">
                             {item.group ?? getCategoryById(item.categoryId)?.title}
                           </span>
                         </span>

@@ -21,7 +21,7 @@ export default function ProductSpecs({ specs, columns = 1 }) {
             index === 0 ? '' : 'border-t border-[#78AEAD]/20'
           } ${columns === 2 && index === 1 ? 'md:border-t-0' : ''}`}
         >
-          <dt className="shrink-0 leading-relaxed text-slate-500 sm:w-[46%]">{spec.label}</dt>
+          <dt className="shrink-0 leading-relaxed text-[var(--muted-text)] sm:w-[46%]">{spec.label}</dt>
           <dd className="min-w-0 flex-1 font-semibold leading-relaxed text-[var(--ink)]">
             {spec.value}
           </dd>
