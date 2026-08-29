@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import Breadcrumbs from '../components/Breadcrumbs'
 import SearchIcon from '../components/SearchIcon'
-import useDocumentTitle from '../hooks/useDocumentTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import {
   getBrandFacets,
   getCategoryFacets,
@@ -41,7 +41,7 @@ export default function SearchPage({ onOpenModal, onPreviewProduct }) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
 
   // Новый запрос из адресной строки (шапка, ссылка) сбрасывает фильтры
-  useDocumentTitle(query.trim() ? `Поиск: ${query.trim()}` : 'Поиск по каталогу')
+  usePageMeta(query.trim() ? `Поиск: ${query.trim()}` : 'Поиск по каталогу', undefined, { noindex: true })
 
   const [prevQuery, setPrevQuery] = useState(query)
   if (prevQuery !== query) {

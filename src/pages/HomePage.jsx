@@ -3,8 +3,11 @@ import BrandsMarquee from '../components/BrandsMarquee'
 import CategoriesBentoGrid from '../components/CategoriesBentoGrid'
 import { DEFAULT_TOPIC } from '../constants'
 import { benefits } from '../data/siteData'
+import usePageMeta from '../hooks/usePageMeta'
 
 export default function HomePage({ onOpenModal }) {
+  usePageMeta(undefined, 'Поставка испытательного оборудования для дорожных, строительных и материаловедческих лабораторий Казахстана: 127 позиций, подбор, монтаж и сервис.')
+
   return (
     <>
       <section className="relative overflow-hidden bg-[var(--hero-mid)] text-white">

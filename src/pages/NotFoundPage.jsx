@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import useDocumentTitle from '../hooks/useDocumentTitle'
+import usePageMeta from '../hooks/usePageMeta'
 
 export default function NotFoundPage() {
-  useDocumentTitle('Страница не найдена')
+  usePageMeta('Страница не найдена', undefined, { noindex: true })
 
   return (
     <section className="mx-auto flex min-h-[calc(100vh-120px)] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center">

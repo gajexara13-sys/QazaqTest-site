@@ -1,4 +1,5 @@
 import Breadcrumbs from '../components/Breadcrumbs'
+import usePageMeta from '../hooks/usePageMeta'
 
 const SERVICE_BLOCKS = [
   {
@@ -16,6 +17,8 @@ const SERVICE_BLOCKS = [
 ]
 
 export default function ServicePage() {
+  usePageMeta('Сервис', 'Диагностика, калибровка и выезд инженера: техническое сопровождение лабораторного оборудования.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'Сервис' }]} />

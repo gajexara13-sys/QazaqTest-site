@@ -1,7 +1,10 @@
 import Breadcrumbs from '../components/Breadcrumbs'
 import { CONTACT_PHONE_HREF, CONTACT_PHONE_LABEL, DEFAULT_TOPIC } from '../constants'
+import usePageMeta from '../hooks/usePageMeta'
 
 export default function ContactPage({ onOpenModal }) {
+  usePageMeta('Контакты', 'Телефон, почта и форма заявки: поможем подобрать оборудование под задачи вашей лаборатории.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'Контакты' }]} />

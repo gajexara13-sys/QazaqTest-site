@@ -14,6 +14,7 @@ npm run catalog:build     # пересобрать каталог из выгр�
 npm run images:download   # скачать фото товаров к себе (см. ниже)
 npm run build             # прод-сборка в dist/
 npm run preview           # предпросмотр прод-сборки
+npm run sitemap           # пересобрать sitemap.xml и robots.txt
 npm run lint              # ESLint
 ```
 
@@ -97,6 +98,32 @@ npm run catalog:build     # подтянет их в витрину
 `node scripts/check_copy.mjs --facts` выдаёт фактолист по проблемным
 позициям — из него пишется текст.
 
+## Адреса и индексация
+
+Роутер — `BrowserRouter`, адреса обычные: `/catalog/asphalt/tester-…-lwd-5b`.
+До этого был `HashRouter`, и весь сайт для поисковика выглядел одной страницей
+`qazaqtest.kz/`, а `canonical` со всех 127 карточек указывал на главную.
+
+**Хостинг обязан отдавать `index.html` на любой путь**, иначе прямой заход по
+ссылке на карточку вернёт 404. Правила уже лежат в репозитории:
+
+| Площадка | Файл |
+| --- | --- |
+| Netlify | `public/_redirects` |
+| Vercel | `vercel.json` |
+| nginx | `location / { try_files $uri /index.html; }` — прописать вручную |
+| GitHub Pages | fallback не поддерживается штатно, нужен обходной путь через `404.html` |
+
+`usePageMeta` на каждой странице ставит заголовок, описание, `canonical` и
+`og:url` по текущему адресу. Страницы поиска и 404 закрыты `noindex`.
+
+`npm run build` перед сборкой вызывает `npm run sitemap`: карта на 146 адресов
+(12 разделов и 127 карточек) собирается из `catalog.json`, поэтому не разъезжается
+с каталогом.
+
+Домен задаётся константой `SITE_ORIGIN` в `src/constants.js` и в
+`scripts/generate_sitemap.mjs`.
+
 ## Отправка заявок
 
 Форма отправляет JSON `{ name, phone, topic, page, submittedAt }` на адрес из
@@ -117,19 +144,20 @@ VITE_LEAD_ENDPOINT=https://formspree.io/f/XXXXXXXX
   строку в подвале не выводит: показывать выдуманные реквизиты нельзя.
 - Ссылки «Политика конфиденциальности» и «Договор оферты» — сейчас `href="#"`.
 - Курс `RUB_TO_KZT` и наценка.
-- Домен в `index.html` (`canonical`, `og:url`), если он отличается от
-  qazaqtest.kz.
+- Домен `SITE_ORIGIN` в `src/constants.js` и `scripts/generate_sitemap.mjs`,
+  если он отличается от qazaqtest.kz.
+- Правило SPA-fallback на хостинге — без него глубокие ссылки вернут 404.
 
 ## Структура
 
 ```
-src/App.jsx                     роутинг (HashRouter), модалки, общий каркас
+src/App.jsx                     роутинг (BrowserRouter), модалки, общий каркас
 src/constants.js                телефон, почта, пункты меню, тема заявки по умолчанию
 src/pages/                      Home, Catalog, Category, Product, Search, NotFound,
                                 Services, Service, Guides, About, Contact
 src/components/                 Header (мега-меню, поиск), ProductCard, ProductSpecs,
                                 ProductImage, Breadcrumbs, модалки, подвал
-src/hooks/useDocumentTitle.js   заголовок вкладки на HashRouter
+src/hooks/usePageMeta.js        заголовок, описание и canonical страницы
 src/lib/search.js               индекс и ранжирование поиска, фильтры, сортировка
 src/lib/lead.js                 отправка заявки и ссылка на WhatsApp
 src/lib/hooks.js                блокировка скролла страницы, закрытие по Esc

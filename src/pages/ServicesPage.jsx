@@ -1,4 +1,5 @@
 import Breadcrumbs from '../components/Breadcrumbs'
+import usePageMeta from '../hooks/usePageMeta'
 
 const SERVICES = [
   {
@@ -16,6 +17,8 @@ const SERVICES = [
 ]
 
 export default function ServicesPage() {
+  usePageMeta('Услуги', 'Монтаж и запуск оборудования, обучение методикам испытаний, логистика и поставка в лаборатории Казахстана.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'Услуги' }]} />

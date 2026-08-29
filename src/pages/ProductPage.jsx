@@ -3,7 +3,7 @@ import Breadcrumbs from '../components/Breadcrumbs'
 import ProductCard from '../components/ProductCard'
 import ProductImage from '../components/ProductImage'
 import ProductSpecs from '../components/ProductSpecs'
-import useDocumentTitle from '../hooks/useDocumentTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import {
   formatPrice,
   getCategoryById,
@@ -47,7 +47,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
   const item = getProductBySlug(categoryId, slug)
   const category = getCategoryById(categoryId)
 
-  useDocumentTitle(item?.title, item?.summary)
+  usePageMeta(item?.title, item?.summary)
 
   if (!item || !category) {
     return <NotFound />

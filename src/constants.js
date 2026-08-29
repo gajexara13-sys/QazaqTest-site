@@ -1,3 +1,7 @@
+/** Домен для канонических адресов и карты сайта */
+export const SITE_ORIGIN = 'https://qazaqtest.kz'
+export const SITE_NAME = 'QAZAQTEST'
+
 /** Тема заявки по умолчанию, когда пользователь пишет не из карточки товара */
 export const DEFAULT_TOPIC = 'Общий запрос'
 

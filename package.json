@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "node -e \"require('fs').mkdirSync('node_modules/.vite-temp',{recursive:true})\" && vite",
-    "build": "vite build",
+    "build": "npm run sitemap && vite build",
     "catalog:build": "node scripts/normalize_catalog.mjs",
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "catalog:lint": "node scripts/check_copy.mjs"
+    "catalog:lint": "node scripts/check_copy.mjs",
+    "sitemap": "node scripts/generate_sitemap.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

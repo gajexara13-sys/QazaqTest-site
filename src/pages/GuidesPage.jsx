@@ -1,5 +1,6 @@
 import Breadcrumbs from '../components/Breadcrumbs'
 import { DEFAULT_TOPIC } from '../constants'
+import usePageMeta from '../hooks/usePageMeta'
 
 const GUIDES = [
   {
@@ -13,6 +14,8 @@ const GUIDES = [
 ]
 
 export default function GuidesPage({ onOpenModal }) {
+  usePageMeta('Гайды', 'Практические материалы по выбору оборудования, запуску лаборатории и подготовке к испытаниям.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'Гайды' }]} />

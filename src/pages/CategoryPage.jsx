@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, useParams } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import ProductCard from '../components/ProductCard'
-import useDocumentTitle from '../hooks/useDocumentTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import {
   categories,
   categoryCounts,
@@ -205,7 +205,7 @@ export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
     setVisibleCount(CATEGORY_PAGE_SIZE)
   }
 
-  useDocumentTitle(category?.title, category?.description)
+  usePageMeta(category?.title, category?.description)
 
   if (!category) {
     return (

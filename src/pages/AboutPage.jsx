@@ -1,7 +1,10 @@
 import Breadcrumbs from '../components/Breadcrumbs'
 import { benefits } from '../data/siteData'
+import usePageMeta from '../hooks/usePageMeta'
 
 export default function AboutPage() {
+  usePageMeta('О компании', 'QAZAQTEST поставляет лабораторное оборудование по Казахстану и сопровождает клиентов на всех этапах внедрения.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'О компании' }]} />

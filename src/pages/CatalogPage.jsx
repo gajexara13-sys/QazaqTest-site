@@ -1,7 +1,10 @@
 import CategoriesBentoGrid from '../components/CategoriesBentoGrid'
 import Breadcrumbs from '../components/Breadcrumbs'
+import usePageMeta from '../hooks/usePageMeta'
 
 export default function CatalogPage() {
+  usePageMeta('Каталог', 'Испытательное оборудование по разделам: асфальтобетоны, битумные вяжущие, заполнители, грунты, цемент и общелабораторное оборудование.')
+
   return (
     <>
       <Breadcrumbs trail={[{ title: 'Каталог' }]} />
