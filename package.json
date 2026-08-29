@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "catalog:lint": "node scripts/check_copy.mjs",
-    "sitemap": "node scripts/generate_sitemap.mjs"
+    "sitemap": "node scripts/generate_sitemap.mjs",
+    "catalog:import": "node scripts/import_woocommerce_csv.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",
