@@ -6,6 +6,10 @@
  * перегенерируется скриптом normalize_catalog.mjs и любые правки в ней
  * затираются. После загрузки нужно пересобрать каталог.
  *
+ * И ключ правки, и имя файла — `wp-<id записи в WooCommerce>`, а не порядковый
+ * `qzt-N`: импорт выгрузки присваивает порядковые номера заново, и привязанные
+ * к ним фото разъехались бы по чужим карточкам.
+ *
  * Запуск:  npm run images:download && npm run catalog:build
  * Повторный запуск безопасен: уже скачанные файлы пропускаются.
  */
@@ -25,6 +29,9 @@ const CONCURRENCY = 5
 
 const exists = (p) => access(p).then(() => true, () => false)
 
+/** Устойчивый между выгрузками ключ позиции */
+const stableKey = (item) => (item.wpId == null ? item.id : `wp-${item.wpId}`)
+
 function extFromUrl(url) {
   const ext = path.extname(new URL(url).pathname).toLowerCase()
   return ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'].includes(ext) ? ext : '.jpg'
@@ -36,7 +43,7 @@ async function downloadOne(item) {
     return { item, status: 'no-remote-url' }
   }
 
-  const fileName = `${item.id}${extFromUrl(sourceUrl)}`
+  const fileName = `${stableKey(item)}${extFromUrl(sourceUrl)}`
   const filePath = path.join(OUT_DIR, fileName)
   const localUrl = `/products/${fileName}`
 
@@ -73,7 +80,8 @@ async function worker() {
     try {
       const result = await downloadOne(item)
       if (result.localUrl) {
-        overrides[item.id] = { ...overrides[item.id], image: result.localUrl }
+        const key = stableKey(item)
+        overrides[key] = { ...overrides[key], image: result.localUrl }
         ok += 1
         console.log(`✓ ${item.id} (${result.status})`)
       } else {
