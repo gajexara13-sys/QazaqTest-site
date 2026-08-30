@@ -124,6 +124,11 @@ const normalizeUnits = (value) =>
       .replace(/\bAC\s*(\d{3})\s*V(?![A-Za-z0-9])/gi, '$1 В')
       .replace(/(\d{3})\s*V(?![A-Za-z0-9])/g, '$1 В')
       .replace(/(\d{2})\s*Hz(?![A-Za-z0-9])/gi, '$1 Гц')
+      .replace(/(\d)\s*kW(?![A-Za-z0-9])/g, '$1 кВт')
+      .replace(/(\d)\s*W(?![A-Za-z0-9])/g, '$1 Вт')
+      // «-50 °C~30 °C» — тильда значит диапазон. В текстах китайского
+      // происхождения она полноширинная (～) и волнистая (〜), не только ASCII.
+      .replace(/\s*[~～〜]\s*(?=[-+]?\d)/g, ' – ')
       .replace(/(\d)\.(\d)/g, '$1,$2')
       .replace(/(\d)\s*°C/g, '$1 °C')
       // «1,2Х20» → «1,2×20»: кириллическая «х/Х» вместо знака умножения —
@@ -141,6 +146,9 @@ const normalizeUnits = (value) =>
 const normalizeSpecLabel = (label) =>
   label
     .replace(/^вес(?![а-яё])/i, 'Масса')
+    // «Масса всей машины», «Масса нетто прибора» — уточнение про сам прибор
+    // ничего не добавляет: в карточке и так его характеристики.
+    .replace(/^(масса(?:\s+нетто|\s+брутто)?)\s+(?:всей\s+)?(?:машины|прибора|устройства|установки|инструмента)$/i, '$1')
     .replace(/^габаритные\s+размеры/i, 'Габариты')
     .replace(/^размеры(?=\s*$)/i, 'Габариты')
     .replace(/^размер(ы)?\s+(устройства|прибора|машины|установки)/i, 'Габариты')
@@ -448,7 +456,34 @@ function slugify(value) {
     .join('')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .slice(0, 70)
+}
+
+const SLUG_MAX = 70
+
+/** Обрезка по границе слова, а не посреди него */
+function clipSlug(value, limit) {
+  if (value.length <= limit) {
+    return value
+  }
+  const cut = value.slice(0, limit)
+  const boundary = cut.lastIndexOf('-')
+  return (boundary >= limit / 2 ? cut.slice(0, boundary) : cut).replace(/-+$/, '')
+}
+
+/**
+ * Адрес карточки — название плюс код модели. Код при обрезке не жертвуем: по
+ * нему карточку и ищут, а «…-asfaltobetona-k» вместо «…-kwn-05a» не находится
+ * ничем. И не дублируем его, если он уже вошёл в название («Барометр БАММ-1»).
+ */
+function buildSlug(title, model, fallback) {
+  const tail = model ? slugify(model) : ''
+  const head = slugify(title)
+  if (!tail || head === tail || head.endsWith(`-${tail}`)) {
+    return clipSlug(head, SLUG_MAX) || fallback
+  }
+  const room = SLUG_MAX - tail.length - 1
+  const clipped = room > 0 ? clipSlug(head, room) : ''
+  return [clipped, tail].filter(Boolean).join('-') || fallback
 }
 
 /**
@@ -562,7 +597,7 @@ function normalizeItem(item) {
     // Идентификатор записи в WooCommerce: он стабилен между выгрузками,
     // в отличие от порядкового id, поэтому по нему привязаны overrides.
     wpId: item.wpId ?? null,
-    slug: slugify(`${title}${model ? ` ${model}` : ''}`) || item.id,
+    slug: buildSlug(title, model, item.id),
     categoryId: item.categoryId,
     group: detectGroup(item),
     title,
@@ -633,14 +668,24 @@ async function main() {
   const overrides = await readOverrides()
 
   const usedOverrideKeys = new Set()
-  const items = disambiguateTitles(source.map(normalizeItem)).map((item) => {
+  const merged = source.map(normalizeItem).map((item) => {
     const wpKey = item.wpId == null ? null : `wp-${item.wpId}`
     const key = wpKey != null && overrides[wpKey] ? wpKey : item.id
     if (overrides[key]) {
       usedOverrideKeys.add(key)
     }
-    return { ...item, ...(overrides[key] ?? {}) }
+    const patched = { ...item, ...(overrides[key] ?? {}) }
+    // Заголовок мог прийти из правки — тогда слаг, посчитанный по названию из
+    // выгрузки, ему больше не соответствует. Свой слаг в правке уважаем.
+    if (!overrides[key]?.slug) {
+      patched.slug = buildSlug(patched.title, patched.model, patched.id)
+    }
+    return patched
   })
+
+  // Развести одинаковые названия можно только после правок: заголовок из
+  // overrides может совпасть с чужим, а до применения правок этого не видно.
+  const items = disambiguateTitles(merged)
 
   // Позиция без раздела на витрину не попадёт: у неё нет ни адреса, ни места в
   // навигации. Импортёр такие не выбрасывает, чтобы раздел можно было назначить

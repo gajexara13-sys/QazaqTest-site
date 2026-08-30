@@ -42,7 +42,7 @@ export default function ProductCard({ item, onOpenModal, onPreview }) {
           {item.group ?? 'Оборудование'}
         </p>
 
-        <h3 className="mt-2 break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
+        <h3 className="mt-2 hyphens-auto break-words text-lg font-bold leading-snug tracking-tight text-[var(--ink)]">
           <Link to={productPath} className="transition-colors hover:text-[var(--accent-text)]">
             {item.title}
           </Link>
