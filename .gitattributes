@@ -1,0 +1,19 @@
+# Переводы строк — всегда LF, независимо от машины.
+#
+# Скрипты каталога пишут файлы с LF, а Windows выдаёт их из репозитория с CRLF.
+# Без этого правила поведение зависит от настройки core.autocrlf у конкретного
+# разработчика: при autocrlf=false пересборка каталога даёт диф на все 7961
+# строку catalog.json вместо тех трёх, что действительно изменились.
+* text=auto eol=lf
+
+# Двоичные файлы не трогать
+*.webp  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.pdf   binary
+*.xlsx  binary
