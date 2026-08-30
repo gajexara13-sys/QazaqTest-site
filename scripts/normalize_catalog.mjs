@@ -531,6 +531,9 @@ function normalizeItem(item) {
 
   return {
     id: item.id,
+    // Идентификатор записи в WooCommerce: он стабилен между выгрузками,
+    // в отличие от порядкового id, поэтому по нему привязаны overrides.
+    wpId: item.wpId ?? null,
     slug: slugify(`${baseTitle}${model ? ` ${model}` : ''}`) || item.id,
     categoryId: item.categoryId,
     group: detectGroup(item),
@@ -589,10 +592,24 @@ async function main() {
   const source = JSON.parse(raw)
   const overrides = await readOverrides()
 
-  const items = disambiguateTitles(source.map(normalizeItem)).map((item) => ({
-    ...item,
-    ...(overrides[item.id] ?? {}),
-  }))
+  const usedOverrideKeys = new Set()
+  const items = disambiguateTitles(source.map(normalizeItem)).map((item) => {
+    const wpKey = item.wpId == null ? null : `wp-${item.wpId}`
+    const key = wpKey != null && overrides[wpKey] ? wpKey : item.id
+    if (overrides[key]) {
+      usedOverrideKeys.add(key)
+    }
+    return { ...item, ...(overrides[key] ?? {}) }
+  })
+
+  const orphanKeys = Object.keys(overrides).filter((key) => !usedOverrideKeys.has(key))
+  if (orphanKeys.length > 0) {
+    console.warn(`\nВ overrides ${orphanKeys.length} ключей ни с чем не совпали — эти правки не применились:`)
+    orphanKeys.slice(0, 20).forEach((key) => console.warn(`  ${key}`))
+    if (orphanKeys.length > 20) {
+      console.warn(`  … и ещё ${orphanKeys.length - 20}`)
+    }
+  }
 
   // Слаги участвуют в адресах карточек — коллизии недопустимы.
   const slugs = new Map()

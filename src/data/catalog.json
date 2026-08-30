@@ -1,6 +1,7 @@
 [
   {
     "id": "qzt-1",
+    "wpId": 340,
     "slug": "avtomaticheskiy-laboratornyy-smesitel-hyjb-30-hyjb-30",
     "categoryId": "asphalt",
     "group": "Смесители",
@@ -60,6 +61,7 @@
   },
   {
     "id": "qzt-2",
+    "wpId": 400,
     "slug": "avtomaticheskiy-smesitel-asfaltovoy-smesi-dvuhkolonnyy-lbh-20",
     "categoryId": "asphalt",
     "group": "Смесители",
@@ -133,6 +135,7 @@
   },
   {
     "id": "qzt-3",
+    "wpId": 398,
     "slug": "avtomaticheskiy-smesitel-dlya-asfaltobetonnyh-smesey-bh-20",
     "categoryId": "asphalt",
     "group": "Смесители",
@@ -201,6 +204,7 @@
   },
   {
     "id": "qzt-4",
+    "wpId": 1009,
     "slug": "avtomaticheskiy-uplotnitel-marshalla-ls-ms10",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -223,6 +227,7 @@
   },
   {
     "id": "qzt-5",
+    "wpId": 468,
     "slug": "avtomaticheskiy-tsentrobezhnyy-ekstraktor-asfaltovoy-smesi-s-obratnym-",
     "categoryId": "asphalt",
     "group": "Асфальтоанализаторы",
@@ -279,6 +284,7 @@
   },
   {
     "id": "qzt-6",
+    "wpId": 470,
     "slug": "analizator-soderzhaniya-bituma-v-asfaltobetonnoy-smesi-metod-vyzhigani",
     "categoryId": "asphalt",
     "group": "Асфальтоанализаторы",
@@ -399,6 +405,7 @@
   },
   {
     "id": "qzt-7",
+    "wpId": 1002,
     "slug": "vibratsionnyy-valtsovyy-uplotnitel-asfaltobetonnyh-plit-ls-vib-55",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -421,6 +428,7 @@
   },
   {
     "id": "qzt-8",
+    "wpId": 1007,
     "slug": "vraschatelnyy-giratornyy-uplotnitel-ls-gc100",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -443,6 +451,7 @@
   },
   {
     "id": "qzt-9",
+    "wpId": 306,
     "slug": "vraschatelnyy-uplotnitel-girator-kys-08a-kys-08a",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -509,6 +518,7 @@
   },
   {
     "id": "qzt-10",
+    "wpId": 925,
     "slug": "gilotina",
     "categoryId": "asphalt",
     "group": "Испытательное оборудование",
@@ -563,6 +573,7 @@
   },
   {
     "id": "qzt-11",
+    "wpId": 933,
     "slug": "kernootbornik-tehkom-ko-280-st",
     "categoryId": "asphalt",
     "group": "Отбор образцов",
@@ -636,6 +647,7 @@
   },
   {
     "id": "qzt-12",
+    "wpId": 409,
     "slug": "mashina-dlya-izgotovleniya-obraztsov-asfaltobetonnoy-smesi-gidravliche",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -697,6 +709,7 @@
   },
   {
     "id": "qzt-13",
+    "wpId": 411,
     "slug": "mashina-dlya-izgotovleniya-obraztsov-asfaltobetonnoy-smesi-pnevmatiche",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -761,6 +774,7 @@
   },
   {
     "id": "qzt-14",
+    "wpId": 435,
     "slug": "mashina-dlya-ispytaniya-asfaltobetonnoy-smesi-na-izgib-zhk-displey-syd",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -834,6 +848,7 @@
   },
   {
     "id": "qzt-15",
+    "wpId": 433,
     "slug": "mashina-dlya-ispytaniya-asfaltobetonnoy-smesi-na-odnoosnoe-szhatie-met",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -900,6 +915,7 @@
   },
   {
     "id": "qzt-16",
+    "wpId": 437,
     "slug": "mashina-dlya-ispytaniya-na-polzuchest-asfaltobetonnoy-smesi-syd-0728",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -964,6 +980,7 @@
   },
   {
     "id": "qzt-17",
+    "wpId": 413,
     "slug": "mashina-dlya-rezki-obraztsov-asfaltovoy-smesi-syd-0626a",
     "categoryId": "asphalt",
     "group": null,
@@ -1056,6 +1073,7 @@
   },
   {
     "id": "qzt-18",
+    "wpId": 449,
     "slug": "mashina-dlya-trehosnyh-ispytaniy-asfaltobetonnoy-smesi-ksz-10a",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1142,6 +1160,7 @@
   },
   {
     "id": "qzt-19",
+    "wpId": 445,
     "slug": "mikrokompyuternaya-servoprivodnaya-mashina-dlya-ispytaniya-smesi-na-di",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1211,6 +1230,7 @@
   },
   {
     "id": "qzt-20",
+    "wpId": 1006,
     "slug": "sektornyy-gidravlicheskiy-uplotnitel-ls-rsc20",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -1233,6 +1253,7 @@
   },
   {
     "id": "qzt-21",
+    "wpId": 441,
     "slug": "sistema-kompleksnogo-ispytaniya-asfaltobetonnyh-smesey-standartnaya-ve",
     "categoryId": "asphalt",
     "group": "Испытательные машины",
@@ -1317,6 +1338,7 @@
   },
   {
     "id": "qzt-22",
+    "wpId": 439,
     "slug": "tester-rasslaivaniya-asfaltovoy-smesi-syd-0716",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1390,6 +1412,7 @@
   },
   {
     "id": "qzt-23",
+    "wpId": 425,
     "slug": "tester-stabilnosti-marshalla-lwd-3a",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1461,6 +1484,7 @@
   },
   {
     "id": "qzt-24",
+    "wpId": 545,
     "slug": "tester-stabilnosti-marshalla-lwd-3b",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1532,6 +1556,7 @@
   },
   {
     "id": "qzt-25",
+    "wpId": 546,
     "slug": "tester-stabilnosti-marshalla-lwd-3c",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1603,6 +1628,7 @@
   },
   {
     "id": "qzt-26",
+    "wpId": 427,
     "slug": "tester-stabilnosti-marshalla-lwd-4a",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1681,6 +1707,7 @@
   },
   {
     "id": "qzt-27",
+    "wpId": 547,
     "slug": "tester-stabilnosti-marshalla-lwd-4b",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1759,6 +1786,7 @@
   },
   {
     "id": "qzt-28",
+    "wpId": 548,
     "slug": "tester-stabilnosti-marshalla-lwd-4c",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1837,6 +1865,7 @@
   },
   {
     "id": "qzt-29",
+    "wpId": 550,
     "slug": "tester-stabilnosti-marshalla-lwd-5",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1901,6 +1930,7 @@
   },
   {
     "id": "qzt-30",
+    "wpId": 429,
     "slug": "tester-stabilnosti-marshalla-lwd-5a",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -1965,6 +1995,7 @@
   },
   {
     "id": "qzt-31",
+    "wpId": 549,
     "slug": "tester-stabilnosti-marshalla-lwd-5b",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -2029,6 +2060,7 @@
   },
   {
     "id": "qzt-32",
+    "wpId": 447,
     "slug": "universalnaya-mashina-dlya-ispytaniya-asfaltobetonnoy-smesi-s-mikrokom",
     "categoryId": "asphalt",
     "group": "Испытательные прессы",
@@ -2110,6 +2142,7 @@
   },
   {
     "id": "qzt-33",
+    "wpId": 551,
     "slug": "uplotnitel-marshalla-avtomaticheskiy-dvoynoy-mdj-iis-mdj-ii",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -2175,6 +2208,7 @@
   },
   {
     "id": "qzt-34",
+    "wpId": 405,
     "slug": "uplotnitel-marshalla-avtomaticheskiy-malyy-mdj-iia",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -2241,6 +2275,7 @@
   },
   {
     "id": "qzt-35",
+    "wpId": 407,
     "slug": "uplotnitel-marshalla-avtomaticheskiy-s-avtomaticheskim-ekstruderom-mdj",
     "categoryId": "asphalt",
     "group": "Уплотнители",
@@ -2295,6 +2330,7 @@
   },
   {
     "id": "qzt-36",
+    "wpId": 1024,
     "slug": "ustanovka-dlya-ispytaniya-asfaltobetona-na-ustalost-pri-chetyrehtochec",
     "categoryId": "asphalt",
     "group": "Научное оборудование",
@@ -2318,6 +2354,7 @@
   },
   {
     "id": "qzt-37",
+    "wpId": 456,
     "slug": "ustanovka-dlya-opredeleniya-koleeobrazovaniya-asfaltobetona-3-kolesa-h",
     "categoryId": "asphalt",
     "group": "Испытательные машины",
@@ -2404,6 +2441,7 @@
   },
   {
     "id": "qzt-38",
+    "wpId": 454,
     "slug": "ustanovka-dlya-opredeleniya-koleeobrazovaniya-asfaltobetona-odnokanaln",
     "categoryId": "asphalt",
     "group": "Испытательные машины",
@@ -2477,6 +2515,7 @@
   },
   {
     "id": "qzt-39",
+    "wpId": 453,
     "slug": "ustanovka-dlya-opredeleniya-koleeobrazovaniya-asfaltobetona-hycz-1",
     "categoryId": "asphalt",
     "group": "Испытательные машины",
@@ -2547,6 +2586,7 @@
   },
   {
     "id": "qzt-40",
+    "wpId": 1010,
     "slug": "ustanovka-dlya-opredeleniya-stoykosti-k-koleeobrazovaniyu-gamburgskoe-",
     "categoryId": "asphalt",
     "group": null,
@@ -2569,6 +2609,7 @@
   },
   {
     "id": "qzt-41",
+    "wpId": 1026,
     "slug": "ustanovka-dlya-otsenki-ekspluatatsionnyh-harakteristik-asfaltobetonnyh",
     "categoryId": "asphalt",
     "group": "Научное оборудование",
@@ -2592,6 +2633,7 @@
   },
   {
     "id": "qzt-42",
+    "wpId": 921,
     "slug": "ustroystvo-leytnera",
     "categoryId": "asphalt",
     "group": "Испытательное оборудование",
@@ -2616,6 +2658,7 @@
   },
   {
     "id": "qzt-43",
+    "wpId": 378,
     "slug": "elektromagnitnyy-neyadernyy-plotnomer-asfaltobetona-310a",
     "categoryId": "field-testing",
     "group": "Плотномеры",
@@ -2665,6 +2708,7 @@
   },
   {
     "id": "qzt-44",
+    "wpId": 478,
     "slug": "abrazivnaya-mashina-dlya-ispytaniya-bitumnogo-vyazhuschego-na-istiraem",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний нефтяных дорожных битумов",
@@ -2733,6 +2777,7 @@
   },
   {
     "id": "qzt-45",
+    "wpId": 480,
     "slug": "adgezionnyy-tester-syd-0754",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний нефтяных дорожных битумов",
@@ -2779,6 +2824,7 @@
   },
   {
     "id": "qzt-46",
+    "wpId": 855,
     "slug": "apparat-dlya-opredeleniya-temperatury-razmyagcheniya-po-koltsu-i-sharu",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний нефтяных дорожных битумов",
@@ -2844,6 +2890,7 @@
   },
   {
     "id": "qzt-47",
+    "wpId": 853,
     "slug": "apparat-dlya-opredeleniya-temperatury-hrupkosti-bitumov",
     "categoryId": "bitumen",
     "group": "Битумные вяжущие",
@@ -2871,6 +2918,7 @@
   },
   {
     "id": "qzt-48",
+    "wpId": 1022,
     "slug": "vakuumnaya-degazatsionnaya-pech-vdo-ls-vdo-630",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -2893,6 +2941,7 @@
   },
   {
     "id": "qzt-49",
+    "wpId": 501,
     "slug": "dinamicheskiy-sdvigovyy-reometr-ls-dsr",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -2969,6 +3018,7 @@
   },
   {
     "id": "qzt-50",
+    "wpId": 991,
     "slug": "laboratornyy-dispergator-smesitel-hr-750drh",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3032,6 +3082,7 @@
   },
   {
     "id": "qzt-51",
+    "wpId": 443,
     "slug": "mikrokompyuternaya-servoprivodnaya-sistema-nizkotemperaturnogo-zamoraz",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3111,6 +3162,7 @@
   },
   {
     "id": "qzt-52",
+    "wpId": 474,
     "slug": "model-retsiklera-asfalta-rotatsionnyy-isparitel-abson-method-khs-07a-k",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3159,6 +3211,7 @@
   },
   {
     "id": "qzt-53",
+    "wpId": 464,
     "slug": "model-retsiklera-trihloretilena-hhs-1-hhs-1",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3207,6 +3260,7 @@
   },
   {
     "id": "qzt-54",
+    "wpId": 1018,
     "slug": "pech-dlya-stareniya-bituma-rtfot-ls-rtfo-8",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3229,6 +3283,7 @@
   },
   {
     "id": "qzt-55",
+    "wpId": 484,
     "slug": "pribor-dlya-ispytaniya-na-istiranie-s-vraschayuscheysya-emkostyu-dlya-",
     "categoryId": "bitumen",
     "group": "Битумные вяжущие",
@@ -3276,6 +3331,7 @@
   },
   {
     "id": "qzt-56",
+    "wpId": 510,
     "slug": "reometr-s-izgibom-balki-bbr-superpave-ls-bbr",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3338,6 +3394,7 @@
   },
   {
     "id": "qzt-57",
+    "wpId": 330,
     "slug": "rotatsionnyy-viskozimetr-brukfilda-ndj-1c",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний нефтяных дорожных битумов",
@@ -3401,6 +3458,7 @@
   },
   {
     "id": "qzt-58",
+    "wpId": 476,
     "slug": "tester-konsistentsii-konsistentsii-bitumnoy-emulsii-syd-0751",
     "categoryId": "bitumen",
     "group": "Битумные вяжущие",
@@ -3434,6 +3492,7 @@
   },
   {
     "id": "qzt-59",
+    "wpId": 503,
     "slug": "tester-pryamogo-rastyazheniya-bitumnogo-vyazhuschego-pri-otritsatelnyh",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3510,6 +3569,7 @@
   },
   {
     "id": "qzt-60",
+    "wpId": 1020,
     "slug": "ustanovka-dlya-stareniya-bituma-pod-davleniem-pav-ls-pav-20",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3532,6 +3592,7 @@
   },
   {
     "id": "qzt-61",
+    "wpId": 514,
     "slug": "ustroystvo-dlya-ispytaniya-na-starenie-asfalta-pod-davleniem-pav-syd-0",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний битумного вяжущего PG",
@@ -3621,6 +3682,7 @@
   },
   {
     "id": "qzt-62",
+    "wpId": 1028,
     "slug": "tsifrovoy-viskozimetr-bituma-ls-vis-d",
     "categoryId": "bitumen",
     "group": "Оборудование для испытаний нефтяных дорожных битумов",
@@ -3644,6 +3706,7 @@
   },
   {
     "id": "qzt-63",
+    "wpId": 486,
     "slug": "avtomaticheskiy-tester-peschanogo-ekvivalenta-sd-ii",
     "categoryId": "aggregates",
     "group": "Испытательные машины",
@@ -3694,6 +3757,7 @@
   },
   {
     "id": "qzt-64",
+    "wpId": 497,
     "slug": "ispytatelnaya-ustanovka-los-andzheles-dm-ii",
     "categoryId": "aggregates",
     "group": "Испытательные машины",
@@ -3739,6 +3803,7 @@
   },
   {
     "id": "qzt-65",
+    "wpId": 489,
     "slug": "ispytatelnoe-ustroystvo-udarnogo-vozdeystviya-jcj-ii",
     "categoryId": "aggregates",
     "group": "Испытательное оборудование",
@@ -3794,6 +3859,7 @@
   },
   {
     "id": "qzt-66",
+    "wpId": 493,
     "slug": "konus-absorbtsii-peska-nasyschennaya-poverhnost-wx-2002",
     "categoryId": "aggregates",
     "group": "Испытательное оборудование",
@@ -3816,6 +3882,7 @@
   },
   {
     "id": "qzt-67",
+    "wpId": 495,
     "slug": "mashina-dlya-uskorennoy-polirovki-zapolniteley-jm-iii",
     "categoryId": "aggregates",
     "group": "Испытательные машины",
@@ -3860,6 +3927,7 @@
   },
   {
     "id": "qzt-68",
+    "wpId": 723,
     "slug": "sita-laboratornye-iz-nerzhaveyuschey-stali-bez-kalibrovki",
     "categoryId": "aggregates",
     "group": "Сита",
@@ -3999,6 +4067,7 @@
   },
   {
     "id": "qzt-69",
+    "wpId": 721,
     "slug": "ustanovka-dlya-opredeleniya-soprotivleniya-istiraemosti-po-pokazatelyu",
     "categoryId": "aggregates",
     "group": "Испытательные машины",
@@ -4021,6 +4090,7 @@
   },
   {
     "id": "qzt-70",
+    "wpId": 491,
     "slug": "ustroystvo-dlya-opredeleniya-obema-pustot-otsenka-uglovatosti-melkogo-",
     "categoryId": "aggregates",
     "group": "Испытательное оборудование",
@@ -4079,6 +4149,7 @@
   },
   {
     "id": "qzt-71",
+    "wpId": 846,
     "slug": "shablon-peredvizhnoy-kp-601-5-dlya-opredeleniya-leschadnosti-schebnya",
     "categoryId": "aggregates",
     "group": "Шаблоны",
@@ -4106,6 +4177,7 @@
   },
   {
     "id": "qzt-72",
+    "wpId": 283,
     "slug": "gidravlicheskiy-press-matest-na-3000kn-dlya-betona-c079-05n",
     "categoryId": "concrete",
     "group": "Лабораторные прессы",
@@ -4146,6 +4218,7 @@
   },
   {
     "id": "qzt-73",
+    "wpId": 793,
     "slug": "ustanovka-dlya-ispytaniya-obraztsov-betona-na-vodonepronitsaemost-uvb-",
     "categoryId": "concrete",
     "group": "Водопроницаемость",
@@ -4217,6 +4290,7 @@
   },
   {
     "id": "qzt-74",
+    "wpId": 848,
     "slug": "pribor-vika-ogts-1-s-dopolnitelnym-gruzom-170-g",
     "categoryId": "cement",
     "group": "Испытательное оборудование",
@@ -4246,6 +4320,7 @@
   },
   {
     "id": "qzt-75",
+    "wpId": 912,
     "slug": "impuls-1d",
     "categoryId": "field-testing",
     "group": "Плотномеры",
@@ -4274,6 +4349,7 @@
   },
   {
     "id": "qzt-76",
+    "wpId": 754,
     "slug": "komplekt-pkf-sd-dlya-opredelenie-koeffitsienta-filtratsii-peschanyh-gr",
     "categoryId": "soil",
     "group": "Фильтрационные приборы",
@@ -4297,6 +4373,7 @@
   },
   {
     "id": "qzt-77",
+    "wpId": 743,
     "slug": "plotnomer-dinamicheskiy-dlya-grunta-d-51",
     "categoryId": "field-testing",
     "group": "Плотномеры",
@@ -4319,6 +4396,7 @@
   },
   {
     "id": "qzt-78",
+    "wpId": 850,
     "slug": "reyka",
     "categoryId": "field-testing",
     "group": "Контроль геометрии",
@@ -4354,6 +4432,7 @@
   },
   {
     "id": "qzt-79",
+    "wpId": 914,
     "slug": "upor-1",
     "categoryId": "field-testing",
     "group": "Плотномеры",
@@ -4382,6 +4461,7 @@
   },
   {
     "id": "qzt-80",
+    "wpId": 421,
     "slug": "apparat-dlya-proverki-plotnosti-uplotnennoy-asfaltovoy-smesi-syd-0705",
     "categoryId": "general-lab",
     "group": "Общелабораторное оборудование",
@@ -4412,6 +4492,7 @@
   },
   {
     "id": "qzt-81",
+    "wpId": 844,
     "slug": "barometr",
     "categoryId": "general-lab",
     "group": "Барометры",
@@ -4439,6 +4520,7 @@
   },
   {
     "id": "qzt-82",
+    "wpId": 383,
     "slug": "vesy-laboratornye-cas-ed-15h-ed-15h",
     "categoryId": "general-lab",
     "group": "Весы",
@@ -4473,6 +4555,7 @@
   },
   {
     "id": "qzt-83",
+    "wpId": 382,
     "slug": "vesy-laboratornye-vibra-aj-6200-ce-aj-6200",
     "categoryId": "general-lab",
     "group": "Весы",
@@ -4495,6 +4578,7 @@
   },
   {
     "id": "qzt-84",
+    "wpId": 423,
     "slug": "vodyanaya-banya-30-litrov-s-vysokoy-nizkoy-i-stabilnoy-postoyannoy-tem",
     "categoryId": "general-lab",
     "group": "Водяные бани",
@@ -4562,6 +4646,7 @@
   },
   {
     "id": "qzt-85",
+    "wpId": 836,
     "slug": "gigrometr-vit-1-0-25",
     "categoryId": "general-lab",
     "group": "Гигрометры",
@@ -4621,6 +4706,7 @@
   },
   {
     "id": "qzt-86",
+    "wpId": 431,
     "slug": "izmeritel-maksimalnoy-teoreticheskoy-plotnosti-asfaltobetonnoy-smesi-e",
     "categoryId": "general-lab",
     "group": "Общелабораторное оборудование",
@@ -4686,6 +4772,7 @@
   },
   {
     "id": "qzt-87",
+    "wpId": 798,
     "slug": "laboratornye-vesy-shinko-vibra-ab-1202ce-ab-1202ce",
     "categoryId": "general-lab",
     "group": "Весы",
@@ -4710,6 +4797,7 @@
   },
   {
     "id": "qzt-88",
+    "wpId": 800,
     "slug": "laboratornye-vesy-shinko-vibra-aj-820ce-aj-820ce",
     "categoryId": "general-lab",
     "group": "Весы",
@@ -4735,6 +4823,7 @@
   },
   {
     "id": "qzt-89",
+    "wpId": 540,
     "slug": "laboratornyy-sushilnyy-shkaf-136-litrov-101-2a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -4793,6 +4882,7 @@
   },
   {
     "id": "qzt-90",
+    "wpId": 541,
     "slug": "laboratornyy-sushilnyy-shkaf-136-litrov-101-2b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -4851,6 +4941,7 @@
   },
   {
     "id": "qzt-91",
+    "wpId": 534,
     "slug": "laboratornyy-sushilnyy-shkaf-16-litrov-101-0a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -4909,6 +5000,7 @@
   },
   {
     "id": "qzt-92",
+    "wpId": 535,
     "slug": "laboratornyy-sushilnyy-shkaf-16-litrov-101-0b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -4967,6 +5059,7 @@
   },
   {
     "id": "qzt-93",
+    "wpId": 532,
     "slug": "laboratornyy-sushilnyy-shkaf-16-litrov-202-0a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5025,6 +5118,7 @@
   },
   {
     "id": "qzt-94",
+    "wpId": 533,
     "slug": "laboratornyy-sushilnyy-shkaf-16-litrov-202-0b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5083,6 +5177,7 @@
   },
   {
     "id": "qzt-95",
+    "wpId": 543,
     "slug": "laboratornyy-sushilnyy-shkaf-225-litrov-101-3b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5141,6 +5236,7 @@
   },
   {
     "id": "qzt-96",
+    "wpId": 542,
     "slug": "laboratornyy-sushilnyy-shkaf-225-litrov-101-3a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5199,6 +5295,7 @@
   },
   {
     "id": "qzt-97",
+    "wpId": 536,
     "slug": "laboratornyy-sushilnyy-shkaf-43-litra-101-00a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5257,6 +5354,7 @@
   },
   {
     "id": "qzt-98",
+    "wpId": 537,
     "slug": "laboratornyy-sushilnyy-shkaf-43-litra-101-00b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5315,6 +5413,7 @@
   },
   {
     "id": "qzt-99",
+    "wpId": 544,
     "slug": "laboratornyy-sushilnyy-shkaf-640-litrov-101-4b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5373,6 +5472,7 @@
   },
   {
     "id": "qzt-100",
+    "wpId": 538,
     "slug": "laboratornyy-sushilnyy-shkaf-71-litr-101-1a",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5431,6 +5531,7 @@
   },
   {
     "id": "qzt-101",
+    "wpId": 539,
     "slug": "laboratornyy-sushilnyy-shkaf-71-litr-101-1b",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -5489,6 +5590,7 @@
   },
   {
     "id": "qzt-102",
+    "wpId": 689,
     "slug": "mufelnaya-pech-dion-thermofusion-1100-s-5l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5549,6 +5651,7 @@
   },
   {
     "id": "qzt-103",
+    "wpId": 693,
     "slug": "mufelnaya-pech-dion-thermofusion-1100-s-8l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5609,6 +5712,7 @@
   },
   {
     "id": "qzt-104",
+    "wpId": 695,
     "slug": "mufelnaya-pech-dion-thermofusion-1100-s-10l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5669,6 +5773,7 @@
   },
   {
     "id": "qzt-105",
+    "wpId": 699,
     "slug": "mufelnaya-pech-dion-thermofusion-1100-s-50l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5729,6 +5834,7 @@
   },
   {
     "id": "qzt-106",
+    "wpId": 702,
     "slug": "mufelnaya-pech-dion-thermofusion-900-s-50l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5789,6 +5895,7 @@
   },
   {
     "id": "qzt-107",
+    "wpId": 686,
     "slug": "mufelnaya-pech-dion-thermofusion-900-s-5l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5849,6 +5956,7 @@
   },
   {
     "id": "qzt-108",
+    "wpId": 691,
     "slug": "mufelnaya-pech-dion-thermofusion-900-s-8l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5909,6 +6017,7 @@
   },
   {
     "id": "qzt-109",
+    "wpId": 697,
     "slug": "mufelnaya-pech-dion-thermofusion-900-s-10l",
     "categoryId": "general-lab",
     "group": "Лабораторные муфельные печи",
@@ -5969,6 +6078,7 @@
   },
   {
     "id": "qzt-110",
+    "wpId": 462,
     "slug": "nastolnaya-vysokoproizvoditelnaya-nizkoskorostnaya-tsentrifuga-td5a-ws",
     "categoryId": "general-lab",
     "group": "Лабораторные центрифуги",
@@ -6028,6 +6138,7 @@
   },
   {
     "id": "qzt-111",
+    "wpId": 418,
     "slug": "perelivnoy-bak-s-postoyannoy-temperaturoy-nizkotemperaturnyy-cf-ca",
     "categoryId": "general-lab",
     "group": "Переливные баки",
@@ -6067,6 +6178,7 @@
   },
   {
     "id": "qzt-112",
+    "wpId": 416,
     "slug": "perelivnoy-bak-s-postoyannoy-temperaturoy-cf-c",
     "categoryId": "general-lab",
     "group": "Переливные баки",
@@ -6118,6 +6230,7 @@
   },
   {
     "id": "qzt-113",
+    "wpId": 838,
     "slug": "pirometr-testo-830-t2-2-h-tochechnyy-lazernyy-pritsel-830-t2",
     "categoryId": "general-lab",
     "group": null,
@@ -6174,6 +6287,7 @@
   },
   {
     "id": "qzt-114",
+    "wpId": 842,
     "slug": "sekundomer-soppr-2a-2-010-protivoudarnyy-2",
     "categoryId": "general-lab",
     "group": "Секундомеры",
@@ -6200,6 +6314,7 @@
   },
   {
     "id": "qzt-115",
+    "wpId": 631,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-100l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6285,6 +6400,7 @@
   },
   {
     "id": "qzt-116",
+    "wpId": 633,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-120l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6370,6 +6486,7 @@
   },
   {
     "id": "qzt-117",
+    "wpId": 635,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-250l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6455,6 +6572,7 @@
   },
   {
     "id": "qzt-118",
+    "wpId": 621,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-50l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6540,6 +6658,7 @@
   },
   {
     "id": "qzt-119",
+    "wpId": 625,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-60l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6625,6 +6744,7 @@
   },
   {
     "id": "qzt-120",
+    "wpId": 623,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-70l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6710,6 +6830,7 @@
   },
   {
     "id": "qzt-121",
+    "wpId": 627,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200s-80l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6795,6 +6916,7 @@
   },
   {
     "id": "qzt-122",
+    "wpId": 615,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200c-30l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6888,6 +7010,7 @@
   },
   {
     "id": "qzt-123",
+    "wpId": 618,
     "slug": "sushilnyy-laboratornyy-shkaf-dion-siblab-200c-40l",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
@@ -6973,6 +7096,7 @@
   },
   {
     "id": "qzt-124",
+    "wpId": 833,
     "slug": "termometr-tsifrovoy-wt-0-te-113-wt-0",
     "categoryId": "general-lab",
     "group": "Термометры",
@@ -7051,6 +7175,7 @@
   },
   {
     "id": "qzt-125",
+    "wpId": 840,
     "slug": "termometr-elektronnyy-zondovyy-tts3-mg4-01-dvuhkanalnyy-3-mg4-01",
     "categoryId": "general-lab",
     "group": "Термометры",
@@ -7078,6 +7203,7 @@
   },
   {
     "id": "qzt-126",
+    "wpId": 460,
     "slug": "tsentrobezhnyy-pribor-dlya-bystroy-ekstraktsii-smeshannyh-materialov-n",
     "categoryId": "general-lab",
     "group": "Лабораторные центрифуги",
@@ -7130,6 +7256,7 @@
   },
   {
     "id": "qzt-127",
+    "wpId": 741,
     "slug": "shkaf-sushilnyy-ekros-120-l-320-s-4630m-4630m",
     "categoryId": "general-lab",
     "group": "Сушильные шкафы",
