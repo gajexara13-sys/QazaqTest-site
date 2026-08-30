@@ -323,7 +323,11 @@ function buildSummary(paragraphs, features, fallback) {
 function cleanTitle(title) {
   return collapseSpaces(
     title
-      .replace(/\s*Модель:\s*-?\s*/gi, ' ')
+      // Точка перед «Модель» остаётся висеть в названии: «…истираемости. DM-II»
+      .replace(/[.,]?\s*Модель:\s*-?\s*/gi, ' ')
+      // «…(низкотемпературный) Модель CF-CA» — двоеточие ставят не всегда.
+      // Само слово в названии лишнее: код модели выводится отдельным полем.
+      .replace(/[.,]?\s*Модел[ьи]\s+(?=[A-ZА-ЯЁ0-9][A-ZА-ЯЁ0-9\-–—/.]*\s*$)/gi, ' ')
       // Пробел перед дефисом внутри кода модели: «HYJB -30».
       .replace(/\b([A-ZА-Я]{2,6})\s+-(\d)/g, '$1-$2')
       .replace(/\s*,\s*$/, ''),
@@ -333,16 +337,30 @@ function cleanTitle(title) {
 const matchModelCodes = (value) => value.match(MODEL_PATTERN) ?? []
 
 /** «- 4630М» → «4630М»: в выгрузке код модели иногда идёт с дефисом-мусором. */
-const cleanModel = (value) => collapseSpaces(value).replace(/^[-–—\s]+/, '').replace(/[;.,]+$/, '')
+// Хвостовое пояснение в скобках — часть названия, а не кода: «ОГЦ-1 (с
+// дополнительным грузом 170 г)». Отличаем его от вариантов исполнения вроде
+// «LYY-7G (1.5)» или «ВИТ-1 (0...+25)» по строчной кириллице внутри скобок.
+const cleanModel = (value) =>
+  collapseSpaces(value)
+    .replace(/\s*\([^()]*[а-яё][^()]*\)\s*$/, '')
+    .replace(/^[-–—\s]+/, '')
+    .replace(/[;.,]+$/, '')
 
 function detectModel(item, title) {
   if (item.model) {
     return cleanModel(item.model) || null
   }
 
+  // Характеристика «Модель» бывает шапкой таблицы всего модельного ряда: у
+  // весов CAS ED-15H там стоит ED-3-H. Берём её, только если код действительно
+  // встречается в названии, — иначе название вернее.
   const fromSpec = item.specs?.find((spec) => /^Модель\s*:/i.test(spec))
   if (fromSpec) {
-    return cleanModel(fromSpec.replace(/^Модель\s*:/i, '')) || null
+    const code = cleanModel(fromSpec.replace(/^Модель\s*:/i, ''))
+    const flatten = (value) => value.toLowerCase().replace(/[\s-–—]/g, '')
+    if (code && flatten(title).includes(flatten(code))) {
+      return code
+    }
   }
 
   // Теги выгрузки часто содержат ровно код модели отдельным элементом.
@@ -402,13 +420,17 @@ function parsePriceRub(priceLabel) {
 }
 
 /** Подраздел каталога — последний сегмент рубрики источника. */
+// Подраздел карточки — лист дерева категорий магазина: «Асфальтобетон >
+// Уплотнители» даёт группу «Уплотнители». Когда путь состоит из одного уровня,
+// лист совпадает с самим разделом и группой быть не может.
 function detectGroup(item) {
   const raw = item.originalCategory ?? ''
-  const leaf = raw.split('>').pop()?.trim()
-  if (!leaf || /^проч(ее|ие)$/i.test(leaf)) {
+  const levels = raw.split('>').map((level) => level.trim()).filter(Boolean)
+  if (levels.length < 2) {
     return null
   }
-  return leaf
+  const leaf = levels[levels.length - 1]
+  return /^проч(ее|ие)$/i.test(leaf) ? null : leaf
 }
 
 const TRANSLIT = {
@@ -486,6 +508,11 @@ function normalizeItem(item) {
     if (seenLabels.has(key)) {
       continue
     }
+    // Строка «Асфальтоанализатор (метод выжигания) Модель: LHRS-6» — это шапка
+    // карточки, попавшая в список характеристик, а не параметр прибора.
+    if (key.length > 24 && baseTitle.toLowerCase().includes(key.slice(0, 24))) {
+      continue
+    }
     seenLabels.add(key)
     specs.push(spec)
   }
@@ -508,8 +535,9 @@ function normalizeItem(item) {
     features.push(feature)
   }
 
+  const title = stripTrailingModel(baseTitle, model)
   const paragraphs = fromDescription.paragraphs.map(tidyText)
-  const summary = tidyText(buildSummary(paragraphs, features, baseTitle))
+  const summary = tidyText(buildSummary(paragraphs, features, title))
 
   // Если аннотацию пришлось собрать из пункта «особенностей», этот пункт
   // из списка убираем: иначе одна и та же фраза стоит в карточке дважды.
@@ -534,10 +562,10 @@ function normalizeItem(item) {
     // Идентификатор записи в WooCommerce: он стабилен между выгрузками,
     // в отличие от порядкового id, поэтому по нему привязаны overrides.
     wpId: item.wpId ?? null,
-    slug: slugify(`${baseTitle}${model ? ` ${model}` : ''}`) || item.id,
+    slug: slugify(`${title}${model ? ` ${model}` : ''}`) || item.id,
     categoryId: item.categoryId,
     group: detectGroup(item),
-    title: baseTitle,
+    title,
     model,
     brand,
     summary,
@@ -556,6 +584,18 @@ function normalizeItem(item) {
  * шкафов с одинаковыми названиями — в сетке это выглядит как дубли.
  * Модификации различает код модели, поэтому дописываем его в название.
  */
+// Код модели выводится в карточке отдельным полем, поэтому с конца названия
+// его снимаем: «Адгезионный тестер SYD-0754» → «Адгезионный тестер». Туда, где
+// без кода названия станут неразличимы, его вернёт disambiguateTitles.
+function stripTrailingModel(title, model) {
+  if (!model) {
+    return title
+  }
+  const escaped = model.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const stripped = collapseSpaces(title.replace(new RegExp(`[.,]?\\s*${escaped}\\s*$`), ''))
+  return stripped.length >= 12 ? stripped : title
+}
+
 function disambiguateTitles(items) {
   const counts = new Map()
   for (const item of items) {
@@ -602,6 +642,17 @@ async function main() {
     return { ...item, ...(overrides[key] ?? {}) }
   })
 
+  // Позиция без раздела на витрину не попадёт: у неё нет ни адреса, ни места в
+  // навигации. Импортёр такие не выбрасывает, чтобы раздел можно было назначить
+  // правкой по wpId, — отсеиваем здесь, уже после применения overrides.
+  const homeless = items.filter((item) => !item.categoryId)
+  if (homeless.length > 0) {
+    console.warn(`\nБез раздела — не попали на витрину: ${homeless.length}`)
+    homeless.forEach((item) => console.warn(`  ${item.wpId ? `wp-${item.wpId}` : item.id}  ${item.title}`))
+    console.warn('  Назначьте раздел в catalog.overrides.json или категорию в импортёре.')
+  }
+  const placed = items.filter((item) => item.categoryId)
+
   const orphanKeys = Object.keys(overrides).filter((key) => !usedOverrideKeys.has(key))
   if (orphanKeys.length > 0) {
     console.warn(`\nВ overrides ${orphanKeys.length} ключей ни с чем не совпали — эти правки не применились:`)
@@ -613,7 +664,7 @@ async function main() {
 
   // Слаги участвуют в адресах карточек — коллизии недопустимы.
   const slugs = new Map()
-  for (const item of items) {
+  for (const item of placed) {
     const taken = slugs.get(item.slug)
     if (taken) {
       item.slug = `${item.slug}-${item.id}`
@@ -621,17 +672,17 @@ async function main() {
     slugs.set(item.slug, item.id)
   }
 
-  await writeFile(OUTPUT_PATH, `${JSON.stringify(items, null, 2)}\n`, 'utf8')
+  await writeFile(OUTPUT_PATH, `${JSON.stringify(placed, null, 2)}\n`, 'utf8')
 
   const report = {
-    'позиций': items.length,
-    'с ценой': items.filter((item) => item.priceRub !== null).length,
-    'с моделью': items.filter((item) => item.model).length,
-    'с брендом': items.filter((item) => item.brand).length,
-    'с характеристиками': items.filter((item) => item.specs.length > 0).length,
-    'с особенностями': items.filter((item) => item.features.length > 0).length,
-    'с фото': items.filter((item) => item.image).length,
-    'обрезанных текстов': items.filter(
+    'позиций': placed.length,
+    'с ценой': placed.filter((item) => item.priceRub !== null).length,
+    'с моделью': placed.filter((item) => item.model).length,
+    'с брендом': placed.filter((item) => item.brand).length,
+    'с характеристиками': placed.filter((item) => item.specs.length > 0).length,
+    'с особенностями': placed.filter((item) => item.features.length > 0).length,
+    'с фото': placed.filter((item) => item.image).length,
+    'обрезанных текстов': placed.filter(
       (item) =>
         isTruncated(item.summary) ||
         item.paragraphs.some(isTruncated) ||
