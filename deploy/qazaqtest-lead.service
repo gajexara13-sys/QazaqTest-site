@@ -1,0 +1,41 @@
+# Сервис приёма заявок. Установить в /etc/systemd/system/qazaqtest-lead.service
+#
+#   systemctl daemon-reload
+#   systemctl enable --now qazaqtest-lead
+#   systemctl status qazaqtest-lead
+#
+# Секреты — в /etc/qazaqtest-lead.env с правами 600: в systemd-юните им не
+# место, его читают все.
+
+[Unit]
+Description=QAZAQTEST — приём заявок с сайта
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=qazaqtest
+Group=qazaqtest
+WorkingDirectory=/opt/qazaqtest-lead
+EnvironmentFile=/etc/qazaqtest-lead.env
+ExecStart=/usr/bin/node /opt/qazaqtest-lead/lead-service.mjs
+Restart=always
+RestartSec=5
+
+# Журнал заявок переживает перезапуск сервиса и обновление сайта
+StateDirectory=qazaqtest-lead
+
+# Сервису нужно только слушать localhost и дописывать один файл
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/qazaqtest-lead
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target
