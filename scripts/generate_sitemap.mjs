@@ -19,6 +19,7 @@ const STATIC_ROUTES = [
   ['/guides', '0.5', 'monthly'],
   ['/about', '0.5', 'monthly'],
   ['/contact', '0.7', 'monthly'],
+  ['/privacy', '0.3', 'yearly'],
 ]
 
 const catalog = JSON.parse(await readFile(path.join(root, 'src/data/catalog.json'), 'utf8'))

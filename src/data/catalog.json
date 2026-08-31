@@ -41,6 +41,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-283.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/05/c040n-1.jpg"
   },
@@ -103,6 +104,7 @@
     ],
     "tags": [],
     "priceRub": 3119094,
+    "priceKzt": 19120000,
     "image": "/products/wp-306.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/07/girator-kys-08a.png"
   },
@@ -167,6 +169,7 @@
     ],
     "tags": [],
     "priceRub": 1033263,
+    "priceKzt": 6334000,
     "image": "/products/wp-330.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/07/bezymjannyj.jpg"
   },
@@ -224,6 +227,7 @@
     ],
     "tags": [],
     "priceRub": 1329446,
+    "priceKzt": 8150000,
     "image": "/products/wp-340.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/07/izobrazhenie-whatsapp-2023-07-25-v-14.11.36.jpg"
   },
@@ -272,6 +276,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-378.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/09/izobrazhenie-whatsapp-2023-09-13-v-10.37.36.jpg"
   },
@@ -347,6 +352,7 @@
       "Весы лабораторные ViBRA AJ-6200 CE"
     ],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-382.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/07/vibra_aj_6200ce_1.jpg"
   },
@@ -431,6 +437,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-383.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2023/10/vesy_cas_ed_30h.jpg"
   },
@@ -496,6 +503,7 @@
     ],
     "tags": [],
     "priceRub": 463706,
+    "priceKzt": 2843000,
     "image": "/products/wp-398.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_193405E6-1.jpg"
   },
@@ -564,6 +572,7 @@
     ],
     "tags": [],
     "priceRub": 727799,
+    "priceKzt": 4461000,
     "image": "/products/wp-400.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_193U6439-1.jpg"
   },
@@ -628,6 +637,7 @@
     ],
     "tags": [],
     "priceRub": 380903,
+    "priceKzt": 2335000,
     "image": "/products/wp-405.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/2_0USa41.png"
   },
@@ -681,6 +691,7 @@
     ],
     "tags": [],
     "priceRub": 897683,
+    "priceKzt": 5503000,
     "image": "/products/wp-407.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_203930556-1.jpg"
   },
@@ -742,6 +753,7 @@
     ],
     "tags": [],
     "priceRub": 1411791,
+    "priceKzt": 8654000,
     "image": "/products/wp-409.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mashina-dlja-izgotovlenija-obrazcov-asfaltobetonnoj-smesi-gidravlicheskij-standart-model-hycx-1.png"
   },
@@ -804,6 +816,7 @@
     ],
     "tags": [],
     "priceRub": 1393758,
+    "priceKzt": 8544000,
     "image": "/products/wp-411.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_194549311-1.jpg"
   },
@@ -898,6 +911,7 @@
     ],
     "tags": [],
     "priceRub": 1855062,
+    "priceKzt": 11372000,
     "image": "/products/wp-413.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_201224J7.jpg"
   },
@@ -947,6 +961,7 @@
     ],
     "tags": [],
     "priceRub": 264479,
+    "priceKzt": 1621000,
     "image": "/products/wp-416.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-perelivnogo-baka-s-postojannoj-temperaturoj-cf-c.png"
   },
@@ -986,6 +1001,7 @@
     ],
     "tags": [],
     "priceRub": 395753,
+    "priceKzt": 2426000,
     "image": "/products/wp-418.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/nizkotemperaturnyj-perelivnoj-bak-s-postojannoj-temperaturoj-nizkotemperaturnyj-model-cf-ca.png"
   },
@@ -1021,6 +1037,7 @@
     ],
     "tags": [],
     "priceRub": 882239,
+    "priceKzt": 5408000,
     "image": "/products/wp-421.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-plotnosti-uplotnennoj-asfaltovoj-smesi-model-syd-0705.png"
   },
@@ -1086,6 +1103,7 @@
     ],
     "tags": [],
     "priceRub": 349421,
+    "priceKzt": 2142000,
     "image": "/products/wp-423.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/vysokotemperaturnaja-i-nizkotemperaturnaja-vodjanaja-banja-s-postojannoj-temperaturoj-standart-30-litrov-model-hw-30.png"
   },
@@ -1155,6 +1173,7 @@
     ],
     "tags": [],
     "priceRub": 388031,
+    "priceKzt": 2379000,
     "image": "/products/wp-425.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-testera-stabilnosti-marshalla-lwd-3a-b-c.png"
   },
@@ -1231,6 +1250,7 @@
     ],
     "tags": [],
     "priceRub": 395753,
+    "priceKzt": 2426000,
     "image": "/products/wp-427.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/4_202P5W1.jpg"
   },
@@ -1293,6 +1313,7 @@
     ],
     "tags": [],
     "priceRub": 488417,
+    "priceKzt": 2994000,
     "image": "/products/wp-429.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/4_202952402.jpg"
   },
@@ -1373,6 +1394,7 @@
     ],
     "tags": [],
     "priceRub": 233591,
+    "priceKzt": 1432000,
     "image": "/products/wp-431.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/izmeritel-maksimalnoj-teoreticheskoj-plotnosti-asfaltobetonnoj-smesi-jekran-polnostju-avtomaticheskij.png"
   },
@@ -1437,6 +1459,7 @@
     ],
     "tags": [],
     "priceRub": 619691,
+    "priceKzt": 3799000,
     "image": "/products/wp-433.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mashina-dlja-ispytanija-asfaltobetonnoj-smesi-na-odnoosnoe-szhatie-metod-prizmy-model-syd-0713.png"
   },
@@ -1508,6 +1531,7 @@
     ],
     "tags": [],
     "priceRub": 619691,
+    "priceKzt": 3799000,
     "image": "/products/wp-435.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mashina-dlja-ispytanija-asfaltobetonnoj-smesi-na-izgib-jekrannyj-displej-model-syd-0715.png"
   },
@@ -1570,6 +1594,7 @@
     ],
     "tags": [],
     "priceRub": 3198839,
+    "priceKzt": 19609000,
     "image": "/products/wp-437.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mashina-dlja-ispytanija-na-polzuchest-asfaltobetonnoj-smesi.-model-syd-0728.png"
   },
@@ -1641,6 +1666,7 @@
     ],
     "tags": [],
     "priceRub": 696911,
+    "priceKzt": 4272000,
     "image": "/products/wp-439.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-rasslaivanija-asfaltovoj-smesi-model-syd-0716.png"
   },
@@ -1763,6 +1789,7 @@
     ],
     "tags": [],
     "priceRub": 2033708,
+    "priceKzt": 12467000,
     "image": "/products/wp-441.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/sistema-kompleksnogo-ispytanija-asfaltobetonnyh-smesej-standartnaja-versija-model-kzh-2a.png"
   },
@@ -1841,6 +1868,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-443.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mikrokompjuternaja-servoprivodnaja-sistema-nizkotemperaturnogo-zamorazhivanija-bitumnoj-smesi-model-kdd-03a.png"
   },
@@ -1936,6 +1964,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-445.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mikrokompjuternaja-servoprivodnaja-mashina-dlja-ispytanija-smesi-na-dinamicheskuju-ustalost-model-kpl-04a.png"
   },
@@ -2017,6 +2046,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-447.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/universalnaja-mashina-dlja-ispytanija-asfaltobetonnoj-smesi-s-mikrokompjuternym-servoprivodom-dorozhnaja-versija-model-kwn-05a.png"
   },
@@ -2107,6 +2137,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-449.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/mashina-dlja-trehosnyh-ispytanij-asfaltobetonnoj-smesi-model-ksz-10a.png"
   },
@@ -2175,6 +2206,7 @@
     ],
     "tags": [],
     "priceRub": 1320702,
+    "priceKzt": 8096000,
     "image": "/products/wp-453.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/2_0Z02U58.jpg"
   },
@@ -2246,6 +2278,7 @@
     ],
     "tags": [],
     "priceRub": 1420253,
+    "priceKzt": 8706000,
     "image": "/products/wp-454.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/2_0Z111296.jpg"
   },
@@ -2339,6 +2372,7 @@
     ],
     "tags": [],
     "priceRub": 2323344,
+    "priceKzt": 14242000,
     "image": "/products/wp-456.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/2_0Z145M4.jpg"
   },
@@ -2389,6 +2423,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-460.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_160005643.jpg"
   },
@@ -2446,6 +2481,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-462.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/nastolnaja-vysokoproizvoditelnaja-nizkoskorostnaja-centrifuga-model-td5a-ws.png"
   },
@@ -2492,6 +2528,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-464.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-reciklera-trihlorjetilena-hhs-1.png"
   },
@@ -2548,6 +2585,7 @@
     ],
     "tags": [],
     "priceRub": 1668398,
+    "priceKzt": 10227000,
     "image": "/products/wp-468.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/1_155Z4345.jpg"
   },
@@ -2612,6 +2650,7 @@
     ],
     "tags": [],
     "priceRub": 1074843,
+    "priceKzt": 6589000,
     "image": "/products/wp-470.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/2_160044F2.jpg"
   },
@@ -2658,6 +2697,7 @@
     ],
     "tags": [],
     "priceRub": 766409,
+    "priceKzt": 4698000,
     "image": "/products/wp-474.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-reciklera-asfalta-abson-method-khs-07a.png"
   },
@@ -2690,6 +2730,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-476.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-konsistencii-jemulgirovannogo-asfalta-model-syd-0751.png"
   },
@@ -2759,6 +2800,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-478.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/abrazivnaja-mashina-dlja-mokrogo-asfalta-s-jemulgirovannym-asfaltom-model-syd-0752.png"
   },
@@ -2803,6 +2845,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-480.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/adgezionnyj-tester-jemulgirovannogo-asfalta-model-syd-0754.png"
   },
@@ -2851,6 +2894,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-484.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/pribor-dlja-ispytanija-na-istiranie-s-vrashhajushhejsja-butylkoj-dlja-jemulgirovannogo-asfalta-model-kpm-12a.png"
   },
@@ -2898,6 +2942,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-486.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-avtomaticheskogo-testera-peska-sd-ii.png"
   },
@@ -2951,6 +2996,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-489.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-mashiny-dlja-ispytanija-na-udarnyj-izgib-jcj-ii.png"
   },
@@ -3006,6 +3052,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-491.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-uglovatosti-melkogo-zapolnitelja-model-wx-2000.png"
   },
@@ -3026,6 +3073,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-493.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-vodopogloshhenija-s-melkim-zapolnitelem-nasyshhennaja-poverhnost-model-wx-2002.png"
   },
@@ -3071,6 +3119,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-495.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-agregatnogo-uskorennogo-izmelchitelja-jm-iii.png"
   },
@@ -3117,6 +3166,7 @@
     ],
     "tags": [],
     "priceRub": 404603,
+    "priceKzt": 2480000,
     "image": "/products/wp-497.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-mashiny-dlja-ispytanija-na-istiranie-v-los-andzhelese-dm-ii.png"
   },
@@ -3189,6 +3239,7 @@
     ],
     "tags": [],
     "priceRub": 6017369,
+    "priceKzt": 36886000,
     "image": "/products/wp-501.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/ls-dsr.jpg"
   },
@@ -3262,6 +3313,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-503.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/tester-prjamogo-rastjazhenija-asfaltovoj-smesi-model-syd-0629.png"
   },
@@ -3323,6 +3375,7 @@
     ],
     "tags": [],
     "priceRub": 3535981,
+    "priceKzt": 21676000,
     "image": "/products/wp-510.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/ls-bbr.jpg"
   },
@@ -3410,6 +3463,7 @@
     ],
     "tags": [],
     "priceRub": 3330113,
+    "priceKzt": 20414000,
     "image": "/products/wp-514.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/ustrojstvo-dlja-ispytanija-na-starenie-asfalta-pod-davleniem-pav-model-syd-0630.png"
   },
@@ -3458,6 +3512,7 @@
     ],
     "tags": [],
     "priceRub": 118949,
+    "priceKzt": 729000,
     "image": "/products/wp-532.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3506,6 +3561,7 @@
     ],
     "tags": [],
     "priceRub": 120909,
+    "priceKzt": 741000,
     "image": "/products/wp-533.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3554,6 +3610,7 @@
     ],
     "tags": [],
     "priceRub": 121622,
+    "priceKzt": 746000,
     "image": "/products/wp-534.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3602,6 +3659,7 @@
     ],
     "tags": [],
     "priceRub": 123404,
+    "priceKzt": 756000,
     "image": "/products/wp-535.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3650,6 +3708,7 @@
     ],
     "tags": [],
     "priceRub": 130532,
+    "priceKzt": 800000,
     "image": "/products/wp-536.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3698,6 +3757,7 @@
     ],
     "tags": [],
     "priceRub": 133205,
+    "priceKzt": 817000,
     "image": "/products/wp-537.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3746,6 +3806,7 @@
     ],
     "tags": [],
     "priceRub": 144788,
+    "priceKzt": 888000,
     "image": "/products/wp-538.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3794,6 +3855,7 @@
     ],
     "tags": [],
     "priceRub": 150134,
+    "priceKzt": 920000,
     "image": "/products/wp-539.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3842,6 +3904,7 @@
     ],
     "tags": [],
     "priceRub": 158153,
+    "priceKzt": 969000,
     "image": "/products/wp-540.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3890,6 +3953,7 @@
     ],
     "tags": [],
     "priceRub": 168845,
+    "priceKzt": 1035000,
     "image": "/products/wp-541.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3938,6 +4002,7 @@
     ],
     "tags": [],
     "priceRub": 184883,
+    "priceKzt": 1133000,
     "image": "/products/wp-542.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -3986,6 +4051,7 @@
     ],
     "tags": [],
     "priceRub": 194684,
+    "priceKzt": 1193000,
     "image": "/products/wp-543.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -4034,6 +4100,7 @@
     ],
     "tags": [],
     "priceRub": 371102,
+    "priceKzt": 2275000,
     "image": "/products/wp-544.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/snimok-jekrana-2025-01-27-101659.png"
   },
@@ -4103,6 +4170,7 @@
     ],
     "tags": [],
     "priceRub": 403475,
+    "priceKzt": 2473000,
     "image": "/products/wp-545.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-testera-stabilnosti-marshalla-lwd-3a-b-c.png"
   },
@@ -4172,6 +4240,7 @@
     ],
     "tags": [],
     "priceRub": 426641,
+    "priceKzt": 2615000,
     "image": "/products/wp-546.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-testera-stabilnosti-marshalla-lwd-3a-b-c.png"
   },
@@ -4248,6 +4317,7 @@
     ],
     "tags": [],
     "priceRub": 411197,
+    "priceKzt": 2521000,
     "image": "/products/wp-547.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/4_203325400.jpg"
   },
@@ -4324,6 +4394,7 @@
     ],
     "tags": [],
     "priceRub": 434363,
+    "priceKzt": 2663000,
     "image": "/products/wp-548.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-testera-stabilnosti-marshalla-lwd-4a-b-c.png"
   },
@@ -4386,6 +4457,7 @@
     ],
     "tags": [],
     "priceRub": 503861,
+    "priceKzt": 3089000,
     "image": "/products/wp-549.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/4_203019423.jpg"
   },
@@ -4448,6 +4520,7 @@
     ],
     "tags": [],
     "priceRub": 511583,
+    "priceKzt": 3136000,
     "image": "/products/wp-550.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/model-testera-stabilnosti-marshalla-lwd-5a-b-c.png"
   },
@@ -4511,6 +4584,7 @@
     ],
     "tags": [],
     "priceRub": 416543,
+    "priceKzt": 2553000,
     "image": "/products/wp-551.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2024/11/jelektricheskij-kompaktor-marshall-malyj-dvojnoj-model-mdj-iia-iic.png"
   },
@@ -4606,6 +4680,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-615.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/34850035.webp"
   },
@@ -4693,6 +4768,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-618.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/64217329.webp"
   },
@@ -4780,6 +4856,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-621.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/31390419.webp"
   },
@@ -4867,6 +4944,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-623.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/59734348.webp"
   },
@@ -4954,6 +5032,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-625.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/74435855.webp"
   },
@@ -5041,6 +5120,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-627.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/10752010.webp"
   },
@@ -5128,6 +5208,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-631.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/29209247.webp"
   },
@@ -5215,6 +5296,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-633.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/29209247.webp"
   },
@@ -5302,6 +5384,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-635.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/44330799.webp"
   },
@@ -5360,6 +5443,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-686.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/94517021.webp"
   },
@@ -5418,6 +5502,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-689.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/12229528.webp"
   },
@@ -5476,6 +5561,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-691.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/34783771.webp"
   },
@@ -5534,6 +5620,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-693.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/68985792.webp"
   },
@@ -5592,6 +5679,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-695.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/10555222.webp"
   },
@@ -5650,6 +5738,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-697.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/78276934.webp"
   },
@@ -5708,6 +5797,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-699.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/1.webp"
   },
@@ -5766,6 +5856,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-702.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/2-1.webp"
   },
@@ -5904,6 +5995,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-721.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/imd-10.jpg.webp"
   },
@@ -5968,6 +6060,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-723.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/sita-bez-kalibrovki.png.webp"
   },
@@ -5995,6 +6088,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-741.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/1696580827_1_mini7.png"
   },
@@ -6041,6 +6135,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-743.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/32c9fdaf4711fc06cacd600b37b80d07.png"
   },
@@ -6097,6 +6192,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-754.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/pkf-sd.png.webp"
   },
@@ -6164,6 +6260,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-793.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/01/uvb2.jpg"
   },
@@ -6235,6 +6332,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-798.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/121.jpg"
   },
@@ -6311,6 +6409,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-800.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/610298563115b.jpeg"
   },
@@ -6388,6 +6487,7 @@
     ],
     "tags": [],
     "priceRub": 122422,
+    "priceKzt": 750000,
     "image": "/products/wp-833.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/0000499_termometr-cifrovoj-tp101_600.jpeg"
   },
@@ -6445,6 +6545,7 @@
     ],
     "tags": [],
     "priceRub": 388132,
+    "priceKzt": 2379000,
     "image": "/products/wp-836.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/optimize.webp"
   },
@@ -6498,6 +6599,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-838.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/orig-1-e1740115287290.webp"
   },
@@ -6578,6 +6680,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-840.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/475.750x0.jpg"
   },
@@ -6655,6 +6758,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-842.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/5bd953c7cf689a5a5d758fb3.jpg"
   },
@@ -6684,6 +6788,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-844.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/orig-2.webp"
   },
@@ -6709,6 +6814,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-846.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/i.webp"
   },
@@ -6736,6 +6842,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-848.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/701_original.webp"
   },
@@ -6793,6 +6900,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-850.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/tfs3mn4fmauau6s5xdhb6a00e1763bhf.jpeg"
   },
@@ -6869,6 +6977,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-853.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/ath-20-cena.jpg"
   },
@@ -6934,6 +7043,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-855.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/02/kish20m4-lintel.jpg"
   },
@@ -6998,6 +7108,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-912.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/04/upor-1-1.webp"
   },
@@ -7025,6 +7136,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-914.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/04/upor-1.webp"
   },
@@ -7046,6 +7158,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-921.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/04/dsc_0028_1.png"
   },
@@ -7097,6 +7210,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-925.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/04/upor-2.webp"
   },
@@ -7172,6 +7286,7 @@
     ],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-933.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2025/04/photo_2025-05-22_12-16-04.jpg"
   },
@@ -7233,6 +7348,7 @@
     ],
     "tags": [],
     "priceRub": 321691,
+    "priceKzt": 1972000,
     "image": "/products/wp-991.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/03/рис1.jpg"
   },
@@ -7253,6 +7369,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1002.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-vib-55-1.jpg"
   },
@@ -7273,6 +7390,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1006.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-rsc20.jpg"
   },
@@ -7293,6 +7411,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1007.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-gc100.jpg"
   },
@@ -7313,6 +7432,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1009.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-ms10.jpg"
   },
@@ -7333,6 +7453,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1010.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-wth10.png"
   },
@@ -7353,6 +7474,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1018.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-rtfo-8.jpg"
   },
@@ -7373,6 +7495,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1020.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-pav-20-pressure-aging-vessel.png"
   },
@@ -7393,6 +7516,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1022.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-vdo-main-elite-clean.jpg"
   },
@@ -7414,6 +7538,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1024.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-ft10.png"
   },
@@ -7435,6 +7560,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1026.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-ampt30.jpg"
   },
@@ -7456,6 +7582,7 @@
     "specs": [],
     "tags": [],
     "priceRub": null,
+    "priceKzt": null,
     "image": "/products/wp-1028.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/04/ls-vis-d.jpg"
   },
@@ -7514,6 +7641,7 @@
     ],
     "tags": [],
     "priceRub": 688093,
+    "priceKzt": 4218000,
     "image": "/products/wp-1040.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/qb4hl10vpaayxguqxa8ev4b1193syi1z.jpg"
   },
@@ -7584,6 +7712,7 @@
     ],
     "tags": [],
     "priceRub": 1032273,
+    "priceKzt": 6328000,
     "image": "/products/wp-1044.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/2_0K53I57.jpg"
   },
@@ -7650,6 +7779,7 @@
     ],
     "tags": [],
     "priceRub": 680959,
+    "priceKzt": 4174000,
     "image": "/products/wp-1046.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/ls-dt100.jpg"
   },
@@ -7716,6 +7846,7 @@
     ],
     "tags": [],
     "priceRub": 814481,
+    "priceKzt": 4993000,
     "image": "/products/wp-1048.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/ls-dt150f.jpg"
   },
@@ -7766,58 +7897,9 @@
     ],
     "tags": [],
     "priceRub": 426235,
+    "priceKzt": 2613000,
     "image": "/products/wp-1051.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/ojg8u2zx42fw36k3pfonugt7ajbw6o75.jpg"
-  },
-  {
-    "id": "qzt-133",
-    "wpId": 1053,
-    "slug": "ustanovka-los-andzheles-dlya-opredeleniya-istiraemosti-dm-ii",
-    "categoryId": "aggregates",
-    "group": "Испытательное оборудование",
-    "title": "Установка Лос-Анджелес для определения истираемости",
-    "model": "DM-II",
-    "brand": "HTKYYQ",
-    "summary": "Определяет истираемость щебня и гравия в барабане Лос-Анджелес — потерю массы в процентах. Барабан 710 × 508 мм, частота вращения 30 – 33 об/мин, 12 стальных шаров в комплекте.",
-    "paragraphs": [
-      "Установка определяет стойкость крупного заполнителя к дроблению и истиранию: навеска вращается в барабане вместе со стальными шарами, результат выражается потерей массы в процентах. Подходит для заполнителей разных фракций.",
-      "Внутренние размеры барабана 710 × 508 мм (±5 мм), толщина стенки 12,0 ± 0,5 мм, частота вращения 30 – 33 об/мин. Четырёхразрядный счётчик отсчитывает заданное число оборотов. В комплекте 12 стальных шаров диаметром 46 и 47 мм — набор позволяет собрать нагрузку под нужную методику."
-    ],
-    "features": [],
-    "specs": [
-      {
-        "label": "Внутренние размеры барабана (диаметр×длина)",
-        "value": "710 мм×508 мм (±5 мм)"
-      },
-      {
-        "label": "Толщина стенки барабана",
-        "value": "12,0 мм ±0,5 мм"
-      },
-      {
-        "label": "Скорость вращения барабана",
-        "value": "30 – 33 об/мин"
-      },
-      {
-        "label": "Счетчик оборотов",
-        "value": "4-разрядный"
-      },
-      {
-        "label": "Габариты (Д×Ш×В)",
-        "value": "1100×780×1000 мм"
-      },
-      {
-        "label": "Диаметр стальных шаров",
-        "value": "47 мм и 46 мм"
-      },
-      {
-        "label": "Комплектация",
-        "value": "всего 12 стальных шаров для удобства формирования различных испытательных нагрузок (в зависимости от методики испытания)"
-      }
-    ],
-    "tags": [],
-    "priceRub": 380259,
-    "image": "/products/wp-1053.webp",
-    "imageSource": "https://rutestin.com/wp-content/uploads/2026/07/4_19210U19.jpg"
   },
   {
     "id": "qzt-134",
@@ -7886,6 +7968,7 @@
     ],
     "tags": [],
     "priceRub": 276725,
+    "priceKzt": 1696000,
     "image": "/products/wp-1055.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/08/ТЕРМ.png"
   },
@@ -7955,6 +8038,7 @@
     ],
     "tags": [],
     "priceRub": 362934,
+    "priceKzt": 2225000,
     "image": "/products/wp-1058.webp",
     "imageSource": "https://rutestin.com/wp-content/uploads/2026/08/Снимок-экрана-2026-08-28-164138.png"
   }

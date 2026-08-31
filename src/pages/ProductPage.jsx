@@ -53,7 +53,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
     return <NotFound />
   }
 
-  const price = formatPrice(item.priceRub)
+  const price = formatPrice(item.priceKzt)
   const related = getRelatedItems(item)
 
   return (

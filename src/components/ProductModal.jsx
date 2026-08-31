@@ -7,7 +7,7 @@ import { useEscToClose, useLockBodyScroll } from '../lib/hooks'
 
 export default function ProductModal({ item, onOpenModal, onClose }) {
   const category = getCategoryById(item.categoryId)
-  const price = formatPrice(item.priceRub)
+  const price = formatPrice(item.priceKzt)
   const titleId = useId()
 
   useLockBodyScroll(true)

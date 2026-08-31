@@ -14,6 +14,7 @@ import ContactPage from './pages/ContactPage'
 import GuidesPage from './pages/GuidesPage'
 import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
+import PrivacyPage from './pages/PrivacyPage'
 import ProductPage from './pages/ProductPage'
 import SearchPage from './pages/SearchPage'
 import ServicePage from './pages/ServicePage'
@@ -86,6 +87,7 @@ function AppShell() {
           <Route path="/guides" element={<GuidesPage onOpenModal={handleOpenModal} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage onOpenModal={handleOpenModal} />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

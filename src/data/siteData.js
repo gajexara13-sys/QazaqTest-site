@@ -1,12 +1,5 @@
 import catalog from './catalog.json'
 
-/**
- * Курс пересчёта рублёвых цен источника в тенге (₽ → ₸).
- * Официальный курс НБ РК на 02.07.2026 ≈ 6,13. Сюда же можно заложить
- * наценку (например, 6.13 * 1.15). Цены на сайте округляются до 1000 ₸.
- */
-export const RUB_TO_KZT = 6.13
-
 export const categories = [
   {
     id: 'asphalt',
@@ -182,12 +175,19 @@ export const categories = [
  * Реквизиты компании для подвала. Пустой `bin` строку не выводит:
  * лучше не показать реквизит, чем показать выдуманный.
  */
+/**
+ * Реквизиты из карты партнёра. Полный юридический адрес и банковские
+ * реквизиты на сайт не выводятся: репозиторий публичный, а расчётный счёт
+ * место которому в счетах и договорах, а не на открытой странице.
+ */
 export const COMPANY_DETAILS = {
-  legalName: 'ТОО «QAZAQTEST»',
-  bin: '',
-  address: 'г. Алматы, Казахстан',
+  legalName: 'ТОО «QazaqTest»',
+  fullLegalName: 'Товарищество с ограниченной ответственностью «QazaqTest»',
+  bin: '250540031926',
+  director: 'Ахметов Руслан Фагимович',
+  address: 'г. Костанай, Казахстан',
   phone: '+7 (705) 564 05 35',
-  email: 'office@qazaqtest.kz',
+  email: 'info@qazaqtest.kz',
 }
 
 export const brands = [
@@ -254,13 +254,18 @@ export function getCategoryGroups(categoryId) {
 }
 
 /**
- * Цена в тенге по курсу RUB_TO_KZT с округлением до 1000 ₸.
- * Позиции без цены продаются по запросу — там возвращаем null.
+ * Цена карточки в тенге.
+ *
+ * Число берётся из каталога как есть — никакого пересчёта по курсу здесь нет:
+ * компания держит постоянные цены, и они не должны меняться от того, что
+ * кто-то поправил коэффициент. Цена задаётся в catalog.overrides.json
+ * (`priceKzt`), там же её и менять.
+ *
+ * Позиции без цены продаются по запросу — возвращаем null.
  */
-export function formatPrice(priceRub) {
-  if (!priceRub) {
+export function formatPrice(priceKzt) {
+  if (!priceKzt) {
     return null
   }
-  const kzt = Math.round((priceRub * RUB_TO_KZT) / 1000) * 1000
-  return `${kzt.toLocaleString('ru-RU')} ₸`
+  return `${priceKzt.toLocaleString('ru-RU')} ₸`
 }

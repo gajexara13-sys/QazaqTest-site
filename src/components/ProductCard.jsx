@@ -22,7 +22,7 @@ function pickKeySpecs(specs, limit = 2) {
 }
 
 export default function ProductCard({ item, onOpenModal, onPreview }) {
-  const price = formatPrice(item.priceRub)
+  const price = formatPrice(item.priceKzt)
   const productPath = `/catalog/${item.categoryId}/${item.slug}`
   const keySpecs = pickKeySpecs(item.specs)
 
