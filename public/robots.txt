@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://qazaqtest.kz/sitemap.xml

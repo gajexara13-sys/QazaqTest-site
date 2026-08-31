@@ -1,4 +1,11 @@
-import catalogGenerated from './catalog.generated.json'
+import catalog from './catalog.json'
+
+/**
+ * Курс пересчёта рублёвых цен источника в тенге (₽ → ₸).
+ * Официальный курс НБ РК на 02.07.2026 ≈ 6,13. Сюда же можно заложить
+ * наценку (например, 6.13 * 1.15). Цены на сайте округляются до 1000 ₸.
+ */
+export const RUB_TO_KZT = 6.13
 
 export const categories = [
   {
@@ -171,6 +178,18 @@ export const categories = [
   },
 ]
 
+/**
+ * Реквизиты компании для подвала. Пустой `bin` строку не выводит:
+ * лучше не показать реквизит, чем показать выдуманный.
+ */
+export const COMPANY_DETAILS = {
+  legalName: 'ТОО «QAZAQTEST»',
+  bin: '',
+  address: 'г. Алматы, Казахстан',
+  phone: '+7 (705) 564 05 35',
+  email: 'office@qazaqtest.kz',
+}
+
 export const brands = [
   { name: 'HTKYYQ', logo: '/brands/htkyyq.png' },
   { name: 'Нефтехимавтоматика', logo: '/brands/neftehimavtomatika-clean.png' },
@@ -201,8 +220,47 @@ export const benefits = [
   },
 ]
 
-export const catalogItems = catalogGenerated
+export const catalogItems = catalog
 
 export function getCategoryById(categoryId) {
   return categories.find((category) => category.id === categoryId)
+}
+
+export function getCategoryItems(categoryId) {
+  return catalogItems.filter((item) => item.categoryId === categoryId)
+}
+
+export function getProductBySlug(categoryId, slug) {
+  return catalogItems.find((item) => item.categoryId === categoryId && item.slug === slug)
+}
+
+/** Сколько позиций в каждом разделе — для счётчиков в навигации. */
+export const categoryCounts = categories.reduce((counts, category) => {
+  counts[category.id] = getCategoryItems(category.id).length
+  return counts
+}, {})
+
+/** Подразделы каталога внутри категории, по убыванию наполненности. */
+export function getCategoryGroups(categoryId) {
+  const counts = new Map()
+  for (const item of getCategoryItems(categoryId)) {
+    if (item.group) {
+      counts.set(item.group, (counts.get(item.group) ?? 0) + 1)
+    }
+  }
+  return [...counts.entries()]
+    .map(([title, count]) => ({ title, count }))
+    .sort((a, b) => b.count - a.count || a.title.localeCompare(b.title, 'ru'))
+}
+
+/**
+ * Цена в тенге по курсу RUB_TO_KZT с округлением до 1000 ₸.
+ * Позиции без цены продаются по запросу — там возвращаем null.
+ */
+export function formatPrice(priceRub) {
+  if (!priceRub) {
+    return null
+  }
+  const kzt = Math.round((priceRub * RUB_TO_KZT) / 1000) * 1000
+  return `${kzt.toLocaleString('ru-RU')} ₸`
 }

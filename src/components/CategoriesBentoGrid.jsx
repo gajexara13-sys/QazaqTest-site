@@ -31,7 +31,7 @@ export default function CategoriesBentoGrid() {
             <span className="min-w-0 flex-1 text-sm font-bold uppercase leading-snug tracking-tight text-[var(--ink)] sm:text-base">
               {SHORT_TITLE[category.id] ?? category.title}
             </span>
-            <span className="text-2xl leading-none text-[var(--accent)] transition-transform duration-300 ease-out group-hover:translate-x-1">
+            <span className="text-2xl leading-none text-[var(--accent-text)] transition-transform duration-300 ease-out group-hover:translate-x-1">
               →
             </span>
           </div>
