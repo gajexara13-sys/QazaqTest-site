@@ -134,7 +134,8 @@ npm run catalog:build     # подтянет их в витрину
 | --- | --- |
 | Netlify | `public/_redirects` |
 | Vercel | `vercel.json` |
-| nginx (Cloudzy и любой VPS) | `deploy/nginx.conf.example` — готовый конфиг |
+| nginx (VPS с root) | `deploy/nginx.conf.example` — готовый конфиг |
+| Apache (виртуальный хостинг) | `public/.htaccess` — едет в сборку сам |
 | GitHub Pages | fallback не поддерживается штатно, нужен обходной путь через `404.html` |
 
 `usePageMeta` на каждой странице ставит заголовок, описание, `canonical` и
@@ -258,7 +259,12 @@ Telegram, а не почта, потому что письма со свежег
 лимит наравне со спам-ботом), проверка `Origin`, потолок на размер тела,
 отказ при недоступном журнале.
 
-Разворачивание целиком — `deploy/DEPLOY.md`: nginx, systemd, TLS, проверка.
+**Обработчик под виртуальный хостинг** — `deploy/shared-hosting/lead.php`: то
+же самое на PHP, для площадок без root и постоянных процессов. Поведение
+совпадает с Node-версией вплоть до кодов ответа.
+
+Разворачивание: `deploy/DEPLOY.md` для VPS с root (nginx, systemd, TLS) и
+`deploy/DEPLOY-shared.md` для виртуального хостинга (Apache, `.htaccess`, PHP).
 
 ## Что заполнить перед запуском
 
@@ -289,7 +295,9 @@ src/data/catalog.overrides.json точечные правки карточек �
 src/data/catalog.json           витрина: npm run catalog:build
 src/index.css                   палитра (CSS-переменные), Tailwind, карусель брендов
 scripts/                        нормализация каталога, обработка логотипов, загрузка фото
-server/lead-service.mjs         приём заявок: журнал на диск + Telegram
-deploy/                         nginx, systemd, инструкция по выкладке на VPS
+server/lead-service.mjs         приём заявок на VPS: журнал на диск + Telegram
+deploy/shared-hosting/lead.php  то же для виртуального хостинга, на PHP
+deploy/                         nginx, Apache, systemd, инструкции по выкладке
+public/.htaccess                правила Apache, копируются в сборку
 .claude/agents/                 специализированные агенты: catalog-editor, site-developer
 ```

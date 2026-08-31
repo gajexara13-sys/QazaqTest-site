@@ -31,3 +31,6 @@ dist-ssr
 
 # Журнал заявок, если сервис запускали локально
 leads.jsonl
+
+# Настройки PHP-обработчика заявок: в нём токен бота
+deploy/shared-hosting/lead-config.php
