@@ -6,14 +6,19 @@
  * постоянный процесс, поэтому Node-сервис из server/lead-service.mjs там не
  * запустится. PHP есть везде — этот файл делает ровно то же самое.
  *
- * Порядок действий тот же и по той же причине:
+ * Порядок действий:
  *   1. записать заявку в журнал на диск;
- *   2. отправить уведомление в Telegram;
- *   3. ответить сайту.
+ *   2. ответить сайту и отпустить браузер;
+ *   3. досылать уведомления (Telegram, почта) уже без него.
  *
  * Журнал первым потому, что уведомление может не уйти — Telegram недоступен,
  * токен протух, хостер режет исходящие соединения. Заявка не должна исчезнуть
  * вместе с ним: пока строка на диске, клиенту можно перезвонить.
+ *
+ * Ответ раньше уведомлений потому, что заявка уже принята, и держать человека
+ * у крутящейся кнопки незачем. Когда хостинг режет исходящие соединения,
+ * ожидание упирается в таймаут — форма «думает» несколько секунд на ровном
+ * месте, хотя всё уже сохранено.
  *
  * Куда класть: рядом с сайтом, в папку api/ — путь /api/lead.php.
  * Настройки: файл lead-config.php рядом (см. lead-config.example.php).
@@ -26,6 +31,8 @@ header('Content-Type: application/json; charset=utf-8');
 $config = [
     'tg_token'       => '',
     'tg_chat'        => '',
+    'mail_to'        => '',
+    'mail_from'      => '',
     'allowed_origin' => '',
     // Журнал за пределами корня сайта, иначе его можно скачать по прямой
     // ссылке вместе со всеми телефонами клиентов.
@@ -41,7 +48,7 @@ const MAX_BODY_BYTES = 4096;
 const LIMIT_REQUESTS = ['window' => 60, 'max' => 20];
 const LIMIT_ACCEPTED = ['window' => 600, 'max' => 5];
 
-function respond(int $code, array $payload, string $origin, string $allowed): void
+function respond(int $code, array $payload, string $origin, string $allowed, bool $keepRunning = false): void
 {
     http_response_code($code);
     if ($allowed !== '' && $origin === $allowed) {
@@ -50,8 +57,30 @@ function respond(int $code, array $payload, string $origin, string $allowed): vo
         header('Access-Control-Allow-Headers: Content-Type');
         header('Vary: Origin');
     }
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
-    exit;
+    $body = json_encode($payload, JSON_UNESCAPED_UNICODE);
+    header('Content-Length: ' . strlen((string) $body));
+    echo $body;
+
+    if (!$keepRunning) {
+        exit;
+    }
+
+    // Отпускаем браузер и досылаем уведомление уже без него.
+    //
+    // Заявка к этому моменту записана в журнал, то есть не потеряна. Держать
+    // человека у крутящейся кнопки, пока мы стучимся в Telegram, незачем — а
+    // если хостинг режет исходящие соединения, ожидание упирается в таймаут,
+    // и посетитель видит зависшую форму на пустом месте.
+    if (function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+        return;
+    }
+    // Без PHP-FPM закрываем соединение вручную
+    ignore_user_abort(true);
+    while (ob_get_level() > 0) {
+        ob_end_flush();
+    }
+    flush();
 }
 
 /**
@@ -122,7 +151,7 @@ function notifyTelegram(array $lead, array $config): array
             CURLOPT_POSTFIELDS     => $payload,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_TIMEOUT        => 8,
         ]);
         $body = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
@@ -147,6 +176,42 @@ function notifyTelegram(array $lead, array $config): array
     ]);
     $body = @file_get_contents($url, false, $context);
     return $body === false ? [false, 'исходящие запросы запрещены'] : [true, ''];
+}
+
+/**
+ * Письмо — запасной канал на случай, когда хостинг не выпускает наружу.
+ *
+ * На виртуальном хостинге почта уходит через почтовый сервер самого хостера,
+ * у которого настроены SPF и репутация домена, поэтому доходит она обычно
+ * лучше, чем письмо с только что поднятого VPS.
+ */
+function notifyMail(array $lead, array $config): array
+{
+    if (empty($config['mail_to']) || !function_exists('mail')) {
+        return [false, 'не настроен'];
+    }
+
+    $lines = [
+        'Заявка с сайта QAZAQTEST',
+        '',
+        'Имя:      ' . $lead['name'],
+        'Телефон:  ' . $lead['phone'],
+        'Тема:     ' . $lead['topic'],
+    ];
+    if ($lead['page'] !== '') {
+        $lines[] = 'Страница: ' . $lead['page'];
+    }
+
+    $from = $config['mail_from'] ?: ('noreply@' . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+    $headers = implode("\r\n", [
+        'From: QAZAQTEST <' . $from . '>',
+        'Content-Type: text/plain; charset=UTF-8',
+        'X-Mailer: qazaqtest-lead',
+    ]);
+    $subject = '=?UTF-8?B?' . base64_encode('Заявка с сайта: ' . $lead['topic']) . '?=';
+
+    $sent = @mail($config['mail_to'], $subject, implode("\n", $lines), $headers);
+    return $sent ? [true, ''] : [false, 'mail() вернул false'];
 }
 
 // ---------------------------------------------------------------------------
@@ -213,9 +278,19 @@ if (@file_put_contents($config['log'], $line, FILE_APPEND | LOCK_EX) === false) 
     respond(500, ['error' => 'Не удалось сохранить заявку'], $origin, $allowed);
 }
 
-[$sent, $reason] = notifyTelegram($lead, $config);
-if (!$sent && $reason !== 'не настроен') {
-    error_log('[lead] уведомление не ушло (' . $reason . '), заявка в журнале');
-}
+// Заявка в журнале — значит принята. Отвечаем сразу, уведомления досылаем
+// следом: их задержка не должна превращаться в ожидание у формы.
+respond(200, ['ok' => true], $origin, $allowed, true);
 
-respond(200, ['ok' => true], $origin, $allowed);
+$delivered = false;
+foreach ([['Telegram', notifyTelegram($lead, $config)], ['почта', notifyMail($lead, $config)]] as [$channel, $result]) {
+    [$sent, $reason] = $result;
+    if ($sent) {
+        $delivered = true;
+    } elseif ($reason !== 'не настроен') {
+        error_log('[lead] ' . $channel . ': не ушло (' . $reason . ')');
+    }
+}
+if (!$delivered) {
+    error_log('[lead] ни один канал уведомлений не сработал, заявка только в журнале');
+}
