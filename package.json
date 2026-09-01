@@ -14,7 +14,8 @@
     "catalog:lint": "node scripts/check_copy.mjs",
     "sitemap": "node scripts/generate_sitemap.mjs",
     "catalog:import": "node scripts/import_woocommerce_csv.mjs",
-    "images:optimize": "node scripts/optimize_product_images.mjs"
+    "images:optimize": "node scripts/optimize_product_images.mjs",
+    "images:normalize": "node scripts/normalize_product_photos.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

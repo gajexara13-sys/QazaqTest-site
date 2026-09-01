@@ -38,7 +38,7 @@ export default function ProductModal({ item, onOpenModal, onClose }) {
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <div className="relative min-h-[280px] border-b border-[#78AEAD]/20 bg-[var(--surface)] lg:min-h-full lg:border-b-0 lg:border-r">
+          <div className="relative min-h-[280px] border-b border-[#78AEAD]/20 bg-white lg:min-h-full lg:border-b-0 lg:border-r">
             <ProductImage item={item} eager />
           </div>
 
