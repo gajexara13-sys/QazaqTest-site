@@ -68,14 +68,16 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
       <section className="bg-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-0">
             {/*
               Квадрат, а не 4:3: из 135 снимков 93 квадратные или вертикальные,
               и в широком контейнере прибор висел в пустоте, занимая едва
               половину высоты. Медиана пропорций по всей витрине — ровно 1:1.
             */}
-            <div className="relative aspect-square w-full overflow-hidden bg-white">
-              <ProductImage item={item} eager />
+            <div className="lg:order-2 lg:flex lg:items-center lg:border-l lg:border-[var(--ink)]/12 lg:pl-12">
+              <div className="relative aspect-square w-full overflow-hidden bg-white">
+                <ProductImage item={item} eager />
+              </div>
             </div>
 
             {/*
@@ -83,7 +85,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
               Толстая и контрастная читалась бы как стена: на бледном поле она
               оказывалась самым тёмным пятном страницы и спорила с содержимым.
             */}
-            <div className="flex flex-col lg:border-l lg:border-[var(--ink)]/12 lg:pl-12">
+            <div className="flex flex-col lg:order-1 lg:pr-12">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                 {item.group ?? category.title}
               </p>
@@ -172,8 +174,8 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
             Раньше колонки делились как 1,15:1 против 1:1, линейки расходились
             на 35 пикселей, и это читалось как брак вёрстки, а не как приём.
           */}
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
-            <div className="min-w-0">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-0">
+            <div className="min-w-0 lg:pr-12">
               {item.paragraphs.length > 0 ? (
                 <div>
                   <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
