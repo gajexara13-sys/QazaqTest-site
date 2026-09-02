@@ -66,10 +66,10 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
         ]}
       />
 
-      <section className="bg-[var(--page-bg)]">
+      <section className="bg-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
-            <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)]">
+            <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#78AEAD]/20 bg-white">
               <ProductImage item={item} eager />
             </div>
 
@@ -102,7 +102,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                 </dl>
               ) : null}
 
-              <div className="mt-7 border border-[#78AEAD]/25 bg-white p-6">
+              <div className="mt-7 border border-[#78AEAD]/25 bg-[var(--mint)] p-6">
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                   Стоимость
                 </p>
@@ -138,8 +138,12 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
               <p className="mt-7 text-base leading-relaxed text-slate-600">{item.summary}</p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
+      <section className="bg-[var(--page-bg)]">
+        <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
             <div className="min-w-0">
               {item.paragraphs.length > 0 ? (
                 <div>
