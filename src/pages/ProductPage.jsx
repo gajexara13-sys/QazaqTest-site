@@ -69,7 +69,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
-            <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#78AEAD]/25 bg-white">
+            <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#78AEAD]/25 bg-white shadow-[0_8px_18px_rgba(15,23,42,0.08)]">
               <ProductImage item={item} eager />
             </div>
 
