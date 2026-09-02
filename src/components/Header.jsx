@@ -228,7 +228,7 @@ export default function Header() {
 
           <nav className="hidden flex-1 items-stretch justify-end lg:flex" aria-label="Основное меню">
             <div
-              className="relative flex min-w-[180px]"
+              className="relative flex"
               onMouseEnter={openProductsMenu}
               onMouseLeave={scheduleCloseProductsMenu}
             >
@@ -237,11 +237,11 @@ export default function Header() {
                 onMouseEnter={openProductsMenu}
                 onFocus={openProductsMenu}
                 onClick={() => navigate('/catalog')}
-                className={`inline-flex min-w-[160px] items-center justify-center gap-3 px-5 text-[16px] font-semibold transition-colors ${
+                className={`inline-flex items-center whitespace-nowrap gap-2 px-5 text-[16px] font-semibold transition-colors ${
                   isProductsOpen ? 'bg-[var(--accent)] text-white' : 'hover:bg-white/8'
                 }`}
               >
-                <span className="text-[17px] font-bold">КАТАЛОГ</span>
+                <span>КАТАЛОГ</span>
                 <span className="text-xs">▼</span>
               </button>
             </div>
