@@ -68,12 +68,12 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
       <section className="bg-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
-            <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#78AEAD]/20 bg-white">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
               <ProductImage item={item} eager />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:border-l-2 lg:border-[var(--ink)] lg:pl-10">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                 {item.group ?? category.title}
               </p>
@@ -143,7 +143,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-10">
             <div className="min-w-0">
               {item.paragraphs.length > 0 ? (
                 <div>
@@ -175,7 +175,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
               ) : null}
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 lg:border-l-2 lg:border-[var(--ink)] lg:pl-10">
               {item.specs.length > 0 ? (
                 <>
                   <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">

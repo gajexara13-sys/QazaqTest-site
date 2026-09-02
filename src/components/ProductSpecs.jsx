@@ -10,14 +10,14 @@ export default function ProductSpecs({ specs, columns = 1 }) {
 
   return (
     <dl
-      className={`overflow-hidden border border-[#78AEAD]/25 bg-white ${
+      className={`overflow-hidden border border-[#78AEAD]/25 ${
         columns === 2 ? 'md:grid md:grid-cols-2 md:gap-x-px md:bg-[#78AEAD]/25' : ''
       }`}
     >
       {specs.map((spec, index) => (
         <div
           key={`${spec.label}-${index}`}
-          className={`flex flex-col gap-1 bg-white px-5 py-3 text-sm sm:flex-row sm:gap-4 ${
+          className={`flex flex-col gap-1 px-5 py-3 text-sm sm:flex-row sm:gap-4 ${
             index === 0 ? '' : 'border-t border-[#78AEAD]/20'
           } ${columns === 2 && index === 1 ? 'md:border-t-0' : ''}`}
         >
