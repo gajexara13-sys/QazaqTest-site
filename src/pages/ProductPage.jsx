@@ -68,12 +68,22 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
       <section className="bg-white">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
+            {/*
+              Квадрат, а не 4:3: из 135 снимков 93 квадратные или вертикальные,
+              и в широком контейнере прибор висел в пустоте, занимая едва
+              половину высоты. Медиана пропорций по всей витрине — ровно 1:1.
+            */}
+            <div className="relative aspect-square w-full overflow-hidden bg-white">
               <ProductImage item={item} eager />
             </div>
 
-            <div className="flex flex-col lg:border-l-2 lg:border-[var(--ink)] lg:pl-10">
+            {/*
+              Колонки делит тонкая линия в цвет шапки — как в газетной вёрстке.
+              Толстая и контрастная читалась бы как стена: на бледном поле она
+              оказывалась самым тёмным пятном страницы и спорила с содержимым.
+            */}
+            <div className="flex flex-col lg:border-l lg:border-[var(--ink)]/12 lg:pl-12">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                 {item.group ?? category.title}
               </p>
@@ -81,8 +91,18 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                 {item.title}
               </h1>
 
+              {/* Короткий акцентный штрих — тот же приём, что в первом экране главной. */}
+              <span aria-hidden="true" className="mt-6 block h-[3px] w-16 bg-[var(--accent)]" />
+
+              {/*
+                Аннотация встала сразу под заголовком, до цены: сначала что это
+                за прибор, потом сколько он стоит. Раньше описание оказывалось
+                под кнопками, то есть после того, как решение уже предложено.
+              */}
+              <p className="mt-6 text-base leading-relaxed text-slate-600">{item.summary}</p>
+
               {item.brand || item.model ? (
-                <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+                <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-sm">
                   {item.brand ? (
                     <div>
                       <dt className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
@@ -102,23 +122,28 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                 </dl>
               ) : null}
 
-              <div className="mt-7 border border-[#78AEAD]/25 bg-[var(--mint)] p-6">
+              {/*
+                Цену держит не рамка, а воздух и размер числа. Коробка внутри
+                белого блока добавляла ещё одну границу там, где хватает
+                горизонтальной линии.
+              */}
+              <div className="mt-8 border-t border-[var(--ink)]/12 pt-7">
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted-text)]">
                   Стоимость
                 </p>
                 <p
-                  className={`mt-2 text-3xl font-black tracking-tight ${
+                  className={`mt-2 text-3xl font-black tracking-tight sm:text-4xl ${
                     price ? 'text-[var(--ink)]' : 'text-[var(--muted-text)]'
                   }`}
                 >
                   {price ?? 'По запросу'}
                 </p>
-                <p className="mt-3 text-xs leading-relaxed text-[var(--muted-text)]">
+                <p className="mt-3 max-w-md text-xs leading-relaxed text-[var(--muted-text)]">
                   Цена ориентировочная, пересчитывается на день выставления счёта. Доставка,
                   пусконаладка и обучение персонала считаются отдельно.
                 </p>
 
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <button
                     type="button"
                     onClick={() => onOpenModal(item.title)}
@@ -128,14 +153,12 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                   </button>
                   <Link
                     to={`/catalog/${category.id}`}
-                    className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight border border-[#78AEAD]/35 px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
+                    className="inline-flex min-h-13 flex-1 items-center justify-center text-center leading-tight border border-[var(--ink)]/20 px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ink)] transition-colors hover:border-[var(--ink)] hover:bg-[var(--ink)] hover:text-white"
                   >
                     Похожие позиции
                   </Link>
                 </div>
               </div>
-
-              <p className="mt-7 text-base leading-relaxed text-slate-600">{item.summary}</p>
             </div>
           </div>
         </div>
@@ -143,7 +166,13 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
 
       <section className="bg-[var(--page-bg)]">
         <div className="mx-auto max-w-[var(--page-shell-max)] px-6 py-12 md:px-12 md:py-16">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-10">
+          {/*
+            Пропорции те же, что в верхнем блоке, — тогда обе вертикальные
+            линейки встают на одну ось и держат страницу единой сеткой.
+            Раньше колонки делились как 1,15:1 против 1:1, линейки расходились
+            на 35 пикселей, и это читалось как брак вёрстки, а не как приём.
+          */}
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
             <div className="min-w-0">
               {item.paragraphs.length > 0 ? (
                 <div>
@@ -175,7 +204,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
               ) : null}
             </div>
 
-            <div className="min-w-0 lg:border-l-2 lg:border-[var(--ink)] lg:pl-10">
+            <div className="min-w-0 lg:border-l lg:border-[var(--ink)]/12 lg:pl-12">
               {item.specs.length > 0 ? (
                 <>
                   <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
@@ -186,7 +215,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                   </div>
                 </>
               ) : (
-                <div className="border border-dashed border-[#78AEAD]/35 bg-white p-6">
+                <div className="border border-dashed border-[var(--ink)]/20 p-6">
                   <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-text)]">
                     Технические характеристики
                   </h2>
@@ -202,7 +231,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="border border-[#78AEAD]/25 bg-[var(--mint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]"
+                      className="border border-[var(--ink)]/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--muted-text)]"
                     >
                       {tag}
                     </span>
@@ -213,7 +242,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
           </div>
 
           {related.length > 0 ? (
-            <div className="mt-16 border-t border-[#78AEAD]/25 pt-12">
+            <div className="mt-16 border-t border-[var(--ink)]/12 pt-12">
               <h2 className="text-2xl font-bold tracking-tight text-[var(--ink)]">
                 Смотрите также
               </h2>
