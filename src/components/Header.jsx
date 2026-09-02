@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CONTACT_PHONE_HREF, CONTACT_PHONE_LABEL, NAV_LINKS } from '../constants'
-import { categories, getCategoryById } from '../data/siteData'
+import { categories, categoryCounts, getCategoryById, getCategoryGroups } from '../data/siteData'
+
+// Сколько реальных подразделов показать в превью мегаменю: раздел «Общая
+// лаборатория» держит 11 подразделов сразу, и все сразу в узкую колонку не
+// поместятся — здесь только самые крупные, полный список даёт сама страница
+// раздела.
+const MEGA_MENU_GROUP_LIMIT = 6
 import { useEscToClose } from '../lib/hooks'
 import HeaderSearch from './HeaderSearch'
 import SearchIcon from './SearchIcon'
@@ -24,6 +30,16 @@ function UtilityBar() {
 function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
   const [activeCategoryId, setActiveCategoryId] = useState(categories[0]?.id ?? null)
   const activeCategory = getCategoryById(activeCategoryId) ?? categories[0]
+
+  // Раздел без позиций показывает задуманное наполнение как есть, обычным
+  // текстом на странице раздела — здесь то же самое, ссылка ведёт на форму
+  // подбора. Раздел с товарами — настоящие подразделы из каталога, а не
+  // придуманные заранее названия: та выгрузка из WooCommerce, на которой
+  // построен сайт, разложилась на другие подразделы, и старый список во
+  // многом не совпадает с тем, что реально есть в продаже.
+  const hasProducts = (categoryCounts[activeCategory.id] ?? 0) > 0
+  const realGroups = hasProducts ? getCategoryGroups(activeCategory.id) : []
+  const shownGroups = realGroups.slice(0, MEGA_MENU_GROUP_LIMIT)
 
   return (
     <div
@@ -72,16 +88,28 @@ function MegaMenu({ onClose, onMouseEnter, onMouseLeave }) {
               {activeCategory.description}
             </p>
             <div className="mt-5 grid gap-2 sm:grid-cols-2">
-              {activeCategory.items.map((item) => (
-                <Link
-                  key={item}
-                  to={`/catalog/${activeCategory.id}`}
-                  onClick={onClose}
-                  className="rounded bg-white/76 px-3 py-2 text-[13px] leading-snug text-slate-800 transition-colors hover:bg-white/90 hover:text-[var(--ink)]"
-                >
-                  {item}
-                </Link>
-              ))}
+              {hasProducts
+                ? shownGroups.map((group) => (
+                    <Link
+                      key={group.title}
+                      to={`/catalog/${activeCategory.id}?group=${encodeURIComponent(group.title)}`}
+                      onClick={onClose}
+                      className="flex items-center justify-between gap-2 rounded bg-white/76 px-3 py-2 text-[13px] leading-snug text-slate-800 transition-colors hover:bg-white/90 hover:text-[var(--ink)]"
+                    >
+                      <span className="min-w-0">{group.title}</span>
+                      <span className="shrink-0 text-xs text-slate-500">{group.count}</span>
+                    </Link>
+                  ))
+                : activeCategory.items.map((item) => (
+                    <Link
+                      key={item}
+                      to={`/catalog/${activeCategory.id}`}
+                      onClick={onClose}
+                      className="rounded bg-white/76 px-3 py-2 text-[13px] leading-snug text-slate-800 transition-colors hover:bg-white/90 hover:text-[var(--ink)]"
+                    >
+                      {item}
+                    </Link>
+                  ))}
             </div>
           </div>
 

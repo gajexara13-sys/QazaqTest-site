@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink, useParams } from 'react-router-dom'
+import { Link, NavLink, useParams, useSearchParams } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import ProductCard from '../components/ProductCard'
 import usePageMeta from '../hooks/usePageMeta'
@@ -181,8 +181,11 @@ function EmptyCatalogState({ categoryTitle, onOpenModal }) {
 export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const { id } = useParams()
   const category = getCategoryById(id)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeGroup, setActiveGroup] = useState('all')
+  // Подраздел читается из ?group= — на эту ссылку ведёт мегаменю в шапке,
+  // и по ней же подраздел можно переслать или открыть заново.
+  const [activeGroup, setActiveGroup] = useState(() => searchParams.get('group') ?? 'all')
   const [sortId, setSortId] = useState('default')
   const [visibleCount, setVisibleCount] = useState(CATEGORY_PAGE_SIZE)
 
@@ -191,7 +194,7 @@ export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
   if (prevId !== id) {
     setPrevId(id)
     setSearchQuery('')
-    setActiveGroup('all')
+    setActiveGroup(searchParams.get('group') ?? 'all')
     setSortId('default')
     setVisibleCount(CATEGORY_PAGE_SIZE)
   }
@@ -204,6 +207,17 @@ export default function CategoryPage({ onOpenModal, onPreviewProduct }) {
   const handleGroupChange = (group) => {
     setActiveGroup(group)
     setVisibleCount(CATEGORY_PAGE_SIZE)
+    setSearchParams(
+      (params) => {
+        if (group === 'all') {
+          params.delete('group')
+        } else {
+          params.set('group', group)
+        }
+        return params
+      },
+      { replace: true },
+    )
   }
 
   usePageMeta(category?.title, category?.description)
