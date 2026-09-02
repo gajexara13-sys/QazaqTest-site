@@ -57,8 +57,23 @@ function respond(int $code, array $payload, string $origin, string $allowed, boo
         header('Access-Control-Allow-Headers: Content-Type');
         header('Vary: Origin');
     }
-    $body = json_encode($payload, JSON_UNESCAPED_UNICODE);
-    header('Content-Length: ' . strlen((string) $body));
+    $body = (string) json_encode($payload, JSON_UNESCAPED_UNICODE);
+
+    if ($keepRunning) {
+        // Браузер отпустит форму, только когда поймёт, что ответ пришёл
+        // целиком. Сжатие этому мешает: mod_deflate держит поток открытым и
+        // переписывает Content-Length, поэтому браузер продолжает ждать конца
+        // скрипта, сколько бы мы ни звали flush(). Для ответа в 15 байт
+        // сжатие всё равно бессмысленно.
+        if (function_exists('apache_setenv')) {
+            @apache_setenv('no-gzip', '1');
+        }
+        @ini_set('zlib.output_compression', '0');
+        header('Connection: close');
+        ignore_user_abort(true);
+    }
+
+    header('Content-Length: ' . strlen($body));
     echo $body;
 
     if (!$keepRunning) {
@@ -75,8 +90,13 @@ function respond(int $code, array $payload, string $origin, string $allowed, boo
         fastcgi_finish_request();
         return;
     }
-    // Без PHP-FPM закрываем соединение вручную
-    ignore_user_abort(true);
+
+    // Без PHP-FPM закрываем соединение вручную. Под mod_php это работает,
+    // под CGI — нет: там веб-сервер ждёт завершения процесса и всё равно
+    // придержит ответ. Поэтому единственная надёжная защита от зависшей
+    // формы — не делать долгих обращений наружу: если хостинг блокирует
+    // исходящие соединения, канал нужно выключить (пустой tg_token), а не
+    // надеяться, что ожидание останется незаметным.
     while (ob_get_level() > 0) {
         ob_end_flush();
     }
@@ -151,6 +171,7 @@ function notifyTelegram(array $lead, array $config): array
             CURLOPT_POSTFIELDS     => $payload,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 4,
             CURLOPT_TIMEOUT        => 8,
         ]);
         $body = curl_exec($ch);
@@ -282,8 +303,12 @@ if (@file_put_contents($config['log'], $line, FILE_APPEND | LOCK_EX) === false) 
 // следом: их задержка не должна превращаться в ожидание у формы.
 respond(200, ['ok' => true], $origin, $allowed, true);
 
+// Почта первой: она уходит через локальный почтовый сервер хостинга и
+// занимает миллисекунды, тогда как обращение к Telegram может упереться в
+// таймаут. Если max_execution_time оборвёт скрипт на этом ожидании, письмо
+// к тому моменту уже отправлено.
 $delivered = false;
-foreach ([['Telegram', notifyTelegram($lead, $config)], ['почта', notifyMail($lead, $config)]] as [$channel, $result]) {
+foreach ([['почта', notifyMail($lead, $config)], ['Telegram', notifyTelegram($lead, $config)]] as [$channel, $result]) {
     [$sent, $reason] = $result;
     if ($sent) {
         $delivered = true;
