@@ -3,7 +3,9 @@ import Breadcrumbs from '../components/Breadcrumbs'
 import ProductCard from '../components/ProductCard'
 import ProductImage from '../components/ProductImage'
 import ProductSpecs from '../components/ProductSpecs'
+import { SITE_ORIGIN } from '../constants'
 import usePageMeta from '../hooks/usePageMeta'
+import useProductSchema from '../hooks/useProductSchema'
 import {
   formatPrice,
   getCategoryById,
@@ -48,6 +50,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
   const category = getCategoryById(categoryId)
 
   usePageMeta(item?.title, item?.summary)
+  useProductSchema(item, item ? `${SITE_ORIGIN}/catalog/${item.categoryId}/${item.slug}` : null)
 
   if (!item || !category) {
     return <NotFound />
