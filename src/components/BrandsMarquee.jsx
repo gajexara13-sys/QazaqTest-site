@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { brands } from '../data/siteData'
+import { brands } from '../data/content'
 
 /** Логотипы, которые визуально мельче остальных — чуть крупнее в карусели */
 const BRAND_LOGO_UPSCALE = new Set(['Техком', 'Lithostek', 'Грин-Тех'])

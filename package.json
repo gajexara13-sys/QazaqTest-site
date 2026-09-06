@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node -e \"require('fs').mkdirSync('node_modules/.vite-temp',{recursive:true})\" && vite",
-    "build": "npm run sitemap && vite build",
-    "catalog:build": "node scripts/normalize_catalog.mjs",
+    "build": "npm run category-summary && npm run sitemap && vite build",
+    "catalog:build": "node scripts/normalize_catalog.mjs && node scripts/generate_category_summary.mjs",
+    "category-summary": "node scripts/generate_category_summary.mjs",
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",
@@ -14,7 +15,9 @@
     "catalog:lint": "node scripts/check_copy.mjs",
     "sitemap": "node scripts/generate_sitemap.mjs",
     "catalog:import": "node scripts/import_woocommerce_csv.mjs",
-    "images:optimize": "node scripts/optimize_product_images.mjs"
+    "images:optimize": "node scripts/optimize_product_images.mjs",
+    "images:normalize": "node scripts/normalize_product_photos.mjs",
+    "images:crop": "node scripts/crop_product_photos.mjs"
   },
   "dependencies": {
     "react": "^19.2.4",

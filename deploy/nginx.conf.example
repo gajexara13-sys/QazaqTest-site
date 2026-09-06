@@ -1,0 +1,62 @@
+# nginx для qazaqtest.kz на VPS (Cloudzy и любой другой).
+#
+# Положить в /etc/nginx/sites-available/qazaqtest, сослаться из sites-enabled,
+# проверить `nginx -t`, перезагрузить `systemctl reload nginx`.
+#
+# Блок TLS ниже дописывает certbot сам — см. deploy/DEPLOY.md.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name qazaqtest.kz www.qazaqtest.kz;
+
+    root /var/www/qazaqtest;
+    index index.html;
+
+    # Сжатие: каталог отдаёт крупный JSON и JS
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Имена файлов сборки содержат хеш, поэтому кэшировать можно надолго
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Фото товаров лежат под стабильными именами wp-<id>.webp: имя не меняется,
+    # даже когда меняется содержимое (например, после npm run
+    # images:normalize). При долгом кэше браузер после переезаливки на
+    # сервере продолжает показывать старую картинку, потому что туда и не
+    # заходит. Сутки — компромисс между трафиком и тем, чтобы обновление фото
+    # доезжало до посетителя быстро, а не через месяц.
+    location /products/ {
+        expires 1d;
+        add_header Cache-Control "public";
+    }
+
+    # Приём заявок с формы
+    location /api/lead {
+        proxy_pass http://127.0.0.1:8081/lead;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 20s;
+    }
+
+    # БЕЗ ЭТОГО ПРАВИЛА ГЛУБОКИЕ ССЫЛКИ ВЕРНУТ 404.
+    #
+    # Роутер сайта — BrowserRouter, адреса вида /catalog/asphalt/press-lwd-5b
+    # существуют только в браузере: на диске такого файла нет. Прямой заход по
+    # ссылке из поиска или мессенджера должен получить index.html, а дальше
+    # маршрут разберёт уже сам сайт.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # index.html кэшировать нельзя: в нём ссылки на хешированные бандлы, и
+    # закэшированная копия будет тянуть удалённые файлы после следующей выкладки.
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+}

@@ -220,10 +220,10 @@ export function sortItems(items, sortId) {
       const direction = sortId === 'price-asc' ? 1 : -1
       // Позиции «по запросу» всегда в конце списка, независимо от направления.
       return sorted.sort((a, b) => {
-        if (!a.priceRub || !b.priceRub) {
-          return (a.priceRub ? 0 : 1) - (b.priceRub ? 0 : 1)
+        if (!a.priceKzt || !b.priceKzt) {
+          return (a.priceKzt ? 0 : 1) - (b.priceKzt ? 0 : 1)
         }
-        return (a.priceRub - b.priceRub) * direction
+        return (a.priceKzt - b.priceKzt) * direction
       })
     }
     case 'title':
