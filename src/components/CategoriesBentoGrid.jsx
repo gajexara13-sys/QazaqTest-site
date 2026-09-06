@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { categories } from '../data/siteData'
+import { categories } from '../data/categoryMeta'
 
 /** Короткие подписи в сетке, чтобы прямоугольники были одинаковой высоты */
 const SHORT_TITLE = {

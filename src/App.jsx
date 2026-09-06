@@ -1,24 +1,41 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import BackToTop from './components/BackToTop'
 import ContactModal from './components/ContactModal'
 import Header from './components/Header'
-import ProductModal from './components/ProductModal'
 import ScrollToTop from './components/ScrollToTop'
 import SiteFooter from './components/SiteFooter'
 import { DEFAULT_TOPIC } from './constants'
-import AboutPage from './pages/AboutPage'
-import CatalogPage from './pages/CatalogPage'
-import CategoryPage from './pages/CategoryPage'
-import ContactPage from './pages/ContactPage'
-import GuidesPage from './pages/GuidesPage'
-import HomePage from './pages/HomePage'
-import NotFoundPage from './pages/NotFoundPage'
-import PrivacyPage from './pages/PrivacyPage'
-import ProductPage from './pages/ProductPage'
-import SearchPage from './pages/SearchPage'
-import ServicePage from './pages/ServicePage'
-import ServicesPage from './pages/ServicesPage'
+
+// Быстрый просмотр товара читает цену и категорию через ProductImage —
+// то есть тоже тянет siteData.js целиком (см. комментарий у HomePage ниже).
+// Модалка не нужна, пока по карточке не кликнули, поэтому она лениво
+// подгружаемая точно так же, как строки поиска в шапке.
+const ProductModal = lazy(() => import('./components/ProductModal'))
+
+// Каждая страница — свой чанк, который грузится только при переходе на неё.
+// Каталог, карточка товара и поиск тянут за собой catalogItems (422 КБ
+// описаний всех 135 позиций); без разбивки этот вес попадал в общий бандл и
+// скачивался даже тем, кто открыл только главную.
+const HomePage = lazy(() => import('./pages/HomePage'))
+const CatalogPage = lazy(() => import('./pages/CatalogPage'))
+const CategoryPage = lazy(() => import('./pages/CategoryPage'))
+const ProductPage = lazy(() => import('./pages/ProductPage'))
+const SearchPage = lazy(() => import('./pages/SearchPage'))
+const ServicesPage = lazy(() => import('./pages/ServicesPage'))
+const ServicePage = lazy(() => import('./pages/ServicePage'))
+const GuidesPage = lazy(() => import('./pages/GuidesPage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+
+/** Пусто, а не спиннер: переход между страницами и так быстрый, а мигающий
+ * индикатор на каждый клик по ссылке раздражал бы больше, чем короткая
+ * пауза перед отрисовкой. */
+function RouteFallback() {
+  return null
+}
 
 function AppShell() {
   const [isContactOpen, setContactOpen] = useState(false)
@@ -39,11 +56,13 @@ function AppShell() {
       <Header />
       <BackToTop />
       {previewItem ? (
-        <ProductModal
-          item={previewItem}
-          onOpenModal={handleOpenModal}
-          onClose={() => setPreviewItem(null)}
-        />
+        <Suspense fallback={null}>
+          <ProductModal
+            item={previewItem}
+            onOpenModal={handleOpenModal}
+            onClose={() => setPreviewItem(null)}
+          />
+        </Suspense>
       ) : null}
       {isContactOpen ? (
         <ContactModal
@@ -52,44 +71,46 @@ function AppShell() {
         />
       ) : null}
       <main className="relative z-0 [overflow-anchor:none]">
-        <Routes>
-          <Route path="/" element={<HomePage onOpenModal={handleOpenModal} />} />
-          <Route path="/catalog" element={<CatalogPage />} />
-          <Route
-            path="/catalog/:id"
-            element={
-              <CategoryPage
-                onOpenModal={handleOpenModal}
-                onPreviewProduct={handlePreviewProduct}
-              />
-            }
-          />
-          <Route
-            path="/catalog/:categoryId/:slug"
-            element={
-              <ProductPage
-                onOpenModal={handleOpenModal}
-                onPreviewProduct={handlePreviewProduct}
-              />
-            }
-          />
-          <Route
-            path="/search"
-            element={
-              <SearchPage
-                onOpenModal={handleOpenModal}
-                onPreviewProduct={handlePreviewProduct}
-              />
-            }
-          />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/service" element={<ServicePage />} />
-          <Route path="/guides" element={<GuidesPage onOpenModal={handleOpenModal} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage onOpenModal={handleOpenModal} />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage onOpenModal={handleOpenModal} />} />
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route
+              path="/catalog/:id"
+              element={
+                <CategoryPage
+                  onOpenModal={handleOpenModal}
+                  onPreviewProduct={handlePreviewProduct}
+                />
+              }
+            />
+            <Route
+              path="/catalog/:categoryId/:slug"
+              element={
+                <ProductPage
+                  onOpenModal={handleOpenModal}
+                  onPreviewProduct={handlePreviewProduct}
+                />
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <SearchPage
+                  onOpenModal={handleOpenModal}
+                  onPreviewProduct={handlePreviewProduct}
+                />
+              }
+            />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/service" element={<ServicePage />} />
+            <Route path="/guides" element={<GuidesPage onOpenModal={handleOpenModal} />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage onOpenModal={handleOpenModal} />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </main>
       <SiteFooter onOpenModal={handleOpenModal} />
     </div>

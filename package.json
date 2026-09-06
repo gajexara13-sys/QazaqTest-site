@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node -e \"require('fs').mkdirSync('node_modules/.vite-temp',{recursive:true})\" && vite",
-    "build": "npm run sitemap && vite build",
-    "catalog:build": "node scripts/normalize_catalog.mjs",
+    "build": "npm run category-summary && npm run sitemap && vite build",
+    "catalog:build": "node scripts/normalize_catalog.mjs && node scripts/generate_category_summary.mjs",
+    "category-summary": "node scripts/generate_category_summary.mjs",
     "knockout:lithostek": "node scripts/knockout-lithostek.mjs",
     "images:download": "node scripts/download_product_images.mjs",
     "lint": "eslint .",

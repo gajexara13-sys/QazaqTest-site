@@ -1,16 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CONTACT_PHONE_HREF, CONTACT_PHONE_LABEL, NAV_LINKS } from '../constants'
-import { categories, categoryCounts, getCategoryById, getCategoryGroups } from '../data/siteData'
+import { categories, categoryCounts, getCategoryById, getCategoryGroups } from '../data/categoryMeta'
+import { useEscToClose } from '../lib/hooks'
+import SearchIcon from './SearchIcon'
+
+// Живой поиск тянет за собой каталог целиком (catalogItems из siteData.js —
+// 422 КБ описаний всех 135 позиций), а нужен только тем, кто открыл поле
+// поиска. Ленивая загрузка не даёт этому весу попасть в общий чанк, который
+// подгружает вообще каждый посетитель, включая тех, кто поиском ни разу не
+// воспользуется.
+const HeaderSearch = lazy(() => import('./HeaderSearch'))
 
 // Сколько реальных подразделов показать в превью мегаменю: раздел «Общая
 // лаборатория» держит 11 подразделов сразу, и все сразу в узкую колонку не
 // поместятся — здесь только самые крупные, полный список даёт сама страница
 // раздела.
 const MEGA_MENU_GROUP_LIMIT = 6
-import { useEscToClose } from '../lib/hooks'
-import HeaderSearch from './HeaderSearch'
-import SearchIcon from './SearchIcon'
 
 function UtilityBar() {
   return (
@@ -307,7 +313,9 @@ export default function Header() {
           />
         ) : null}
         {isSearchOpen ? (
-          <HeaderSearch onClose={closeSearch} />
+          <Suspense fallback={null}>
+            <HeaderSearch onClose={closeSearch} />
+          </Suspense>
         ) : null}
         {isMobileOpen ? <MobileMenu onClose={() => setMobileOpen(false)} /> : null}
       </div>

@@ -5,7 +5,7 @@ import {
   CONTACT_PHONE_LABEL,
   DEFAULT_TOPIC,
 } from '../constants'
-import { COMPANY_DETAILS } from '../data/siteData'
+import { COMPANY_DETAILS } from '../data/content'
 
 const FOOTER_LINKS = [
   { to: '/catalog', label: 'Каталог' },
