@@ -15,6 +15,31 @@ import {
 
 const RELATED_LIMIT = 3
 
+/**
+ * Заголовок вкладки и сниппета в выдаче — с кодом модели.
+ *
+ * Оборудование ищут по коду («KYS-08A купить»), а в названии карточки он есть
+ * далеко не всегда: нормализация каталога дописывает его только к названиям,
+ * которые иначе повторялись бы. У 72 позиций из 134 кода в названии нет, и по
+ * своему же коду страница в заголовке не совпадала ни с чем.
+ *
+ * Сравниваем по буквам и цифрам, без пробелов и регистра: у весов ViBRA
+ * название «Весы лабораторные VIBRA AJ-6200 CE» и модель «ViBRA AJ-6200CE» —
+ * одно и то же, и дословное сравнение дописало бы код второй раз.
+ *
+ * В видимый заголовок страницы код не идёт: там он выведен отдельным полем
+ * «Модель» рядом с производителем.
+ */
+function buildMetaTitle(item) {
+  if (!item.model) {
+    return item.title
+  }
+  const letters = (value) => value.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
+  return letters(item.title).includes(letters(item.model))
+    ? item.title
+    : `${item.title} ${item.model}`
+}
+
 /** Соседние позиции: сначала из того же подраздела, затем из раздела. */
 function getRelatedItems(item) {
   const siblings = getCategoryItems(item.categoryId).filter((other) => other.id !== item.id)
@@ -49,7 +74,7 @@ export default function ProductPage({ onOpenModal, onPreviewProduct }) {
   const item = getProductBySlug(categoryId, slug)
   const category = getCategoryById(categoryId)
 
-  usePageMeta(item?.title, item?.summary)
+  usePageMeta(item ? buildMetaTitle(item) : undefined, item?.summary)
   useProductSchema(item, item ? `${SITE_ORIGIN}/catalog/${item.categoryId}/${item.slug}` : null)
 
   if (!item || !category) {

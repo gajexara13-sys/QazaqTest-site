@@ -23,11 +23,19 @@ const STATIC_ROUTES = [
 ]
 
 const catalog = JSON.parse(await readFile(path.join(root, 'src/data/catalog.json'), 'utf8'))
-const siteData = await readFile(path.join(root, 'src/data/siteData.js'), 'utf8')
+const content = await readFile(path.join(root, 'src/data/content.js'), 'utf8')
 
-// Разделы читаем из siteData, а не дублируем списком: иначе карта разъедется
+// Разделы читаем из content.js, а не дублируем списком: иначе карта разъедется
 // с меню при первом же изменении каталога.
-const categoryIds = [...siteData.matchAll(/^\s{4}id: '([a-z-]+)',$/gm)].map((match) => match[1])
+const categoryIds = [...content.matchAll(/^\s{4}id: '([a-z-]+)',$/gm)].map((match) => match[1])
+
+// Пустой список значит, что разделы переехали в другой файл, а регулярное
+// выражение осталось искать их по старому адресу — ровно так из карты тихо
+// пропали все 12 страниц разделов. Падать здесь лучше, чем выкладывать
+// обрезанную карту и ждать, пока это заметит поисковик.
+if (categoryIds.length === 0) {
+  throw new Error('В content.js не найдено ни одного раздела — проверьте формат списка categories')
+}
 
 const today = new Date().toISOString().slice(0, 10)
 const urls = [

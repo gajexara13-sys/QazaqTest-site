@@ -1,6 +1,7 @@
 # QAZAQTEST — сайт поставщика лабораторного оборудования
 
-React 19 + Vite + Tailwind CSS 4, маршрутизация на HashRouter. Каталог
+React 19 + Vite + Tailwind CSS 4, маршрутизация на BrowserRouter (адреса без
+`#`, переписывание запросов настроено в `public/.htaccess`). Каталог
 испытательного оборудования для дорожных и строительных лабораторий Казахстана:
 135 позиций, 12 разделов, 27 подразделов, форма заявки с отправкой на внешний
 обработчик и запасным вариантом через WhatsApp.
@@ -13,8 +14,15 @@ npm run dev              # http://localhost:5173
 npm run catalog:build    # пересобрать src/data/catalog.json из выгрузки
 npm run images:download  # скачать фото товаров в public/products/
 npm run lint
-npm run build
+npm run build            # сборка + предрендер 154 страниц, около минуты
+npm run prerender        # только предрендер, поверх готового dist/
 ```
+
+`npm run build` в конце прогоняет `scripts/prerender.mjs`: он открывает каждый
+адрес из `sitemap.xml` в Chromium и кладёт рядом со сборкой готовый HTML.
+Сайт — SPA, и без этого шага робот получает по всем адресам один пустой шаблон
+с заголовком главной и `canonical`, ведущим на главную. Предрендеру нужен
+Chromium (ставится вместе с `playwright` при `npm install`).
 
 ## Специализированные агенты
 
@@ -93,11 +101,20 @@ npm run lint && npm run build
 ```bash
 npm run dev &
 npx playwright screenshot --browser chromium \
-  "http://localhost:5173/#/catalog/general-lab" /tmp/check.png
+  "http://localhost:5173/catalog/general-lab" /tmp/check.png
 ```
 
-Ключевые адреса: `/#/`, `/#/catalog`, `/#/catalog/asphalt`,
-`/#/catalog/asphalt/<slug>`, `/#/contact`.
+Ключевые адреса: `/`, `/catalog`, `/catalog/asphalt`,
+`/catalog/asphalt/<slug>`, `/contact`. Без `#` — роутер BrowserRouter, и
+адрес с `#` откроет главную вместо нужной страницы.
+
+Что видит поисковый робот — проверяется по собранным файлам, а не в браузере:
+
+```bash
+npm run build
+grep -o '<title>[^<]*</title>' dist/catalog/asphalt/<slug>.html
+grep -o '<link rel="canonical"[^>]*>' dist/catalog/asphalt/<slug>.html
+```
 
 ## Скрыть позицию
 
