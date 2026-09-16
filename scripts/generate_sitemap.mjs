@@ -2,6 +2,12 @@
  * Карта сайта из витрины каталога. Запускается перед сборкой, чтобы
  * sitemap.xml всегда соответствовал текущему составу каталога:
  * добавили позицию — она сама попала в карту.
+ *
+ * Без <lastmod>. Настоящей даты изменения позиции у нас нет — в catalog.json
+ * такого поля не существует, — а подставлять день сборки значит на каждой
+ * пересборке заявлять поисковику, что все 154 страницы изменились сегодня.
+ * Такой дате он всё равно перестаёт верить, а файл при этом менялся после
+ * каждой сборки и мешал `git pull` на машине, с которой идёт выкладка.
  */
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -37,7 +43,6 @@ if (categoryIds.length === 0) {
   throw new Error('В content.js не найдено ни одного раздела — проверьте формат списка categories')
 }
 
-const today = new Date().toISOString().slice(0, 10)
 const urls = [
   ...STATIC_ROUTES.map(([loc, priority, changefreq]) => ({ loc, priority, changefreq })),
   ...categoryIds.map((id) => ({ loc: `/catalog/${id}`, priority: '0.8', changefreq: 'weekly' })),
@@ -53,7 +58,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
 ${urls
   .map(
     ({ loc, priority, changefreq }) =>
-      `  <url>\n    <loc>${ORIGIN}${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
+      `  <url>\n    <loc>${ORIGIN}${loc}</loc>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
   )
   .join('\n')}
 </urlset>

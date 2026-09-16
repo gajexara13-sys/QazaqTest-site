@@ -18,7 +18,8 @@
     "images:optimize": "node scripts/optimize_product_images.mjs",
     "images:normalize": "node scripts/normalize_product_photos.mjs",
     "images:crop": "node scripts/crop_product_photos.mjs",
-    "prerender": "node scripts/prerender.mjs"
+    "prerender": "node scripts/prerender.mjs",
+    "postinstall": "playwright install chromium"
   },
   "dependencies": {
     "react": "^19.2.4",
