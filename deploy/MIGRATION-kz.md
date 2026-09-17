@@ -80,16 +80,29 @@ Spaceweb**. Это самое рискованное место переезда
 | `autoconfig` | CNAME | `autoconfig.spaceweb.ru.` |
 | `autodiscover` | CNAME | `autodiscover.spaceweb.ru.` |
 | `@` | SRV | `autodiscover.spaceweb.ru.` |
-| `@` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com …` |
-| `info` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com …` |
+| `@` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com ~all` |
+| `info` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com ~all` |
 
 Что с чем делать при переключении:
 
 - **A (`@` и `www`)** — на IP сервера PS.KZ.
 - **MX** — на почтовые серверы PS.KZ.
-- **TXT (SPF) у `@`** — переписать: `include:_spf.sweb.ru` убрать, добавить
-  значение PS.KZ. **`include:_spf.google.com` сохранить**, если письма от
-  `info@qazaqtest.kz` отправляются через Gmail: без него они пойдут в спам.
+- **TXT (SPF) у `@`** — переписать по образцу:
+
+  ```
+  v=spf1 include:<значение PS.KZ> include:_spf.google.com ~all
+  ```
+
+  `include:_spf.sweb.ru` уходит вместе со Spaceweb, а **`_spf.google.com`
+  остаётся**: почта этого домена подключена в Gmail на телефоне, и если
+  оттуда отправляется письмо с подписью `info@qazaqtest.kz`, без этой записи
+  оно пойдёт в спам к получателю. Сам владелец об этом не узнает — письмо
+  уйдёт, просто на него перестанут отвечать.
+
+  `~all` оставить как есть. Это мягкая политика: письмо с неизвестного
+  сервера помечается подозрительным, но не отбрасывается. Ужесточать до
+  `-all` в момент переезда не стоит — любая забытая мелочь обернётся
+  потерянными письмами.
 - **`autoconfig`, `autodiscover` (CNAME и SRV)** — это автонастройка почтовых
   программ. Указывают на Spaceweb, поэтому либо удалить, либо заменить
   аналогами PS.KZ, если те их предоставляют.
