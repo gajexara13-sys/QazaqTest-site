@@ -66,6 +66,37 @@ Spaceweb**. Это самое рискованное место переезда
 5. **Сфотографируйте текущие DNS-записи** в панели Spaceweb: A, MX, TXT (SPF),
    CNAME. Понадобятся для сверки и для отката.
 
+### Записи на момент подготовки переезда
+
+Снято в панели Spaceweb. Это же — точка отката: чтобы вернуть всё как было,
+достаточно восстановить эти значения.
+
+| Поддомен | Тип | Значение |
+|---|---|---|
+| `@` | A | `77.222.40.84` |
+| `www` | A | `77.222.40.84` |
+| `@` | MX | `mx1.spaceweb.ru.` |
+| `@` | MX | `mx2.spaceweb.ru.` |
+| `autoconfig` | CNAME | `autoconfig.spaceweb.ru.` |
+| `autodiscover` | CNAME | `autodiscover.spaceweb.ru.` |
+| `@` | SRV | `autodiscover.spaceweb.ru.` |
+| `@` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com …` |
+| `info` | TXT | `v=spf1 include:_spf.sweb.ru include:_spf.google.com …` |
+
+Что с чем делать при переключении:
+
+- **A (`@` и `www`)** — на IP сервера PS.KZ.
+- **MX** — на почтовые серверы PS.KZ.
+- **TXT (SPF) у `@`** — переписать: `include:_spf.sweb.ru` убрать, добавить
+  значение PS.KZ. **`include:_spf.google.com` сохранить**, если письма от
+  `info@qazaqtest.kz` отправляются через Gmail: без него они пойдут в спам.
+- **`autoconfig`, `autodiscover` (CNAME и SRV)** — это автонастройка почтовых
+  программ. Указывают на Spaceweb, поэтому либо удалить, либо заменить
+  аналогами PS.KZ, если те их предоставляют.
+- **TXT у `info`** — можно удалить. SPF на поддомене `info` относился бы к
+  адресам `@info.qazaqtest.kz`, а не к ящику `info@qazaqtest.kz`, так что
+  запись ни на что не влияет.
+
 Проверьте, что копия открывается и весит столько же, сколько на сервере.
 Дальше — только после этого.
 
