@@ -125,9 +125,9 @@ export default function HeaderSearch({ onClose }) {
                             {item.group ?? getCategoryById(item.categoryId)?.title}
                           </span>
                         </span>
-                        {item.priceRub ? (
+                        {item.priceKzt ? (
                           <span className="hidden shrink-0 text-sm font-bold text-[var(--ink)] sm:block">
-                            {formatPrice(item.priceRub)}
+                            {formatPrice(item.priceKzt)}
                           </span>
                         ) : null}
                       </Link>

@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Переменные окружения: в .env.production лежит адрес обработчика заявок,
+# в .env.local — секреты. В репозиторий не попадают.
+.env
+.env.*
+!.env.example
+
+# Журнал заявок, если сервис запускали локально
+leads.jsonl
+
+# Настройки PHP-обработчика заявок: в нём токен бота
+deploy/shared-hosting/lead-config.php

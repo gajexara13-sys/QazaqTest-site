@@ -7,7 +7,7 @@ export const DEFAULT_TOPIC = 'Общий запрос'
 
 export const CONTACT_PHONE_HREF = 'tel:+77055640535'
 export const CONTACT_PHONE_LABEL = '+7 (705) 564 05 35'
-export const CONTACT_EMAIL = 'office@qazaqtest.kz'
+export const CONTACT_EMAIL = 'info@qazaqtest.kz'
 
 /** Номер для ссылок wa.me — только цифры */
 export const WHATSAPP_PHONE = '77055640535'

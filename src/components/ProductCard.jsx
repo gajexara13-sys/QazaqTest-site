@@ -22,7 +22,7 @@ function pickKeySpecs(specs, limit = 2) {
 }
 
 export default function ProductCard({ item, onOpenModal, onPreview }) {
-  const price = formatPrice(item.priceRub)
+  const price = formatPrice(item.priceKzt)
   const productPath = `/catalog/${item.categoryId}/${item.slug}`
   const keySpecs = pickKeySpecs(item.specs)
 
@@ -32,7 +32,7 @@ export default function ProductCard({ item, onOpenModal, onPreview }) {
         type="button"
         onClick={() => onPreview(item)}
         aria-label={`Быстрый просмотр: ${item.title}`}
-        className="relative block aspect-[4/3] w-full overflow-hidden border-b border-[#78AEAD]/15 bg-white"
+        className="relative block aspect-square w-full overflow-hidden border-b border-[#78AEAD]/15 bg-white"
       >
         <ProductImage item={item} />
       </button>

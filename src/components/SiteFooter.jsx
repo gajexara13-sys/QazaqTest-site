@@ -5,7 +5,7 @@ import {
   CONTACT_PHONE_LABEL,
   DEFAULT_TOPIC,
 } from '../constants'
-import { COMPANY_DETAILS } from '../data/siteData'
+import { COMPANY_DETAILS } from '../data/content'
 
 const FOOTER_LINKS = [
   { to: '/catalog', label: 'Каталог' },
@@ -103,12 +103,9 @@ export default function SiteFooter({ onOpenModal }) {
           </button>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-[var(--muted-text)]">
             <span>© {new Date().getFullYear()} QAZAQTEST. Все права защищены.</span>
-            <a href="#" className="transition-colors hover:text-[var(--accent-text)]">
+            <Link to="/privacy" className="transition-colors hover:text-[var(--accent-text)]">
               Политика конфиденциальности
-            </a>
-            <a href="#" className="transition-colors hover:text-[var(--accent-text)]">
-              Договор оферты
-            </a>
+            </Link>
           </div>
         </div>
       </div>

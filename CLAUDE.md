@@ -1,6 +1,7 @@
 # QAZAQTEST — сайт поставщика лабораторного оборудования
 
-React 19 + Vite + Tailwind CSS 4, маршрутизация на HashRouter. Каталог
+React 19 + Vite + Tailwind CSS 4, маршрутизация на BrowserRouter (адреса без
+`#`, переписывание запросов настроено в `public/.htaccess`). Каталог
 испытательного оборудования для дорожных и строительных лабораторий Казахстана:
 135 позиций, 12 разделов, 27 подразделов, форма заявки с отправкой на внешний
 обработчик и запасным вариантом через WhatsApp.
@@ -13,8 +14,15 @@ npm run dev              # http://localhost:5173
 npm run catalog:build    # пересобрать src/data/catalog.json из выгрузки
 npm run images:download  # скачать фото товаров в public/products/
 npm run lint
-npm run build
+npm run build            # сборка + предрендер 154 страниц, около минуты
+npm run prerender        # только предрендер, поверх готового dist/
 ```
+
+`npm run build` в конце прогоняет `scripts/prerender.mjs`: он открывает каждый
+адрес из `sitemap.xml` в Chromium и кладёт рядом со сборкой готовый HTML.
+Сайт — SPA, и без этого шага робот получает по всем адресам один пустой шаблон
+с заголовком главной и `canonical`, ведущим на главную. Предрендеру нужен
+Chromium (ставится вместе с `playwright` при `npm install`).
 
 ## Специализированные агенты
 
@@ -51,9 +59,13 @@ src/data/catalog.json            витрина, её импортирует с�
 
 ## Цены
 
-В выгрузке цены в рублях (`priceRub`). Сайт показывает тенге:
-`formatPrice()` в `src/data/siteData.js` умножает на `RUB_TO_KZT` и округляет до
-1000 ₸. Курс и наценка задаются там же. Позиция без цены выводится как
+**Цена — постоянная величина, пересчёта по курсу на сайте нет.** В витрине
+лежит готовое число в тенге (`priceKzt`), `formatPrice()` только форматирует
+его. Цена позиции задаётся правкой `priceKzt` в `catalog.overrides.json` и
+пересборкой не затирается.
+
+`RUB_TO_KZT_SEED` в `scripts/normalize_catalog.mjs` — ориентир для новых
+позиций без цены, а не действующий курс. Позиция без цены выводится как
 «Цена по запросу» — придумывать цену нельзя.
 
 ## Фото товаров
@@ -63,11 +75,20 @@ src/data/catalog.json            витрина, её импортирует с�
 из 135; без снимка `ProductImage` рисует заглушку с кодом модели.
 
 ```bash
-npm run images:download && npm run images:optimize && npm run catalog:build
+npm run images:download && npm run images:optimize \
+  && npm run images:normalize && npm run images:crop && npm run catalog:build
 ```
 
 Сжатие не пропускать: медиатека отдаёт файлы до 2565 px и 3,9 МБ, витрина
-показывает их в контейнере около 300 px. Оба скрипта идемпотентны.
+показывает их в контейнере около 300 px. `images:normalize` выравнивает фон до
+белого заливкой от краёв — иначе «почти белый» фон снимка даёт на белой
+подложке карточки заметный прямоугольник. Все скрипты идемпотентны.
+
+`images:crop` срезает приклеенные поставщиком полосы «细节展示» с китайскими
+подписями — их отличает сплошной белый разрыв во всю ширину над полосой.
+
+Фото показывается **только на белом**: 133 снимка из 135 сняты на белом фоне,
+и подложка другого цвета сразу обнажает границу кадра.
 
 ## Проверка изменений
 
@@ -80,11 +101,44 @@ npm run lint && npm run build
 ```bash
 npm run dev &
 npx playwright screenshot --browser chromium \
-  "http://localhost:5173/#/catalog/general-lab" /tmp/check.png
+  "http://localhost:5173/catalog/general-lab" /tmp/check.png
 ```
 
-Ключевые адреса: `/#/`, `/#/catalog`, `/#/catalog/asphalt`,
-`/#/catalog/asphalt/<slug>`, `/#/contact`.
+Ключевые адреса: `/`, `/catalog`, `/catalog/asphalt`,
+`/catalog/asphalt/<slug>`, `/contact`. Без `#` — роутер BrowserRouter, и
+адрес с `#` откроет главную вместо нужной страницы.
+
+После выкладки на хостинг — проверить адреса разделов на самом сервере.
+Локальный сервер разработки эту поломку не воспроизводит: она возникает
+только в Apache. Предрендер кладёт рядом и страницу `catalog/asphalt.html`,
+и папку `catalog/asphalt/` с карточками — Apache видит папку и добавляет
+к адресу слеш, а правило сайта слеш снимает, и адрес зацикливается. В
+`public/.htaccess` это разобрано (`DirectorySlash Off` и проверка файла
+через `%{DOCUMENT_ROOT}`), но проверять после выкладки всё равно нужно:
+
+```bash
+for p in / /catalog /catalog/asphalt /catalog/asphalt/<slug>; do
+  curl -sS -o /dev/null -D - "https://qazaqtest.kz$p" | grep -E '^HTTP/|^Location:'
+done
+```
+
+Каждый адрес — `200` и ни одной строки `Location`. Появилась `Location`
+со слешем на конце — страницы разделов недоступны, и в браузере это
+выглядит как «слишком много переадресаций».
+
+Что видит поисковый робот — проверяется по собранным файлам, а не в браузере:
+
+```bash
+npm run build
+grep -o '<title>[^<]*</title>' dist/catalog/asphalt/<slug>.html
+grep -o '<link rel="canonical"[^>]*>' dist/catalog/asphalt/<slug>.html
+```
+
+## Скрыть позицию
+
+Дубль магазина убирается с витрины правкой `{"hidden": true}` по ключу `wp-<id>`,
+а не удалением из выгрузки: источник — чужой магазин, его мы не трогаем.
+Скрытые позиции печатаются при сборке.
 
 ## Чего не делать
 

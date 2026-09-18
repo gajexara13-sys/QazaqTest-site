@@ -1,4 +1,35 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { SITE_ORIGIN } from '../constants'
+
+/**
+ * Разметка BreadcrumbList поверх той же цепочки, что показана на экране —
+ * второй источник для тех же данных заводить незачем, а несовпадение с
+ * видимыми крошками поисковик расценивает как маскировку контента.
+ */
+function useBreadcrumbSchema(items) {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.title,
+        item: `${SITE_ORIGIN}${item.to ?? pathname}`,
+      })),
+    }
+
+    const node = document.createElement('script')
+    node.type = 'application/ld+json'
+    node.text = JSON.stringify(schema)
+    document.head.appendChild(node)
+
+    return () => node.remove()
+  }, [items, pathname])
+}
 
 /**
  * Хлебные крошки для всех внутренних страниц.
@@ -6,6 +37,7 @@ import { Link } from 'react-router-dom'
  */
 export default function Breadcrumbs({ trail }) {
   const items = [{ title: 'QAZAQTEST', to: '/' }, ...trail]
+  useBreadcrumbSchema(items)
 
   return (
     <nav aria-label="Навигационная цепочка" className="border-b border-[#78AEAD]/25 bg-[var(--page-bg)]">

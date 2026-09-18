@@ -1,10 +1,12 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CONTACT_PHONE_HREF, CONTACT_PHONE_LABEL } from '../constants'
 import { useEscToClose, useLockBodyScroll } from '../lib/hooks'
 import { buildWhatsAppUrl, sendLead } from '../lib/lead'
 
 export default function ContactModal({ selectedCategory, onClose }) {
   const [formData, setFormData] = useState({ name: '', phone: '' })
+  const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const nameInputRef = useRef(null)
   const titleId = useId()
@@ -25,14 +27,17 @@ export default function ContactModal({ selectedCategory, onClose }) {
     event.preventDefault()
     setStatus('sending')
     try {
-      await sendLead({
+      // Пока VITE_LEAD_ENDPOINT не задан, отправлять некуда, и sendLead честно
+      // возвращает delivered: false. Показывать в этом случае «Заявка принята»
+      // нельзя — человеку пообещают звонок, которого никто не сделает.
+      const { delivered } = await sendLead({
         name: formData.name,
         phone: formData.phone,
         topic: selectedCategory,
         page: window.location.href,
         submittedAt: new Date().toISOString(),
       })
-      setStatus('sent')
+      setStatus(delivered ? 'sent' : 'error')
     } catch {
       setStatus('error')
     }
@@ -85,9 +90,9 @@ export default function ContactModal({ selectedCategory, onClose }) {
               </>
             ) : (
               <>
-                <p className="text-lg font-semibold text-[var(--ink)]">Не получилось отправить автоматически.</p>
+                <p className="text-lg font-semibold text-[var(--ink)]">Заявка не ушла автоматически.</p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  Напишите нам в WhatsApp или позвоните по номеру{' '}
+                  Чтобы запрос точно дошёл, продублируйте его в WhatsApp кнопкой ниже или позвоните{' '}
                   <a href={CONTACT_PHONE_HREF} className="font-semibold text-[var(--accent-text)]">
                     {CONTACT_PHONE_LABEL}
                   </a>{' '}
@@ -139,10 +144,32 @@ export default function ContactModal({ selectedCategory, onClose }) {
               />
             </label>
 
+            <label className="flex items-start gap-3 pt-2 text-[13px] leading-relaxed text-[var(--muted-text)]">
+              <input
+                type="checkbox"
+                name="consent"
+                required
+                checked={consent}
+                onChange={(event) => setConsent(event.target.checked)}
+                className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--accent)]"
+              />
+              <span>
+                Согласен на обработку персональных данных в соответствии с{' '}
+                <Link
+                  to="/privacy"
+                  onClick={onClose}
+                  className="font-semibold text-[var(--accent-text)] hover:underline"
+                >
+                  политикой конфиденциальности
+                </Link>
+                .
+              </span>
+            </label>
+
             <div className="flex flex-col gap-3 pt-3 sm:flex-row">
               <button
                 type="submit"
-                disabled={status === 'sending'}
+                disabled={status === 'sending' || !consent}
                 className="inline-flex h-14 flex-1 items-center justify-center rounded-2xl bg-[var(--accent)] px-6 text-xs font-bold uppercase tracking-[0.16em] text-white transition-colors hover:brightness-95 disabled:cursor-wait disabled:opacity-70"
               >
                 {status === 'sending' ? 'Отправляем…' : 'Отправить запрос'}

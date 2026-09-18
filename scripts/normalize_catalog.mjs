@@ -415,6 +415,20 @@ function detectBrand(item, title) {
 }
 
 /** «1329446.25 ₽» → 1329446; «по запросу» → null. */
+/**
+ * Курс, по которому рублёвая цена источника переводится в тенге ОДИН РАЗ —
+ * при сборке каталога. Дальше цена живёт в витрине как число и от курса не
+ * зависит: компания держит постоянные цены, а не пересчитывает их ежедневно.
+ *
+ * Значение действует только для позиций, у которых своей цены в тенге ещё нет.
+ * Проставленная цена лежит в catalog.overrides.json под ключом `priceKzt` и
+ * пересборкой не затирается — менять её нужно там.
+ */
+const RUB_TO_KZT_SEED = 6.13
+
+const seedPriceKzt = (priceRub) =>
+  priceRub ? Math.round((priceRub * RUB_TO_KZT_SEED) / 1000) * 1000 : null
+
 function parsePriceRub(priceLabel) {
   if (!priceLabel) {
     return null
@@ -609,6 +623,9 @@ function normalizeItem(item) {
     specs: specs.map((spec) => ({ label: tidyText(spec.label), value: tidyText(spec.value) })).slice(0, 24),
     tags: [...new Set(tags)].filter(Boolean),
     priceRub: parsePriceRub(item.priceLabel),
+    // Цена витрины. Ставится здесь как отправная точка, а окончательное
+    // значение задаётся правкой priceKzt — её пересборка не трогает.
+    priceKzt: seedPriceKzt(parsePriceRub(item.priceLabel)),
     image: null,
     imageSource: item.imageUrl ?? null,
   }
@@ -687,16 +704,26 @@ async function main() {
   // overrides может совпасть с чужим, а до применения правок этого не видно.
   const items = disambiguateTitles(merged)
 
+  // Скрытая позиция остаётся в выгрузке и в правках, но на витрину не идёт:
+  // так убирают дубли магазина, не трогая сам магазин. Снять — убрать
+  // `"hidden": true` из catalog.overrides.json.
+  const hidden = items.filter((item) => item.hidden)
+  if (hidden.length > 0) {
+    console.log(`\nСкрыто правкой hidden: ${hidden.length}`)
+    hidden.forEach((item) => console.log(`  wp-${item.wpId}  ${item.title}`))
+  }
+  const visible = items.filter((item) => !item.hidden)
+
   // Позиция без раздела на витрину не попадёт: у неё нет ни адреса, ни места в
   // навигации. Импортёр такие не выбрасывает, чтобы раздел можно было назначить
   // правкой по wpId, — отсеиваем здесь, уже после применения overrides.
-  const homeless = items.filter((item) => !item.categoryId)
+  const homeless = visible.filter((item) => !item.categoryId)
   if (homeless.length > 0) {
     console.warn(`\nБез раздела — не попали на витрину: ${homeless.length}`)
     homeless.forEach((item) => console.warn(`  ${item.wpId ? `wp-${item.wpId}` : item.id}  ${item.title}`))
     console.warn('  Назначьте раздел в catalog.overrides.json или категорию в импортёре.')
   }
-  const placed = items.filter((item) => item.categoryId)
+  const placed = visible.filter((item) => item.categoryId)
 
   const orphanKeys = Object.keys(overrides).filter((key) => !usedOverrideKeys.has(key))
   if (orphanKeys.length > 0) {
@@ -721,7 +748,7 @@ async function main() {
 
   const report = {
     'позиций': placed.length,
-    'с ценой': placed.filter((item) => item.priceRub !== null).length,
+    'с ценой': placed.filter((item) => item.priceKzt !== null).length,
     'с моделью': placed.filter((item) => item.model).length,
     'с брендом': placed.filter((item) => item.brand).length,
     'с характеристиками': placed.filter((item) => item.specs.length > 0).length,

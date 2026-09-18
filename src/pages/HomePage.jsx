@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import BrandsMarquee from '../components/BrandsMarquee'
 import CategoriesBentoGrid from '../components/CategoriesBentoGrid'
 import { DEFAULT_TOPIC } from '../constants'
-import { benefits } from '../data/siteData'
+import { benefits } from '../data/content'
 import usePageMeta from '../hooks/usePageMeta'
 
 export default function HomePage({ onOpenModal }) {
